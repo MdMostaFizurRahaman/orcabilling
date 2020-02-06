@@ -50,7 +50,7 @@
                                     <div class="form-group">
                                         <label for="">Carrier</label>
                                         <select name="client_id" class="form-control">
-                                            <option value="" selected disabled>All</option>
+                                            <option value="" selected>All</option>
                                             <option v-for='client in clients' v-bind:value='client.id'> @{{client.username}}</option>
                                         </select>
                                         @error('client_id')
@@ -60,7 +60,7 @@
                                     <div class="form-group">
                                         <label for="">Router</label>
                                         <select name="gateway_id" class="form-control">
-                                            <option value="" selected disabled>All</option>
+                                            <option value="" selected>All</option>
                                             <option v-for='gateway in gateways' v-bind:value='gateway.id'> @{{gateway.name}}</option>
                                         </select>
                                         @error('gateway_id')
