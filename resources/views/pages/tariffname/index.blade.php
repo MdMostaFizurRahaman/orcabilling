@@ -74,7 +74,7 @@
                 serverSide: true,
                 destroy: true,
                 "order": [[ 0, "desc" ]],
-                ajax:  "{{route('getTariffnames')}}",
+                ajax:  "{{route('tariffnames.datatable')}}",
                 columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },

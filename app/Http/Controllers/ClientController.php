@@ -64,12 +64,21 @@ class ClientController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display a list of the resource.
      *
-     * @param  \App\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function get()
+    public function clients(Request $request)
+    {
+        return Client::all();
+    }
+
+    /**
+     * Display a datatable of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dataTable()
     {
         $outputs = Client::select(['id', 'username', 'capacity', 'account_state', 'tariff_id']);
 
@@ -143,16 +152,6 @@ class ClientController extends Controller
         }
     }
 
-    public function getCountries()
-    {
-        return DB::table('countries')->get();
-    }
-
-    public function paymentTypes()
-    {
-        return DB::table('payment_types')->get();
-    }
-
     public function paymentStore(Request $request)
     {
         $this->validate($request, [
@@ -191,10 +190,5 @@ class ClientController extends Controller
     public function payment(Request $request)
     {
         return DB::table('payments')->where('client_id', $request->id)->where('client_type', $request->type)->latest()->limit(10)->get();
-    }
-
-    public function getTariffs()
-    {
-        return TariffName::all();
     }
 }

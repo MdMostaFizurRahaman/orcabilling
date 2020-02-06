@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
@@ -31,20 +31,20 @@ class PermissionController extends Controller
             if(!empty($request->user)){
                 $user = User::find($request->user);
                 $permissions = $request->checkedPermissions;
-                $user->syncPermissions($permissions);   
+                $user->syncPermissions($permissions);
             }
 
             if(!empty($request->role)){
                 $role = Role::findByName($request->role);
                 $permissions = $request->checkedPermissions;
-                $role->syncPermissions($permissions);   
+                $role->syncPermissions($permissions);
             }
        } catch (\Throwable $th) {
            return $th;
        }
 
-        
-    }  
+
+    }
 
     public function getPermissions()
     {

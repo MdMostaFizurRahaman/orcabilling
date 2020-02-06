@@ -21,13 +21,17 @@ class TariffNameController extends Controller
         return view('pages.tariffname.index');
     }
 
+    public function tariffNames()
+    {
+        return TariffName::all();
+    }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
 
-    public function getTariffnames()
+    public function dataTable()
     {
         $outputs = TariffName::select(['id', 'name', 'created_by', 'currency_id']);
 
@@ -51,7 +55,7 @@ class TariffNameController extends Controller
             ->make(true);
     }
 
-    
+
     public function getCurrenciesName()
     {
         return Currency::all();
@@ -91,7 +95,7 @@ class TariffNameController extends Controller
         return $tariffName = TariffName::find($request->id);
     }
 
-    
+
     public function update(Request $request, TariffName $tariffName)
     {
         $this->validate($request, [
@@ -107,7 +111,7 @@ class TariffNameController extends Controller
         return $tariffName;
     }
 
- 
+
     public function destroy(TariffName $tariffName)
     {
         try {
@@ -117,7 +121,6 @@ class TariffNameController extends Controller
             return $th;
         }
     }
-
 
     public function getRates ($id)
     {

@@ -24,8 +24,22 @@ class GatewayController extends Controller
         return view('pages.gateway.index');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function gateways()
+    {
+        return $gateways = Gateway::all();
+    }
 
-    public function get()
+    /**
+     * Display a datatable of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dataTable()
     {
         $outputs = Gateway::select(['id', 'name', 'ip', 'port', 'call_limit', 'media_proxy', 'tariff_id', 'account_state']);
 
@@ -145,16 +159,6 @@ class GatewayController extends Controller
         } catch (\Throwable $th) {
             return $th;
         }
-    }
-
-    public function gateways()
-    {
-        return $gateways = Gateway::all();
-    }
-
-    public function getTariffs()
-    {
-        return TariffName::all();
     }
 
     public function paymentTypes()

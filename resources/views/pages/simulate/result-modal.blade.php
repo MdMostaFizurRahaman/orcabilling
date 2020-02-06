@@ -1,6 +1,6 @@
 <div class="scoped">
     <!-- Modal -->
-    <div class="modal animated slideInRight result-modal" id="result-modl-fullscreen" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal right animated slideInRight result-modal" id="result-modl-fullscreen" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-fluid" role="document">
             <div class="modal-content" v-bind="result">
                 <div class="modal-header card-header">
@@ -29,8 +29,8 @@
                                 <td>@{{result.c_cost + ' ' + result.c_symbol}}</td>
                                 <td>@{{result.g_cost + ' ' + result.g_symbol}}</td>
                                 <th>Number (Dialing - Dialed)</th>
-                                <td>@{{result.dialing}}</td>
-                                <td>@{{result.dialed}}</td>
+                                <td>@{{result.calling}}</td>
+                                <td>@{{result.called}}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Voice Rate</th>

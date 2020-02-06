@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\Script',
+        'App\Console\Commands\ParseLog',
+        'App\Console\Commands\BackupDatabase',
     ];
 
     /**
@@ -24,8 +25,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // $schedule->command('parse:cdr-log')
+        //          ->everyFiveMinutes();
+        // $schedule->command('backup:database')
+        //          ->daily();
     }
 
     /**

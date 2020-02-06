@@ -93,7 +93,7 @@
                 serverSide: true,
                 destroy: true,
                 "order": [[ 0, "desc" ]],
-                ajax:  "{{route('gateway.get')}}",
+                ajax:  "{{route('gateways.datatable')}}",
                 columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
@@ -277,7 +277,7 @@ const app = new Vue({
                     .catch(e=>alert(e))
             },
             getPaymentTypes(){
-                axios.get('{{route("gateway.payment.types")}}')
+                axios.get('{{route("payment-types")}}')
                     .then(res=>{
                         this.paymentTypes = res.data
                     })
@@ -293,7 +293,7 @@ const app = new Vue({
                     })
             },
             getTariffs(){
-                axios.get('{{route("gateway.getTariffs")}}')
+                axios.get('{{route("tariffnames")}}')
                     .then(res=>{
                        this.tariffs = res.data;
                     })

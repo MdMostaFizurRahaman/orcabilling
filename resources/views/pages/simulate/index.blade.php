@@ -43,23 +43,29 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="">Dialed Number</label>
-                                            <input v-model="form.dialed_number"  type="text" name="dialed_number" :class="{ 'is-invalid': form.errors.has('dialed_number') }" class="form-control">
-                                            <has-error :form="form" field="dialed_number"></has-error>
+                                            <label for="">Called Number</label>
+                                            <input v-model="form.called"  type="text" name="called" :class="{ 'is-invalid': form.errors.has('called') }" class="form-control">
+                                            <has-error :form="form" field="called"></has-error>
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Client IP</label>
-                                            <select  v-model="form.client_ip" name="client_ip" class="form-control" :class="{ 'is-invalid': form.errors.has('client_ip') }">
-                                                <option v-for='client in clientIps' v-bind:value='client.ip'> @{{client.ip}}</option>
+                                            <label for="">Carrier</label>
+                                            <select v-model="form.client_ip" name="client_ip" class="form-control">
+                                                <option value="" selected disabled>All</option>
+                                                <option v-for='ipModel in clientIps' v-bind:value='ipModel.ip'> @{{ipModel.ip}}</option>
                                             </select>
-                                            <has-error :form="form" field="client_ip"></has-error>
+                                            @error('client_ip')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Gateway IP</label>
-                                            <select v-model="form.gateway_ip" name="gateway_ip" class="form-control" :class="{ 'is-invalid': form.errors.has('gateway_ip') }">
-                                                <option v-for='gateway in gatewayIps' v-bind:value='gateway.ip'> @{{gateway.name}}</option>
+                                            <label for="">Router</label>
+                                            <select v-model="form.gateway_ip" name="gateway_ip" class="form-control">
+                                                <option value="" selected disabled>All</option>
+                                                <option v-for='gateway in gateways' v-bind:value='gateway.ip'> @{{gateway.name}}</option>
                                             </select>
-                                            <has-error :form="form" field="gateway_ip"></has-error>
+                                            @error('gateway_ip')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="">Duration</label>
@@ -67,9 +73,9 @@
                                             <has-error :form="form" field="duration"></has-error>
                                         </div>
                                         <div class="form-group">
-                                            <label for="">CLI</label>
-                                            <input v-model="form.dialing_number"  type="text" name="dialing_number" :class="{ 'is-invalid': form.errors.has('dialing_number') }" class="form-control">
-                                            <has-error :form="form" field="dialing_number"></has-error>
+                                            <label for="">Calling Number</label>
+                                            <input v-model="form.calling"  type="text" name="calling" :class="{ 'is-invalid': form.errors.has('calling') }" class="form-control">
+                                            <has-error :form="form" field="calling"></has-error>
                                         </div>
                                     </div>
                                     <div class="card-footer text-center">
@@ -102,20 +108,21 @@
         el: '#simulate',
         data:{
             clientIps: [],
-            gatewayIps:[],
+            gateways:[],
             result: {c_rate: [], g_rate: []},
             form: new Form({
-                    dialed_number: '',
+                    called: '',
                     client_ip: '',
                     gateway_ip: '',
                     duration: '',
-                    dialing_number: '',
+                    calling: '',
             })
         },
         methods:{
             simulate(){
                 this.form.post('{{route("bill.simulate")}}')
                     .then(response => {
+                        console.log(response.data)
                         if(response.data.status)
                         {
                             this.result = response.data;
@@ -140,7 +147,7 @@
                         console.log(e);
                     })
             },
-            getClients(){
+            getClientIps(){
                 axios.get('{{route("clients.ips")}}')
                     .then(res=>{
                         this.clientIps = res.data
@@ -148,9 +155,9 @@
                     .catch(e=>alert(e))
             },
             getGateways(){
-                axios.get('{{route("gateways.ips")}}')
+                axios.get('{{route("gateways")}}')
                     .then(res=>{
-                       this.gatewayIps = res.data;
+                       this.gateways = res.data;
                     })
                     .catch(e=>{
                         alert(e);
@@ -168,7 +175,7 @@
         },
         mounted() {
             this.getGateways();
-            this.getClients();
+            this.getClientIps();
         }
     });
 

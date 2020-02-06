@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Ip;
 use DateTime;
 use App\Call;
 use App\Client;
-use App\GateWay;
+use App\Gateway;
 use App\FailedCall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class ParseLog extends Controller
+class ParseLogController extends Controller
 {
     public function parse($file = "../cdr.log", $file_name = "cdr_2019-12-31_09-50-00.log.gz")
     {
@@ -331,19 +332,19 @@ class ParseLog extends Controller
     {
         $startTime = microtime(true);
         $this->validate($request, [
-            'dialed_number' => 'required',
+            'called' => 'required',
             'client_ip' => 'required',
             'gateway_ip' => 'required',
             'duration' => 'required',
-            'dialing_number' => '',
+            'calling' => '',
         ]);
 
         $duration = $this->secondsResolution($request->duration);
         $result['duration'] = $duration;
 
         $data = [];
-        $result['dialed'] = $data['Called'] = $request->dialed_number;
-        $result['dialing'] = $data['Calling'] = $request->dialing_number;
+        $result['calling'] = $data['Calling'] = $request->calling;
+        $result['called'] = $data['Called'] = $request->called;
         $data['StartTime'] = time();
         $data['EndTime'] = $data['StartTime'] + $duration;
         $result['StartTime'] = $this->getDateTime($data['StartTime']);
@@ -352,10 +353,9 @@ class ParseLog extends Controller
         $result['g_ip'] = $request->gateway_ip;
 
         // Client process
-        $client_id = DB::table('ips')->where('ip', '=', $request->client_ip)->value('client_id');
-        $client = Client::where('id', $client_id)->first();
+        $client = Ip::whereIp($request->client_ip)->first()->client;
 
-        if(!($client_id || $client))
+        if(!$client)
         {
             return $response = $this->composeResponse(false, 'Client not found!');
         }

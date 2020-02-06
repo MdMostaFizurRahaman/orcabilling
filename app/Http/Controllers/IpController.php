@@ -101,4 +101,5 @@ class IpController extends Controller
     {
         return $clientsIps = Ip::all();
     }
+
 }

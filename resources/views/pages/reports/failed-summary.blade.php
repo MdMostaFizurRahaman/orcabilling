@@ -37,13 +37,12 @@
                                     <thead class="bg-dark text-white" style="font-size: 12px;">
                                         <tr>
                                             <th scope="col">Called</th>
+                                            <th scope="col">Calling</th>
                                             <th scope="col">Start Time</th>
                                             <th scope="col">PDD</th>
                                             <th scope="col">IP Number</th>
                                             <th scope="col">Client</th>
-                                            <th scope="col">Destination</th>
                                             <th scope="col">Prefix</th>
-                                            <th scope="col">Dialing Prefix</th>
                                             <th scope="col">Route</th>
                                             <th scope="col">Discon. Reason</th>
                                             <th scope="col">Madia Prox.</th>
@@ -55,13 +54,12 @@
                                         @foreach ($group as $call)
                                         <tr>
                                             <td scope="row">{{$call->called}}</td>
+                                            <td>{{$call->calling}}</td>
                                             <td>{{$call->call_start}}</td>
                                             <td>{{$call->pdd}}</td>
                                             <td>{{$call->ip_number}}</td>
                                             <td>{{$call->client_name}}</td>
-                                            <td>{{$call->calling}}</td>
                                             <td>{{$call->tariff_prefix}}</td>
-                                            <td>{{'Dialing Prefix'}}</td>
                                             <td>{{$call->gateway_name}}</td>
                                             <td>{{$call->release_reason}}</td>
                                             <td>{{'False'}}</td>
@@ -77,7 +75,6 @@
                                             <th></th>
                                             <th></th>
                                             <th>{{$collection['totalCalls']}}</th>
-                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -112,12 +109,12 @@ $(document).ready( function () {
         // "order": [[ 0, "asc"]],
         columns: [
                     { data: 'called', name: 'called' },
+                    { data: 'calling', name: 'calling' },
                     { data: 'call_start', name: 'call_start' },
                     { data: 'client_name', name: 'client_name' },
                     { data: 'ip_number', name: 'ip_number' },
                     { data: 'pdd', name: 'pdd' },
                     { data: 'tariff_prefix', name: 'tariff_prefix' },
-                    { data: 'calling', name: 'calling' },
                     { data: 'dialing_prefix', name: 'Dialing Prefix' },
                     { data: 'gateway_name', name: 'gateway_name' },
                     { data: 'release_reason', name: 'release_reason' },

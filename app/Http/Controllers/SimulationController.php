@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Call;
 use App\Client;
-use App\GateWay;
+use App\Gateway;
 use App\FailedCall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;

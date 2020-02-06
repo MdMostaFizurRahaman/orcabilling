@@ -16,10 +16,10 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/parse', "ParseLog@parse");
-Route::get('/get', "ParseLog@getPrefix");
+Route::get('/parse', "ParseLogController@parse");
+Route::get('/get', "ParseLogController@getPrefix");
 Route::get('/test', "ReportController@test");
-Route::get('/testreport', "ParseLog@testReport");
+Route::get('/testreport', "ParseLogController@testReport");
 
 
 
@@ -43,7 +43,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/getRolePermissions', "PermissionController@getRolePermissions")->name('getRolePermissions');
     });
 
-
     // Currency Routes
     Route::get('/currencies', 'CurrencyController@index')->name('currencies.index');
     Route::post('/currencies', 'CurrencyController@store')->name('currencies.store');
@@ -51,18 +50,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/currencies/{currency}', 'CurrencyController@destroy')->name('currencies.delete');
     Route::get('/getCurrencies', "CurrencyController@getCurrencies")->name('getCurrencies');
     Route::post('/getCurrency', 'CurrencyController@show')->name('getCurrency');
-    Route::get('/callcost', 'ParseLog@getResolution')->name('CallCost');
-
 
     // Tariff Routes
     Route::get('/tariffnames', 'TariffNameController@index')->name('tariffname.index');
     Route::post('/tariffnames', 'TariffNameController@store')->name('tariffname.store');
-    Route::put('/tariffnames/{tariffName}', 'TariffNameController@update')->name('tariffname.update');
-    Route::delete('/tariffnames/{tariffName}', 'TariffNameController@destroy')->name('tariffnames.delete');
     Route::post('/tariffname/show', 'TariffNameController@show')->name('tariffname.show');
-    Route::get('/getTariffnames', 'TariffNameController@getTariffnames')->name('getTariffnames');
+    Route::get('/tariffnames/all', 'TariffNameController@tariffNames')->name('tariffnames');
+    Route::put('/tariffnames/{tariffName}', 'TariffNameController@update')->name('tariffname.update');
+    Route::get('/tariffnames/datatable', 'TariffNameController@dataTable')->name('tariffnames.datatable');
     Route::get('/getCurrenciesName', 'TariffNameController@getCurrenciesName')->name('getCurrenciesName');
-
+    Route::delete('/tariffnames/{tariffName}', 'TariffNameController@destroy')->name('tariffnames.delete');
 
     // Tariff Rates Routes
     Route::get('/tariffnames/{tariffname}/rates', 'RateController@index')->name('rate.index');
@@ -75,44 +72,44 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('tariffnames/rate/import/', 'RateController@import')->name('rate.import');
     Route::get('tariffnames/rate/download/', 'RateController@download')->name('rate.download');
 
-
     // Gateway Routes
     Route::get('/gateways', "GatewayController@index")->name('gateway.index');
-    Route::post('/gateways/store', "GatewayController@store")->name('gateway.store');
-    Route::get('/gateways/get', 'GatewayController@get')->name('gateway.get');
+    Route::get('/gateways/all', 'GatewayController@gateways')->name('gateways');
     Route::post('/gateways/show', 'GatewayController@show')->name('gateway.show');
+    Route::post('/gateways/store', "GatewayController@store")->name('gateway.store');
     Route::put('/gateways/{gateway}', 'GatewayController@update')->name('gateway.update');
-    Route::delete('/gateways/{gateway}', 'GatewayController@destroy')->name('gateway.delete');
-    Route::get('/gateways/getTariffs', "GatewayController@getTariffs")->name('gateway.getTariffs');
-    Route::get('/gateways/payment/types', 'GatewayController@paymentTypes')->name('gateway.payment.types');
-    Route::post('/gateways/payment/store', 'GatewayController@paymentStore')->name('gateway.payment.store');
     Route::post('/gateways/payments', 'GatewayController@payment')->name('gateway.payments');
-    Route::get('/gateways/ips/get', 'GatewayController@gateways')->name('gateways.ips');
+    Route::delete('/gateways/{gateway}', 'GatewayController@destroy')->name('gateway.delete');
+    Route::get('/gateways/datatable', 'GatewayController@dataTable')->name('gateways.datatable');
+    Route::post('/gateways/payment/store', 'GatewayController@paymentStore')->name('gateway.payment.store');
+
+
+    // General Queries
+    Route::get('/getCountries', "Homecontroller@getCountries")->name('countries');
+    Route::get('/payment-types', 'Homecontroller@getPaymentTypes')->name('payment-types');
 
     // Clients Routes
     Route::get('/clients', "ClientController@index")->name('client.index');
-    Route::get('/clients/get', "ClientController@get")->name('client.get');
+    Route::get('/clients/all', "ClientController@clients")->name('clients');
     Route::post('/clients/show', "ClientController@show")->name('client.show');
-    Route::put('/clients/{client}', "ClientController@update")->name('client.update');
-    Route::delete('/clients/{client}', 'ClientController@destroy')->name('client.delete');
-    Route::get('/clients/getCountries', "ClientController@getCountries")->name('client.getCountries');
-    Route::get('/clients/getTariffs', "ClientController@getTariffs")->name('client.getTariffs');
     Route::post('/clients/store', "ClientController@store")->name('client.store');
-    Route::get('/clients/payment/types', 'ClientController@paymentTypes')->name('client.payment.types');
-    Route::post('/clients/payment/store', 'ClientController@paymentStore')->name('client.payment.store');
+    Route::put('/clients/{client}', "ClientController@update")->name('client.update');
     Route::post('/clients/payments', 'ClientController@payment')->name('client.payments');
+    Route::delete('/clients/{client}', 'ClientController@destroy')->name('client.delete');
+    Route::get('/clients/datatable', "ClientController@dataTable")->name('clients.datatable');
+    Route::post('/clients/payment/store', 'ClientController@paymentStore')->name('client.payment.store');
 
     // IP Routes
-    Route::post('/clients/ips/get', "IpController@index")->name('ip.index');
     Route::post('/clients/ips', "IpController@store")->name('ip.store');
     Route::post('/clients/ips/show', "IpController@show")->name('ip.show');
+    Route::post('/clients/ips/get', "IpController@index")->name('ip.index');
     Route::put('/clients/ips/update', "IpController@update")->name('ip.update');
     Route::delete('/clients/ips/{ip}', "IpController@destroy")->name('ip.delete');
     Route::get('/clients/ips', "IpController@clientsIps")->name('clients.ips');
 
     // Simulation Routes
-    Route::get('/bill/simulate', "ParseLog@getSimulate")->name('bill.simulate.panel');
-    Route::post('/bill/simulate', "ParseLog@simulate")->name('bill.simulate');
+    Route::post('/bill/simulate', "ParseLogController@simulate")->name('bill.simulate');
+    Route::get('/bill/simulate', "ParseLogController@getSimulate")->name('bill.simulate.panel');
 
     // CDR Log Routes
     Route::get('/cdrlogs', "CdrLogController@index")->name('cdr.logs');

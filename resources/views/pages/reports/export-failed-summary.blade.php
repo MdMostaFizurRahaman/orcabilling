@@ -6,12 +6,13 @@
 <table>
     <thead>
         <tr>
-            <th colspan="3"><strong>General</strong></th>
+            <th colspan="4"><strong>General</strong></th>
             <th colspan="4"><strong>Originate</strong></th>
             <th colspan="4"><strong>Termination</strong></th>
         </tr>
         <tr>
             <th scope="col"><strong>Called</strong></th>
+            <th scope="col"><strong>Calling</strong></th>
             <th scope="col"><strong>Start Time</strong></th>
             <th scope="col"><strong>PDD</strong></th>
             <th scope="col"><strong>IP Number</strong></th>
@@ -30,6 +31,7 @@
         @foreach ($group as $call)
         <tr>
             <td scope="row">{{$call['called']}}</td>
+            <td>{{$call['calling']}}</td>
             <td>{{$call['call_start']}}</td>
             <td>{{$call['pdd']}}</td>
             <td>{{$call['ip_number']}}</td>
@@ -47,6 +49,7 @@
     <tfoot>
         <tr>
             <th scope="row" colspan="2"><strong>Total Failed Calls</strong></th>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>

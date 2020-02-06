@@ -49,11 +49,11 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="">Carrier</label>
-                                        <select name="client_ip" class="form-control">
+                                        <select name="client_id" class="form-control">
                                             <option value="" selected disabled>All</option>
-                                            <option v-for='client in clientIps' v-bind:value='client.ip'> @{{client.ip}}</option>
+                                            <option v-for='client in clients' v-bind:value='client.id'> @{{client.username}}</option>
                                         </select>
-                                        @error('client_ip')
+                                        @error('client_id')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -61,7 +61,7 @@
                                         <label for="">Router</label>
                                         <select name="gateway_id" class="form-control">
                                             <option value="" selected disabled>All</option>
-                                            <option v-for='gateway in gatewayIps' v-bind:value='gateway.id'> @{{gateway.name}}</option>
+                                            <option v-for='gateway in gateways' v-bind:value='gateway.id'> @{{gateway.name}}</option>
                                         </select>
                                         @error('gateway_id')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -107,7 +107,6 @@
                                     <div class="form-group">
                                         <label for=""> From Date</label>
                                         <input type='text' id='fromDate' data-id="fromDate" name="from_date" class="form-control" />
-                                        {{-- <input type="datetime-local" name="from_date" class="form-control"> --}}
                                         @error('from_date')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -116,7 +115,6 @@
                                     <div class="form-group">
                                         <label for=""> To Date</label>
                                         <input type='text' id='toDate' name="to_date" class="form-control" />
-                                        {{-- <input type="datetime-local" name="to_date" class="form-control"> --}}
                                         @error('to_date')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -189,21 +187,21 @@
     const app = new Vue({
         el: '#summary',
         data:{
-            clientIps: [],
-            gatewayIps:[],
+            clients: [],
+            gateways:[],
         },
         methods:{
-           getClients(){
-                axios.get('{{route("clients.ips")}}')
+            getClients(){
+                axios.get('{{route("clients")}}')
                     .then(res=>{
-                        this.clientIps = res.data
+                        this.clients = res.data
                     })
                     .catch(e=>alert(e))
             },
             getGateways(){
-                axios.get('{{route("gateways.ips")}}')
+                axios.get('{{route("gateways")}}')
                     .then(res=>{
-                       this.gatewayIps = res.data;
+                       this.gateways = res.data;
                     })
                     .catch(e=>{
                         alert(e);

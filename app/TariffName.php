@@ -10,6 +10,11 @@ class TariffName extends Model
     protected $table = 'tariffnames';
     protected $guarded = [];
 
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'created_by');
+    }
+
     public function clients()
     {
         return $this->hasMany('App\Client', 'id', 'tariff_id');
@@ -33,6 +38,7 @@ class TariffName extends Model
     public function rate($data)
     {
         $number = $data['Called'];
+
         return $this->hasOne("App\Rate", "tariffname_id")->selectRaw(
             "*, locate(prefix, $number) as prefix_status"
             )->whereRaw("locate(prefix, $number) = 1")

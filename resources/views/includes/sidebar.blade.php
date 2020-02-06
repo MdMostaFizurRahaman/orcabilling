@@ -38,46 +38,14 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                        <i class="icon-Management"></i>
-                        <span class="hide-menu">Management </span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item">
-                            <a href="ticket-list.html" class="sidebar-link">
-                                <i class="mdi mdi-book-multiple"></i>
-                                <span class="hide-menu"> Reseller 1 </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="ticket-detail.html" class="sidebar-link">
-                                <i class="mdi mdi-book-plus"></i>
-                                <span class="hide-menu"> Reseller 2</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="icon-Sunglasses-Smiley"></i>
-                        <span class="hide-menu">Subscriber </span>
+                        <span class="hide-menu">Client </span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
                             <a href="{{route('client.index')}}" class="sidebar-link">
                                 <i class="mdi mdi-comment-processing-outline"></i>
                                 <span class="hide-menu"> Wholesale Client </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="app-calendar.html" class="sidebar-link">
-                                <i class="mdi mdi-calendar"></i>
-                                <span class="hide-menu"> Retail Client </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="app-taskboard.html" class="sidebar-link">
-                                <i class="mdi mdi-bulletin-board"></i>
-                                <span class="hide-menu"> Recharge PIN </span>
                             </a>
                         </li>
                     </ul>
@@ -106,12 +74,6 @@
                                 <span class="hide-menu"> Loss-Profit Report</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="ui-tab.html" class="sidebar-link">
-                                <i class="mdi mdi-sort-variant"></i>
-                                <span class="hide-menu"> Reseller Report</span>
-                            </a>
-                        </li>
                         <li class="sidebar-item {{Request::is('summary/success-calls/*') ? 'active': ''}}">
                             <a href="{{route('success-calls.summary.panel')}}" class="sidebar-link">
                                 <i class="mdi mdi-image-filter-vintage"></i>
@@ -122,12 +84,6 @@
                             <a href="{{route('failed-calls.summary.panel')}}" class="sidebar-link">
                                 <i class="mdi mdi-message-bulleted"></i>
                                 <span class="hide-menu"> Failed Calls</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="ui-progressbar.html" class="sidebar-link">
-                                <i class="mdi mdi-poll"></i>
-                                <span class="hide-menu"> Unauthorized Calls</span>
                             </a>
                         </li>
                     </ul>
@@ -168,42 +124,14 @@
                                 <span class="hide-menu"> Invoice History</span>
                             </a>
                         </li>
-                    </ul>
-                </li>
-                </li>
-                <li class="sidebar-item {{Request::is('route/*') ? 'selected' : ''}}">
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)
-                        " aria-expanded="false">
-                        <i class="icon-Router"></i>
-                        <span class="hide-menu">Routing</span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse first-level">
-
-                        <li class="sidebar-item">
-                            <a href="form-horizontal.html" class="sidebar-link">
-                                <i class="mdi mdi-file-document-box"></i>
-                                <span class="hide-menu"> Routing Plan</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="form-actions.html" class="sidebar-link">
-                                <i class="mdi mdi-code-greater-than"></i>
-                                <span class="hide-menu"> Routing Group</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="form-row-separator.html" class="sidebar-link">
-                                <i class="mdi mdi-code-equal"></i>
-                                <span class="hide-menu"> Routing Features</span>
-                            </a>
-                        </li>
                         <li class="sidebar-item">
                             <a href="{{route('bill.simulate.panel')}}" class="sidebar-link">
                                 <i class="mdi mdi-flip-to-front"></i>
-                                <span class="hide-menu"> Routing Simulation</span>
+                                <span class="hide-menu"> Billing Simulation</span>
                             </a>
                         </li>
                     </ul>
+                </li>
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)

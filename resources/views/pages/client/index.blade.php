@@ -2,7 +2,7 @@
 
 @section('title')
     Clients
-@endsection 
+@endsection
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
@@ -20,7 +20,7 @@
             <strong><i class="fa fa-check-circle"></i> Success!</strong> {{session()->get('success')}}
         </div>
         @endif
-    
+
         <!-- ============================================================== -->
         <!-- Start Page Content -->
         <!-- ============================================================== -->
@@ -75,7 +75,7 @@
 
 {{-- DataTable --}}
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>    
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
         $(function(){
             getClients();
@@ -92,7 +92,7 @@
                 serverSide: true,
                 destroy: true,
                 "order": [[ 0, "desc" ]],
-                ajax:  "{{route('client.get')}}",
+                ajax:  "{{route('clients.datatable')}}",
                 columns: [
                             { data: 'id', name: 'id' },
                             { data: 'username', name: 'username' },
@@ -106,7 +106,7 @@
                 "drawCallback": function( settings ) {
                     $('.ip').click(function(){
                         var id = $(this).data("id");
-                        app.ip(id);
+                        app.clientIps(id);
                     });
                     $('.payment').click(function(){
                         var id = $(this).data("id");
@@ -142,7 +142,7 @@
     }
 
 
-   
+
 const app = new Vue({
         el: '#gateway',
         data:{
@@ -270,9 +270,7 @@ const app = new Vue({
                 this.getPaymentTypes()
                 $('#payment-fullscreen-modal').modal('show')
             },
-            ip(id){
-                this.form3.reset();
-                this.form3.client_id = id
+            clientIps(id){
                 this.getIPs(id)
                 $('#ip-fullscreen-modal').modal('show')
             },
@@ -311,28 +309,6 @@ const app = new Vue({
                         this.disabled = false;
                     })
             },
-            editIP(id){
-                this.form3.reset();
-                this.editMode = true;
-                this.getIP(id);
-            },
-            updateIP(){
-                this.disabled = true;
-                this.form3.put('{{route("ip.update")}}')
-                    .then(response=>{
-                        this.form3.reset()
-                        this.disabled = false;
-                        this.editMode = false;
-                        this.$toastr.s(
-                            "Ip updated successfully"
-                        )
-                        $('#ip-fullscreen-modal').modal('hide')
-                    })
-                    .catch(e=>{
-                        alert(e);
-                        this.disabled = false;
-                    })
-            },
             deleteIP(id){
                 this.form.delete(`clients/ips/${id}`)
                     .then(res=>{
@@ -356,13 +332,8 @@ const app = new Vue({
                     .then(res=>this.ips=res.data)
                     .catch(e=>alert(e))
             },
-            getIP(id){
-                axios.post('{{route("ip.show")}}', {id:id})
-                    .then(res=>this.form3.fill(res.data))
-                    .catch(e=>alert(e))
-            },
             getPaymentTypes(){
-                axios.get('{{route("client.payment.types")}}')
+                axios.get('{{route("payment-types")}}')
                     .then(res=>{
                         this.paymentTypes = res.data
                     })
@@ -378,7 +349,7 @@ const app = new Vue({
                     })
             },
             getTariffs(){
-                axios.get('{{route("client.getTariffs")}}')
+                axios.get('{{route("tariffnames")}}')
                     .then(res=>{
                        this.tariffs = res.data;
                     })
@@ -395,7 +366,7 @@ const app = new Vue({
                 }, 3000)
             },
             getCountries(){
-                axios.get('{{route("client.getCountries")}}')
+                axios.get('{{route("countries")}}')
                         .then(res=>this.countries = res.data)
                         .catch(e=>alert(e));
             }

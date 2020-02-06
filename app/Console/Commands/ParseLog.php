@@ -6,24 +6,24 @@ use Carbon\Carbon;
 use Spatie\Regex\Regex;
 use phpseclib\Net\SFTP;
 use Illuminate\Console\Command;
-use App\Http\Controllers\ParseLog;
+use App\Http\Controllers\ParseLogController;
 use Illuminate\Support\Facades\DB;
 
-class Script extends Command
+class ParseLog extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:script';
+    protected $signature = 'parse:cdr-log';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Parse CDR logs';
 
     /**
      * Create a new command instance.
@@ -65,7 +65,7 @@ class Script extends Command
 
                     $this->uncompress('cdr.log.gz', 'cdr.log');
 
-                    $parser = new ParseLog;
+                    $parser = new ParseLogController;
 
                     if($rowsCount = $parser->parse('cdr.log', $file_name))
                     {

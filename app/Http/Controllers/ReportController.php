@@ -482,7 +482,7 @@ class ReportController extends Controller
     public function validateSummaryRequest(Request $request)
     {
         return $validation = $this->validate($request, [
-            'client_ip' => 'string|nullable',
+            'client_id' => 'string|nullable',
             'gateway_id' => 'string|nullable',
             'called' => 'string|nullable',
             'calling' => 'string|nullable',
@@ -497,7 +497,7 @@ class ReportController extends Controller
     {
         $query = $model::whereBetween('call_start', [$request->from_date, $request->to_date]);
         if($request->client_ip){
-            $query = $query->where('ip_number', $request->client_ip);
+            $query = $query->whereClientId($request->client_id);
         }
         if($request->gateway_id){
             $query = $query->where('id_route', $request->gateway_id);

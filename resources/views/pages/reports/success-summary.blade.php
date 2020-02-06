@@ -35,7 +35,8 @@
                                 <table id="summary_table" style="font-size: 13px;" class="table table-bordered nowrap display" v-bind="summary">
                                     <thead class="bg-dark text-white" style="font-size: 12px;">
                                         <tr>
-                                            <th scope="col">Called</th>
+                                            <th scope="col">Calling Number</th>
+                                            <th scope="col">Called Number</th>
                                             <th scope="col">Start Time</th>
                                             <th scope="col">Duration</th>
                                             <th scope="col">IP Number</th>
@@ -44,10 +45,10 @@
                                             <th scope="col">Destination</th>
                                             <th scope="col">Prefix</th>
                                             <th scope="col">Cost</th>
-                                            <th scope="col">Dial Prefix</th>
                                             <th scope="col">Route</th>
                                             <th scope="col">Prefix</th>
                                             <th scope="col">Cost</th>
+                                            <th scope="col">PDD</th>
                                         </tr>
                                     </thead>
 
@@ -55,6 +56,7 @@
                                         @foreach ($collection['calls'] as $calls)
                                         @foreach ($calls as $call)
                                         <tr>
+                                            <td scope="row">{{$call->calling}}</td>
                                             <td scope="row">{{$call->called}}</td>
                                             <td>{{$call->call_start}}</td>
                                             <td>{{number_format($call['duration'] / 60, 2)}}</td>
@@ -64,7 +66,6 @@
                                             <td>{{$call->tariffdesc}}</td>
                                             <td>{{$call->tariff_prefix }}</td>
                                             <td>{{number_format($call->cost, 2)}}</td>
-                                            <td>Dial Prefix</td>
                                             <td>{{$call->gateway_name}}</td>
                                             <td>{{$call->route_rate_prefix}}</td>
                                             <td>{{number_format($call->costD, 2)}}</td>
@@ -87,6 +88,7 @@
                                             <th></th>
                                             <th></th>
                                             <th>{{$collection['totalCostD']}}</th>
+                                            <th></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -117,6 +119,7 @@ $(document).ready( function () {
         destroy: true,
         // "order": [[ 0, "asc"]],
         columns: [
+                    { data: 'calling', name: 'calling' },
                     { data: 'called', name: 'called' },
                     { data: 'call_start', name: 'call_start' },
                     { data: 'client_name', name: 'client_name' },
@@ -130,6 +133,7 @@ $(document).ready( function () {
                     { data: 'route_rate_prefix', name: 'route_rate_prefix' },
                     { data: 'gateway_name', name: 'gateway_name' },
                     { data: 'costD', name: 'costD' },
+                    { data: 'pdd', name: 'pdd' },
                 ],
     });
 });

@@ -11,7 +11,8 @@
         </tr>
         <tr>
             <th scope="col"><strong>Start Time</strong></th>
-            <th scope="col"><strong>Called</strong></th>
+            <th scope="col"><strong>Called Number</strong></th>
+            <th scope="col"><strong>Calling Number</strong></th>
             <th scope="col"><strong>Duration</strong></th>
             <th scope="col"><strong>IP Number</strong></th>
             <th scope="col"><strong>Client</strong></th>
@@ -19,10 +20,10 @@
             <th scope="col"><strong>Destination</strong></th>
             <th scope="col"><strong>Prefix</strong></th>
             <th scope="col"><strong>Cost</strong></th>
-            <th scope="col"><strong>Dial Prefix</strong></th>
             <th scope="col"><strong>Gateway IP</strong></th>
             <th scope="col"><strong>Prefix</strong></th>
             <th scope="col"><strong>Cost</strong></th>
+            <th scope="col"><strong>PDD</strong></th>
         </tr>
     </thead>
 
@@ -32,6 +33,7 @@
         <tr>
             <td scope="row">{{$call['call_start']}}</td>
             <td><i>{{(string)$call['called']}}</i></td>
+            <td><i>{{(string)$call['calling']}}</i></td>
             <td>{{round($call['duration'] / 60, 2)}}</td>
             <td>{{$call['ip_number']}}</td>
             <td>{{$call['client_name']}}</td>
@@ -39,17 +41,17 @@
             <td>{{$call['tariffdesc']}}</td>
             <td>{{$call['tariff_prefix'] }}</td>
             <td>{{number_format($call['cost'], 2)}}</td>
-            <td>Dial Prefix</td>
             <td>{{$call['gateway_name']}}</td>
             <td>{{$call['route_rate_prefix']}}</td>
             <td>{{number_format($call['costD'], 2)}}</td>
+            <td>{{number_format($call['pdd'], 2)}}</td>
         </tr>
         @endforeach
         @endforeach
     </tbody>
     <tfoot >
         <tr>
-            <th scope="row"><strong>Total</strong></th>
+            <th scope="row" colspan="2"><strong>Total</strong></th>
             <th>{{$collection['totalCalls']}}</th>
             <th>{{$collection['totalDuration']}}</th>
             <th></th>
@@ -60,8 +62,8 @@
             <th>{{$collection['totalCost']}}</th>
             <th></th>
             <th></th>
-            <th></th>
             <th>{{$collection['totalCostD']}}</th>
+            <th></th>
         </tr>
     </tfoot>
 </table>
