@@ -71,14 +71,50 @@
                                         <label for=""> Group By</label>
                                         <table class="table table-striped radio">
                                             <tr>
-                                                <th><input checked type="radio" name="group_by" value="monthly"> Monthly<br></th>
-                                                <th><input type="radio" name="group_by" value="daily"> Daily<br></th>
-                                                <th><input type="radio" name="group_by" value="hourly"> Hourly<br></th>
-                                                <th><input type="radio" name="group_by" value="tariff_prefix"> Prefix<br></th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="group_by1" class="custom-control-input" checked type="radio" name="group_by" value="monthly">
+                                                        <label class="custom-control-label" for="group_by1">Monthly</label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="group_by2" class="custom-control-input" type="radio" name="group_by" value="daily">
+                                                        <label class="custom-control-label" for="group_by2">Daily</label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="group_by3" class="custom-control-input" type="radio" name="group_by" value="hourly">
+                                                        <label class="custom-control-label" for="group_by3">Hourly</label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="group_by4" class="custom-control-input" type="radio" name="group_by" value="tariff_prefix">
+                                                        <label class="custom-control-label" for="group_by4">Prefix</label>
+                                                    </div>
+                                                </th>
+                                            </tr>
                                             <tr>
-                                                <th><input type="radio" name="group_by" value="tariff_desc"> Tariff Desc.<br></th>
-                                                <th><input type="radio" name="group_by" value="ip_number"> IP Address<br></th>
-                                                <th><input type="radio" disabled name="group_by" value="account"> Account<br></th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="group_by5" class="custom-control-input" type="radio" name="group_by" value="tariff_desc">
+                                                        <label class="custom-control-label" for="group_by5">Tariff  Desc.</label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="group_by6" class="custom-control-input" type="radio" name="group_by" value="ip_number">
+                                                        <label class="custom-control-label" for="group_by6">IP Address</label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="group_by7" class="custom-control-input" type="radio" disabled name="group_by" value="account">
+                                                        <label class="custom-control-label" for="group_by7">Account</label>
+                                                    </div>
+                                                </th>
                                                 {{-- <th><input type="radio" name="group_by" value="none"> None<br></th> --}}
                                             </tr>
                                         </table>
@@ -117,10 +153,30 @@
                                         <label for=""> Sort By</label>
                                         <table class="table table-striped radio">
                                             <tr>
-                                                <th><input type="radio" name="sort_by" value="tariffdesc"> Tariff Desc.<br></th>
-                                                <th><input checked type="radio" name="sort_by" value="tariff_prefix"> Prefix<br></th>
-                                                <th><input type="radio" name="sort_by" value="call_rate"> Rate<br></th>
-                                                <th><input type="radio" name="sort_by" value=""> None<br></th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="sort_by1" class="custom-control-input" checked type="radio" name="sort_by" value="tariffdesc">
+                                                        <label class="custom-control-label" for="sort_by1"> Tariff Desc.</label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="sort_by2" class="custom-control-input" checked type="radio" name="sort_by" value="tariff_prefix">
+                                                        <label class="custom-control-label" for="sort_by2"> Prefix</label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="sort_by3" class="custom-control-input" checked type="radio" name="sort_by" value="call_rate">
+                                                        <label class="custom-control-label" for="sort_by3"> Rate</label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="custom-control custom-radio">
+                                                        <input id="sort_by4" class="custom-control-input" checked type="radio" name="sort_by" value="">
+                                                        <label class="custom-control-label" for="sort_by4"> None</label>
+                                                    </div>
+                                                </th>
                                             </tr>
                                         </table>
                                         @error('sort_by')

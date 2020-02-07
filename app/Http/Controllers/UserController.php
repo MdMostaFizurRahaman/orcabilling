@@ -20,8 +20,7 @@ class UserController extends Controller
         return view('pages.user.index');
     }
 
-
-    public function getUser()
+    public function dataTable()
     {
         $outputs = User::select(['id', 'name', 'username', 'email']);
 
@@ -36,6 +35,10 @@ class UserController extends Controller
             ->make(true);
     }
 
+    public function users()
+    {
+        return User::all();
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -99,7 +102,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        
+
     }
 
     /**

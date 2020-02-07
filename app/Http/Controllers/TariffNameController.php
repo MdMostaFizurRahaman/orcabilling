@@ -55,13 +55,6 @@ class TariffNameController extends Controller
             ->make(true);
     }
 
-
-    public function getCurrenciesName()
-    {
-        return Currency::all();
-    }
-
-
     /**
      * Store a newly created resource in storage.
      *
@@ -74,7 +67,6 @@ class TariffNameController extends Controller
             'name' => 'required|string|max:45|unique:tariffnames',
             'currency_id' => 'required',
         ]);
-
 
         $tariffName = new TariffName();
         $tariffName->name = $request->name;
@@ -95,14 +87,12 @@ class TariffNameController extends Controller
         return $tariffName = TariffName::find($request->id);
     }
 
-
     public function update(Request $request, TariffName $tariffName)
     {
         $this->validate($request, [
             'name' => 'required|string|max:45|unique:tariffnames,name,'.$request->id,
             'currency_id' => 'required',
         ]);
-
 
         $tariffName->name = $request->name;
         $tariffName->currency_id = $request->currency_id;
@@ -111,14 +101,18 @@ class TariffNameController extends Controller
         return $tariffName;
     }
 
-
-    public function destroy(TariffName $tariffName)
+    public function destroy(TariffName $tariff)
     {
-        try {
-            $tariffName->delete();
-            return "Tariffname deleted successfully";
-        } catch (\Throwable $th) {
-            return $th;
+        if($tariff->has('failed_calls', 'calls')->exists())
+        {
+            return ['status' => false, 'msg' => "Tariff has calls in record. Action aborted!"];
+        } else {
+            try {
+                $tariff->delete();
+                return ['status' => true, 'msg' => "Tariffname deleted successfully"];
+            } catch (\Throwable $th) {
+                return $th;
+            }
         }
     }
 

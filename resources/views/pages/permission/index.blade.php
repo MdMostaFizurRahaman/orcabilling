@@ -44,9 +44,24 @@
                         <div v-show="showAlert" class="alert alert-warning alert-rounded"> <i class="ti-alert"></i> If you select both user & role permissions will be merged.
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
                         </div>
+
+                        <div class="row m-b-10 m-t-10">
+                            <div class="col-lg-12">
+                                <input class="form-control" type="text" v-model="search" placeholder="Search Permissions..." />
+                            </div>
+                        </div>
+
                         <div class="row">
-                            <div class="col-lg-3 col-md-4 col-sm-6 m-t-10" v-for="permission in permissions" :key="permission.id">    
-                                <div  class="list-group-item"> 
+                            <div class="col-lg-3 col-md-4 col-sm-6 m-t-10" v-show="!search">
+                                <div  class="list-group-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="checkAll" v-model="allChecked" v-on:change="checkAll()">
+                                        <label class="custom-control-label" for="checkAll">Check All</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 m-t-10" v-for="permission in filteredPermissions" :key="permission.id">
+                                <div  class="list-group-item">
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" :id="permission.name" :value="permission.name" v-model="form.checkedPermissions">
                                             <label class="custom-control-label" :for="permission.name">  @{{permission.name}}</label>
@@ -54,15 +69,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="row m-t-10">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <span>@{{form.checkedPermissions}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -72,18 +78,20 @@
 
 
 
-@push('scripts')   
+@push('scripts')
 <script>
 
 const app = new Vue({
         el: '#permission',
 
         data:{
-            getUserUrl : "{{route('getUsers')}}",
-            getRoleUrl : "{{route('getRolesName')}}",
+            getUserUrl : "{{route('users')}}",
+            getRoleUrl : "{{route('roles')}}",
             users: [],
             roles: [],
             permissions : [],
+            search:'',
+            allChecked: false,
             form: new Form({
                     user: '',
                     role: '',
@@ -97,12 +105,28 @@ const app = new Vue({
                 }else{
                     return false;
                 }
+            },
+
+            filteredPermissions: function (){
+                return this.permissions.filter(permission => {
+                    return permission.name.match(this.search);
+                });
             }
         },
         methods:{
+            checkAll(){
+                if(this.allChecked){
+                    this.permissions.forEach(permission => {
+                        this.form.checkedPermissions.push(permission.name);
+                    });
+                } else {
+                    this.form.checkedPermissions = []
+                }
+            },
             getUsers(){
                 axios.get(this.getUserUrl)
                     .then(res=>{
+                        console.log(res.data)
                         this.users = res.data
                     })
                     .catch(e=>{
@@ -119,7 +143,7 @@ const app = new Vue({
                     })
             },
             getPermissions(){
-                axios.get('{{route("getPermissions")}}')
+                axios.get('{{route("permissions")}}')
                     .then(res=>{
                         this.permissions = res.data;
                     })
@@ -140,14 +164,13 @@ const app = new Vue({
             },
             getUserPermissions(){
                 var id = this.form.user;
-                this.form.checkedPermissions = []
+                this.form.allChecked = false;
+                this.form.checkedPermissions = [];
                 this.form.role='';
                 axios.post("{{route('getUserPermissions')}}",{id: id})
                     .then(res=>{
-                        console.log(res.data)
-                        this.form.role = ''
-                        this.form.checkedPermissions =[];
-                        this.form.checkedPermissions = res.data
+                        this.form.role = '';
+                        this.form.checkedPermissions = res.data;
                     })
                     .catch(e=>{
                        alert(e)
@@ -155,20 +178,19 @@ const app = new Vue({
             },
             getRolePermissions(){
                 var role = this.form.role;
-                 this.form.checkedPermissions = []
-                 this.form.user='';
+                this.form.allChecked = false;
+                this.form.checkedPermissions = [];
+                this.form.user='';
                 axios.post("{{route('getRolePermissions')}}",{role: role})
                     .then(res=>{
-                        console.log(res.data)
-                        this.form.user = ''
-                        this.form.checkedPermissions =[];
-                        this.form.checkedPermissions = res.data
+                        this.form.user = '';
+                        this.form.checkedPermissions = res.data;
                     })
                     .catch(e=>{
                        alert(e)
                     })
             }
-        }, 
+        },
         mounted(){
             this.getUsers()
             this.getRolesName()

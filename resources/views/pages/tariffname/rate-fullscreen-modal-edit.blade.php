@@ -4,6 +4,8 @@
             <div class="modal-dialog modal-fluid" role="document">
                 <div class="modal-content ">
                     <form @submit.prevent="update()" class="m-t-30">
+                        <input type="hidden" name="_token" v-model="form._token">
+                        {{-- @csrf --}}
                         <div class=" modal-header">
                             <h3 class="modal-title w-100" id="exampleModalPreviewLabel"><i class="ti-marker-alt m-r-10"></i>Edit Rate Details</h3>
                             <button  type="button" class="close " data-dismiss="modal" aria-label="Close">

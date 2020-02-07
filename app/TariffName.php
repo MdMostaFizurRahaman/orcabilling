@@ -10,6 +10,16 @@ class TariffName extends Model
     protected $table = 'tariffnames';
     protected $guarded = [];
 
+    // this is a recommended way to declare event handlers
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($tariff) { // before delete() method call this
+             $tariff->rates()->delete();
+             // do the rest of the cleanup...
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User', 'created_by');
@@ -18,6 +28,16 @@ class TariffName extends Model
     public function clients()
     {
         return $this->hasMany('App\Client', 'id', 'tariff_id');
+    }
+
+    public function calls()
+    {
+        return $this->hasMany('App\Call', 'tariff_id');
+    }
+
+    public function failed_calls()
+    {
+        return $this->hasMany('App\FailedCall', 'tariff_id');
     }
 
     public function currency()

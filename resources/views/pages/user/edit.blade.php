@@ -44,10 +44,10 @@
                                 <div class="form-group">
                                         <label for="">Address</label>
                                     <textarea v-model="form.address" name="text" :class="{ 'is-invalid': form.errors.has('address') }" class="form-control" placeholder="Address">
-                                          
+
                                     </textarea>
                                     <has-error :form="form" field="address"></has-error>
-                                </div> 
+                                </div>
                             <div class="row">
                                 <div class="form-group col-lg-4">
                                         <label for="">City</label>
@@ -98,23 +98,23 @@
                 })
             },
             methods:{
-                updateUser(){  
+                updateUser(){
                     this.form.put(`${this.form.id}`)
                         .then(response=>{
-                            
+
                             console.log(response.data);
 
                             Swal.fire(
-                            'Success!',
-                            'User updated successfully',
-                            'success'
+                                'Success!',
+                                'User updated successfully',
+                                'success'
                             )
-                            
+
                         })
                         .catch(e=>{
-        
+
                             console.log(e);
-                            
+
                         })
                 }
             },

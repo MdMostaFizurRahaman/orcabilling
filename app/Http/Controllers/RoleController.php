@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
-use Spatie\Permission\Models\Role;
-use App\User;
 
 class RoleController extends Controller
 {
@@ -62,7 +62,7 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getRoles()
+    public function dataTable()
     {
         $outputs = DB::table('roles')->select(['id', 'name']);
 
@@ -71,7 +71,7 @@ class RoleController extends Controller
                 return '<button  data-id="'.$query->id.'" class="btn btn-sm btn-danger delete"><i class="fa fa-trash"></i> Delete</button>';
             })
             ->addColumn('edit',function ($query) {
-                return '<a  href="#role" data-id="'.$query->id.'" data-name="'.$query->name.'" class="btn btn-sm btn-info edit"><i class="fa fa-edit"></i> Edit</a>';
+                return '<a  href="" data-id="'.$query->id.'" data-name="'.$query->name.'" class="btn btn-sm btn-info edit"><i class="fa fa-edit"></i> Edit</a>';
             })
            ->rawColumns(['edit', 'delete'])
             ->make(true);
@@ -92,7 +92,6 @@ class RoleController extends Controller
 
         $role->update($request->all());
         return $role;
-
     }
 
     /**
@@ -111,12 +110,7 @@ class RoleController extends Controller
         }
     }
 
-    public function getUsers()
-    {
-        return User::all();
-    }
-
-    public function getRolesName()
+    public function roles()
     {
         return Role::all();
     }
@@ -128,7 +122,6 @@ class RoleController extends Controller
                 'role' => 'required',
             ]
         );
-
 
         $user= User::find($request->user);
         return $user->assignRole($request->role);

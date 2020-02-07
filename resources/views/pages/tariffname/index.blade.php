@@ -175,21 +175,29 @@ const app = new Vue({
             delete(id){
                 this.form.delete(`tariffnames/${id}`)
                     .then(res=>{
-                        console.log(res.data)
-                        this.$toastr.s(
-                            "Tariffname deleted successfully"
-                        );
-                        getTariffnames();
+                        if(res.data.status){
+                            console.log(res.data)
+                            this.$toastr.s(res.data.msg);
+                            getTariffnames();
+                        } else {
+                            Swal.fire({
+                                title: "Oops!",
+                                text: res.data.msg,
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Fine"
+                            })
+                        }
+
                     })
                     .catch(e=>{
                         alert(e);
                     })
             },
-            tariff(id){
-                $('#tariff-fullscreen-modal').modal('show')
-            },
             getCurrenciesName(id){
-                axios.get('{{route("getCurrenciesName")}}')
+                axios.get('{{route("currencies")}}')
                     .then(res=>{
                         this.currencies = res.data
                     })

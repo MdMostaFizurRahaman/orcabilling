@@ -42,11 +42,9 @@ class PermissionController extends Controller
        } catch (\Throwable $th) {
            return $th;
        }
-
-
     }
 
-    public function getPermissions()
+    public function permissions()
     {
         return Permission::all();
     }

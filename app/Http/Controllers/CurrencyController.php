@@ -18,10 +18,12 @@ class CurrencyController extends Controller
         return view('pages.currency.index');
     }
 
+    public function currencies()
+    {
+        return $currencies = Currency::all();
+    }
 
-
-
-    public function getCurrencies()
+    public function dataTable()
     {
         $outputs = Currency::select(['id', 'name', 'symbol', 'ratio']);
 

@@ -15,9 +15,9 @@ class Call extends Model
         return $this->belongsTo("App\Client", 'client_id');
     }
 
-    public function rate()
+    public function tariff()
     {
-        return $this->belongsTo('App\Rate', 'tariff_id');
+        return $this->belongsTo('App\TariffName', 'tariff_id');
     }
 
     public function gateway()

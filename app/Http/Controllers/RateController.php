@@ -80,9 +80,9 @@ class RateController extends Controller
      * @param  \App\Rate  $rate
      * @return \Illuminate\Http\Response
      */
-    public function getRateDetails(Request $request)
+    public function show(Request $request, $id)
     {
-        return Rate::find($request->id);
+        return Rate::find($id);
     }
 
     /**
@@ -103,7 +103,7 @@ class RateController extends Controller
      * @param  \App\Rate  $rate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rate $rate)
+    public function update(Request $request, $tariffId, $id)
     {
         $this->validate($request, [
             'prefix' => 'required|string|max:191',
@@ -120,6 +120,7 @@ class RateController extends Controller
             'effective_date' => 'required|string|max:20',
         ]);
 
+        $rate = Rate::find($id);
         $rate->update($request->all());
         return $rate;
     }

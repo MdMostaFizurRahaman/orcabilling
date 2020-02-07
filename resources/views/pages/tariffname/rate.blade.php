@@ -78,6 +78,8 @@
 
 @push('scripts')
 
+    @routes()
+
 {{-- DataTable --}}
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
@@ -88,6 +90,8 @@
             $('#import').click(function(){
                 $('#import-modal').modal('show');
             })
+            var _token = $('meta[name="csrf-token"]').attr('content');
+            console.log(_token);
         })
 
         function getTariffRates(){
@@ -150,6 +154,7 @@ const app = new Vue({
             disabled: false,
             currencies: [],
             form: new Form({
+                    _token: window._token,
                     tariffname_id: '{{$tariffname_id}}',
                     id: '',
                     prefix: '',
@@ -203,7 +208,7 @@ const app = new Vue({
             },
             update(){
                 this.disabled = true;
-                this.form.put(`${this.form.id}`)
+                this.form.put(`rate/${this.form.id}`)
                     .then(response=>{
                         this.form.reset()
                         this.disabled = false;
@@ -233,7 +238,7 @@ const app = new Vue({
                     })
             },
             getRate(id){
-                axios.post('{{route("getRateDetails")}}', {id:id})
+                axios.get(route("rate.show", id))
                     .then(res=>{
                         this.form.fill(res.data)
                     })

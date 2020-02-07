@@ -2,7 +2,7 @@
 
 @section('title')
     Roles
-@endsection 
+@endsection
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
@@ -100,7 +100,7 @@
 
 {{-- DataTable --}}
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>    
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
         $(function(){
             getRoles();
@@ -112,7 +112,7 @@
                     serverSide: true,
                     destroy: true,
                     "order": [[ 0, "desc" ]],
-                    ajax:  "{{route('getRoles')}}",
+                    ajax:  "{{route('roles.datatable')}}",
                     columns: [
                                 { data: 'id', name: 'id' },
                                 { data: 'name', name: 'name' },
@@ -120,7 +120,8 @@
                                 { data: 'delete', name: 'delete' },
                             ],
                     "drawCallback": function( settings ) {
-                        $('.edit').click(function(){
+                        $('.edit').click(function(e){
+                            e.preventDefault()
                             var id = $(this).data("id");
                             var name = $(this).data("name");
                             app.edit(id, name);
@@ -130,7 +131,7 @@
                             Swal.fire({
                                 title: "Are you sure?",
                                 text: "You won\'t be able to revert this!",
-                                type: "warning",
+                                icon: "warning",
                                 showCancelButton: true,
                                 confirmButtonColor: "#3085d6",
                                 cancelButtonColor: "#d33",
@@ -146,13 +147,11 @@
             });
         }
 
-   
+
 const app = new Vue({
         el: '#role',
 
         data:{
-            getUserUrl : "{{route('getUsers')}}",
-            getRoleUrl : "{{route('getRolesName')}}",
             disabled: false,
             editMode: false,
             users: [],
@@ -223,7 +222,7 @@ const app = new Vue({
                     })
             },
             getUsers(){
-                axios.get(this.getUserUrl)
+                axios.get("{{route('users')}}")
                     .then(res=>{
                         this.users = res.data
                     })
@@ -232,7 +231,7 @@ const app = new Vue({
                     })
             },
             getRolesName(){
-                axios.get(this.getRoleUrl)
+                axios.get("{{route('roles')}}")
                     .then(res=>{
                        this.roles = res.data
                     })
@@ -252,7 +251,7 @@ const app = new Vue({
                         alert(e)
                     })
             }
-        }, 
+        },
         mounted(){
             this.getUsers()
             this.getRolesName()
