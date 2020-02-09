@@ -106,7 +106,7 @@ class RateController extends Controller
     public function update(Request $request, $tariffId, $id)
     {
         $this->validate($request, [
-            'prefix' => 'required|string|unique:rates|max:191',
+            'prefix' => 'required|string|max:191|unique:rates,id,'.$id,
             'description' => 'required|string|max:191',
             'from_day' => 'required|between:0,5',
             'to_day' => 'required|between:1,6|later:from_day',
