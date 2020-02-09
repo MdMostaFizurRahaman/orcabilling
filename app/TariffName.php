@@ -63,9 +63,9 @@ class TariffName extends Model
             "*, locate(prefix, $number) as prefix_status"
             )->whereRaw("locate(prefix, $number) = 1")
             ->where('from_day', '<=', $this->getDayNumberOfWeek($data['StartTime']))
-            ->where('to_day', '>=', $this->getDayNumberOfWeek($data['EndTime']))
+            ->where('to_day', '>=', $this->getDayNumberOfWeek($data['StartTime']))
             ->where('from_hour', '<=', $this->getTime($data['StartTime']))
-            ->where('to_hour', '>=', $this->getTime($data['EndTime']))
+            ->where('to_hour', '>=', $this->getTime($data['StartTime']))
             ->orderBy('prefix', "desc")
             ->first();
     }

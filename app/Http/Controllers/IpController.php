@@ -37,8 +37,8 @@ class IpController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'ip' => "required|ipv4|unique:ips",
-            'client_id' => 'required',
+            'ip' => "required|ip|unique:ips",
+            'client_id' => 'required|integer',
         ]);
         $ip = new Ip();
         $ip->create($request->all());
@@ -76,6 +76,10 @@ class IpController extends Controller
      */
     public function update(Request $request)
     {
+        $this->validate($request, [
+            'ip' => "required|ip|unique:ips",
+            'client_id' => 'required|integer',
+        ]);
         $ip = Ip::find($request->id);
         $ip->update($request->all());
         return $ip;
