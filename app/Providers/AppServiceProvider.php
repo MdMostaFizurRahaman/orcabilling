@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Validator::replacer('later', function($message, $attribute, $rule, $parameters) {
-            return str_replace(':field', Str::title(str_replace('_', ' ', $parameters[0])), ':field shold be between "From day" to Saturday.');
+            return str_replace(':field', Str::title(str_replace('_', ' ', $attribute)), ':field shold be between "From day" to Saturday.');
         });
     }
 }
