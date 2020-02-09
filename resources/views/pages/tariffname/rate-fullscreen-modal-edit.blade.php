@@ -44,7 +44,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <label for="">From Day </label><small>(Week starts from Sunday)</small>
+                                                    <label for="">From Day </label> <small> (Week starts from Sunday)</small>
                                                     <select  v-model="form.from_day" name="from_day" class="form-control" :class="{ 'is-invalid': form.errors.has('from_day') }">
                                                         <option value=0>Sunday</option>
                                                         <option value=1>Monday</option>
@@ -62,7 +62,7 @@
                                                     <has-error :form="form" field="from_hour"></has-error>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="">To Day </label><small>(Week ends in Saturday)</small>
+                                                    <label for="">To Day </label> <small> (Week ends in Saturday)</small>
                                                     <select  v-model="form.to_day" name="to_day" class="form-control" :class="{ 'is-invalid': form.errors.has('to_day') }">
                                                         <option value=0>Sunday</option>
                                                         <option value=1>Monday</option>
