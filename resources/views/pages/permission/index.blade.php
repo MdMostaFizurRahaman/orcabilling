@@ -164,8 +164,8 @@ const app = new Vue({
             },
             getUserPermissions(){
                 var id = this.form.user;
-                this.form.allChecked = false;
                 this.form.checkedPermissions = [];
+                this.form.allChecked = false;
                 this.form.role='';
                 axios.post("{{route('getUserPermissions')}}",{id: id})
                     .then(res=>{
@@ -178,8 +178,8 @@ const app = new Vue({
             },
             getRolePermissions(){
                 var role = this.form.role;
-                this.form.allChecked = false;
                 this.form.checkedPermissions = [];
+                this.form.allChecked = false;
                 this.form.user='';
                 axios.post("{{route('getRolePermissions')}}",{role: role})
                     .then(res=>{

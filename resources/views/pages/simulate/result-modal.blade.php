@@ -46,8 +46,8 @@
                                 <td>@{{result.duration + " Seconds"}}</td>
                                 <td>@{{result.duration + " Seconds"}}</td>
                                 <th>Tariff Description</th>
-                                <td>@{{result.c_rate.prefix + " Seconds"}}</td>
-                                <td>@{{result.g_effective_duration + " Seconds"}}</td>
+                                <td>@{{result.c_rate.description}}</td>
+                                <td>@{{result.g_rate.description}}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Effective Duration</th>

@@ -120,8 +120,8 @@
                                 { data: 'delete', name: 'delete' },
                             ],
                     "drawCallback": function( settings ) {
-                        $('.edit').click(function(e){
-                            e.preventDefault()
+                        $('.edit').click(function(){
+                            event.preventDefault()
                             var id = $(this).data("id");
                             var name = $(this).data("name");
                             app.edit(id, name);

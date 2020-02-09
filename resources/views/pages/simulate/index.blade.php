@@ -68,7 +68,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Duration</label>
+                                            <label for="">Duration (ms)</label>
                                             <input v-model="form.duration"  type="text" name="duration" :class="{ 'is-invalid': form.errors.has('duration') }" class="form-control">
                                             <has-error :form="form" field="duration"></has-error>
                                         </div>
