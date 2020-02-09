@@ -44,15 +44,15 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <label for="">From Day</label>
+                                                    <label for="">From Day </label><small>(Week starts from Sunday)</small>
                                                     <select  v-model="form.from_day" name="from_day" class="form-control" :class="{ 'is-invalid': form.errors.has('from_day') }">
-                                                        <option value=6 >Saturday</option>
                                                         <option value=0>Sunday</option>
                                                         <option value=1>Monday</option>
                                                         <option value=2>Tuesday</option>
                                                         <option value=3>Wednesday</option>
                                                         <option value=4>Thusday</option>
                                                         <option value=5>Friday</option>
+                                                        <option value=6 >Saturday</option>
                                                     </select>
                                                     <has-error :form="form" field="from_day"></has-error>
                                                 </div>
@@ -62,15 +62,15 @@
                                                     <has-error :form="form" field="from_hour"></has-error>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="">To Day</label>
+                                                    <label for="">To Day </label><small>(Week ends in Saturday)</small>
                                                     <select  v-model="form.to_day" name="to_day" class="form-control" :class="{ 'is-invalid': form.errors.has('to_day') }">
-                                                        <option value=6 >Saturday</option>
                                                         <option value=0>Sunday</option>
                                                         <option value=1>Monday</option>
                                                         <option value=2>Tuesday</option>
                                                         <option value=3>Wednesday</option>
                                                         <option value=4>Thusday</option>
                                                         <option value=5>Friday</option>
+                                                        <option value=6 >Saturday</option>
                                                     </select>
                                                     <has-error :form="form" field="to_day"></has-error>
                                                 </div>
