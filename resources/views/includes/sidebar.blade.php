@@ -161,62 +161,62 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)
-                               " aria-expanded="false">
-                            <i class="icon-Settings-Window"></i>
-                            <span class="hide-menu">System</span>
-                        </a>
-                        <ul aria-expanded="false" class="collapse first-level">
-                            <li class="sidebar-item">
-                                <a href="timeline-center.html" class="sidebar-link">
-                                    <i class="mdi mdi-clock-fast"></i>
-                                    <span class="hide-menu"> Access Log </span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="timeline-horizontal.html" class="sidebar-link">
-                                    <i class="mdi mdi-clock-end"></i>
-                                    <span class="hide-menu"> System Status</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="timeline-left.html" class="sidebar-link">
-                                    <i class="mdi mdi-clock-in"></i>
-                                    <span class="hide-menu"> Firewall Status</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="timeline-right.html" class="sidebar-link">
-                                    <i class="mdi mdi-clock-start"></i>
-                                    <span class="hide-menu"> Media IP Blocker</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="authentication-login1.html" class="sidebar-link">
-                                    <i class="mdi mdi-account-key"></i>
-                                    <span class="hide-menu"> Active Calls </span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="authentication-login2.html" class="sidebar-link">
-                                    <i class="mdi mdi-account-key"></i>
-                                    <span class="hide-menu"> Active Registration </span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="authentication-register1.html" class="sidebar-link">
-                                    <i class="mdi mdi-account-plus"></i>
-                                    <span class="hide-menu"> Debug Tools</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="authentication-register2.html" class="sidebar-link">
-                                    <i class="mdi mdi-account-plus"></i>
-                                    <span class="hide-menu"> Web Calls</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)
+                            " aria-expanded="false">
+                        <i class="icon-Settings-Window"></i>
+                        <span class="hide-menu">System</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse first-level">
+                        <li class="sidebar-item">
+                            <a href="timeline-center.html" class="sidebar-link">
+                                <i class="mdi mdi-clock-fast"></i>
+                                <span class="hide-menu"> Access Log </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="timeline-horizontal.html" class="sidebar-link">
+                                <i class="mdi mdi-clock-end"></i>
+                                <span class="hide-menu"> System Status</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="timeline-left.html" class="sidebar-link">
+                                <i class="mdi mdi-clock-in"></i>
+                                <span class="hide-menu"> Firewall Status</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="timeline-right.html" class="sidebar-link">
+                                <i class="mdi mdi-clock-start"></i>
+                                <span class="hide-menu"> Media IP Blocker</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="authentication-login1.html" class="sidebar-link">
+                                <i class="mdi mdi-account-key"></i>
+                                <span class="hide-menu"> Active Calls </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="authentication-login2.html" class="sidebar-link">
+                                <i class="mdi mdi-account-key"></i>
+                                <span class="hide-menu"> Active Registration </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="authentication-register1.html" class="sidebar-link">
+                                <i class="mdi mdi-account-plus"></i>
+                                <span class="hide-menu"> Debug Tools</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="authentication-register2.html" class="sidebar-link">
+                                <i class="mdi mdi-account-plus"></i>
+                                <span class="hide-menu"> Web Calls</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

@@ -18,7 +18,7 @@ class RateController extends Controller
      */
     public function index($id)
     {
-        return view('pages.tariffname.rate')->with('tariffname_id', $id);
+        return view('pages.tariffname.rates-index')->with('tariffname_id', $id);
     }
 
     public function getRatesTable($id){
@@ -58,9 +58,9 @@ class RateController extends Controller
             'prefix' => 'required|string|unique:rates|max:191',
             'description' => 'required|string|max:191',
             'from_day' => 'required|between:0,5',
-            'to_day' => 'required|between:1,6|later:from_day',
+            'to_day' => 'required|between:1,6|greater_than:from_day',
             'from_hour' => 'required|max:6',
-            'to_hour' => 'required|max:6',
+            'to_hour' => 'required|max:6|greater_than:from_hour',
             'voice_rate' => 'required|max:20',
             'grace_period' => 'required|max:11',
             'minimal_time' => 'required|max:6',
@@ -109,9 +109,9 @@ class RateController extends Controller
             'prefix' => 'required|string|max:191|unique:rates,id,'.$id,
             'description' => 'required|string|max:191',
             'from_day' => 'required|between:0,5',
-            'to_day' => 'required|between:1,6|later:from_day',
+            'to_day' => 'required|between:1,6|greater_than:from_day',
             'from_hour' => 'required|max:6',
-            'to_hour' => 'required|max:6',
+            'to_hour' => 'required|max:6|greater_than:from_hour',
             'voice_rate' => 'required|max:20',
             'grace_period' => 'required|max:11',
             'minimal_time' => 'required|max:6',
@@ -154,9 +154,9 @@ class RateController extends Controller
             'file' => 'required|mimes:xlsx',
         ]);
 
-        $path1 = $request->file('file')->store('temp');
-        $path=storage_path('app').'/'.$path1;
-        $data = Excel::import(new RatesImport, $path);
+        $temp_path = $request->file('file')->store('temp');
+        $storage_path = storage_path('app').'/'.$temp_path;
+        $data = Excel::import(new RatesImport, $storage_path);
 
         if($data){
             return "File imported successfully";

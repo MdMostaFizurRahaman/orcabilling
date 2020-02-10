@@ -9,14 +9,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form @submit.prevent="submitForm()" enctype="multipart/form-data">
+                <form @submit.prevent="importRates()" enctype="multipart/form-data">
                     <div class="form-group">
                         <input class="form-control" name="import" type="file" id="file" ref="file" v-on:change="onChangeFileUpload()"/>
                     </div>
                     {{-- <div class="form-group">
                         <output class="form-control">
-                                Column Order: tariffname_id, prefix, description, voice_rate, from_day, to_day, from_hour, to_hour, grace_period, 
-                                minimal_time, resolution, rate_multiplier, free_seconds, effective_date. 
+                                Column Order: tariffname_id, prefix, description, voice_rate, from_day, to_day, from_hour, to_hour, grace_period,
+                                minimal_time, resolution, rate_multiplier, free_seconds, effective_date.
                         </output>
                     </div> --}}
                     <ul>
@@ -33,4 +33,3 @@
         </div>
     </div>
 </div>
-      

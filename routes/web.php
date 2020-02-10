@@ -28,7 +28,6 @@ Route::group(['middleware' => ['auth', 'activity_wathcer']], function () {
     // ACL Routes
     Route::group(['middleware' => ['role:Super Admin']], function () {
 
-        // Previous
         // Users Routes
         Route::resource('users', "UserController");
         Route::get('/users/delete/{user}', "UserController@destroy");

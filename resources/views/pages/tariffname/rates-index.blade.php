@@ -91,7 +91,6 @@
                 $('#import-modal').modal('show');
             })
             var _token = $('meta[name="csrf-token"]').attr('content');
-            console.log(_token);
         })
 
         function getTariffRates(){
@@ -104,6 +103,7 @@
                 ajax:  "{{route('getTariffRates',$tariffname_id)}}",
                 columns: [
                             { data: 'id', name: 'id' },
+
                             { data: 'prefix', name: 'prefix' },
                             { data: 'description', name: 'description' },
                             { data: 'voice_rate', name: 'voice_rate' },
@@ -114,7 +114,8 @@
                             { data: 'delete', name: 'delete' },
                         ],
                 "drawCallback": function( settings ) {
-                    $('.view').click(function(){
+                    $('.view').click(function(e){
+                        e.preventDefault();
                         var id = $(this).data("id");
                         app.view(id);
                     });
@@ -249,7 +250,7 @@ const app = new Vue({
             openModal(){
                     $('#rate-fullscreen-modal-create').modal('show')
             },
-            submitForm(){
+            importRates(){
                     this.disabled = true;
                     let formData = new FormData();
                     formData.append('file', this.file);

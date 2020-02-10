@@ -96,15 +96,15 @@ class ClientController extends Controller
                         </div>';
             })
             ->addColumn('ip', function ($query) {
-                return '<button   data-id="' . $query->id . '" class="btn btn-sm btn-primary ip"><i class="fas fa-binoculars"></i> View</button>';
+                return '<button data-id="' . $query->id . '" class="btn btn-sm btn-primary ip"><i class="fas fa-binoculars"></i> View</button>';
             })
             ->addColumn('payment', function ($query) {
-                return '<button   data-id="' . $query->id . '" class="btn btn-sm btn-success payment"><i class="fa fa-plus"></i> Add</button>';
+                return '<button data-id="' . $query->id . '" class="btn btn-sm btn-success payment"><i class="fa fa-plus"></i> Add</button>';
             })
-            ->editColumn('tariff_id', function ($query) {
-                return $query->tariff->name;
+            ->addColumn('tariff', function ($query) {
+                return '<a href="'.route('rate.index', $query->tariff_id).'" class="btn btn-sm btn-success tariff"><i class="fa fa-book"></i> ' . $query->tariff->name . '</a>';
             })
-            ->rawColumns(['action', 'payment', 'ip'])
+            ->rawColumns(['tariff', 'action', 'payment', 'ip'])
             ->make(true);
     }
     /**

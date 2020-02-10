@@ -28,15 +28,16 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        Validator::extend('later', function($attribute, $value, $parameters, $validator) {
-            $min_field = $parameters[0];
+        Validator::extend('greater_than', function($attribute, $value, $parameters, $validator) {
+            $compare_field = $parameters[0];
             $data = $validator->getData();
-            $min_value = $data[$min_field];
-            return $value > $min_value;
+            $compare_value = $data[$compare_field];
+            return $value > $compare_value;
         });
 
-        Validator::replacer('later', function($message, $attribute, $rule, $parameters) {
-            return str_replace(':field', Str::title(str_replace('_', ' ', $attribute)), ':field shold be between "From day" to Saturday.');
+        Validator::replacer('greater_than', function($message, $attribute, $rule, $parameters) {
+            $compare_field = $parameters[0];
+            return str_replace(':field', Str::title(str_replace('_', ' ', $attribute)), ':field must be later from "' . Str::title(str_replace("_", " ", $compare_field)) . '.');
         });
     }
 }

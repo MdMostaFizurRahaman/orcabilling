@@ -47,7 +47,7 @@
                                         <th>Name</th>
                                         <th>Capacity</th>
                                         <th>Balance</th>
-                                        <th>Rate</th>
+                                        <th>Tariff</th>
                                         <th>IPs</th>
                                         <th>Payment</th>
                                         <th>Action</th>
@@ -72,6 +72,7 @@
 
 
 @push('scripts')
+    @routes()
 
 {{-- DataTable --}}
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
@@ -98,7 +99,11 @@
                             { data: 'username', name: 'username' },
                             { data: 'capacity', name: 'capacity' },
                             { data: 'account_state', name: 'account_state' },
-                            { data: 'tariff_id', name: 'tariff_id' },
+                            // { data: 'tariff_id', name: 'tariff_id', render:function(data, type, row){
+                            //         return "<a href='" + route('rate.index', row.tariff_id) + "' class='view' data-id='" + row.tariff_id +"'>" + row.tariff_id + "</a>"
+                            //     }
+                            // },
+                            { data: 'tariff', name: 'tariff' },
                             { data: 'ip', name: 'ip' },
                             { data: 'payment', name: 'payment' },
                             { data: 'action', name: 'action' },
