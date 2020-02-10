@@ -5,7 +5,6 @@
     Permissions
 @endsection
 
-
 @section('content')
     <div class="container-fluid">
         <div class="row" id="permission">

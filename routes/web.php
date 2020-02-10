@@ -23,7 +23,7 @@ Route::get('/testreport', "ParseLogController@testReport");
 
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'activity_wathcer']], function () {
 
     // ACL Routes
     Route::group(['middleware' => ['role:Super Admin']], function () {

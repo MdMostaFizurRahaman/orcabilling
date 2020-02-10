@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
+
         Validator::extend('later', function($attribute, $value, $parameters, $validator) {
             $min_field = $parameters[0];
             $data = $validator->getData();
