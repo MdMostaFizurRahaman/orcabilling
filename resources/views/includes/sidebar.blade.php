@@ -109,7 +109,7 @@
                         <li class="sidebar-item">
                             <a href="#" class="sidebar-link">
                                 <i class="mdi mdi-weather-fog"></i>
-                                <span class="hide-menu">Log Generator</span>
+                                <span class="hide-menu">Lot Generator</span>
                             </a>
                         </li>
                         <li class="sidebar-item">

@@ -2,7 +2,7 @@
 
 @section('title')
     Currencies
-@endsection 
+@endsection
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
@@ -89,7 +89,7 @@
 
 {{-- DataTable --}}
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>    
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
         $(function(){
             getCurrencies();
@@ -101,7 +101,7 @@
                 serverSide: true,
                 destroy: true,
                 "order": [[ 0, "desc" ]],
-                ajax:  "{{route('getCurrencies')}}",
+                ajax:  "{{route('currencies.datatable')}}",
                 columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
@@ -136,7 +136,7 @@
         });
     }
 
-   
+
 const app = new Vue({
         el: '#currency',
 
@@ -203,7 +203,7 @@ const app = new Vue({
                     .catch(e=>{
                         alert(e);
                     })
-            }, 
+            },
             getCurrency(id){
                 axios.post('{{route("getCurrency")}}', {id:id})
                     .then(res=>{
@@ -213,10 +213,10 @@ const app = new Vue({
                     .catch(e=>{
                         console.log(e)
                     })
-            }  
-        }, 
+            }
+        },
         mounted(){
-         
+
         }
     });
 
