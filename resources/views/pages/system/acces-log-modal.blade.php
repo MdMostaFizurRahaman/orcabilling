@@ -41,7 +41,7 @@
                         </tr>
                         <tr>
                             <th scope="col">Action</th>
-                            <td>@{{log.browse}}</td>
+                            <td>@{{log.action}}</td>
                         </tr>
                         <tr>
                             <th scope="col">Post Data</th>
@@ -53,6 +53,10 @@
                                     </tr>
                                 </table>
                             </td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Status</th>
+                            <td>@{{log.status}}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -28,21 +28,22 @@
             <div class="col-lg-12 col-xl-12 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex no-block align-items-center m-b-30">
+                        <div class="d-flex no-block align-items-center m-b-10">
                             <h4 class="card-title">Activity Log</h4>
                             <div class="ml-auto">
                                 {{-- Something can go here. --}}
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table id="data_table" class="table table-bordered wrap display">
+                            <table id="data_table" class="table table-bordered table-striped wrap display">
                                 <thead>
                                     <tr>
                                         <th>Id</th>
                                         <th>User Name</th>
                                         <th>Date</th>
                                         <th>IP</th>
-                                        <th>Browse</th>
+                                        <th>Action</th>
+                                        <th>Status</th>
                                         <th>View</th>
                                     </tr>
                                 </thead>
@@ -85,10 +86,11 @@
             ajax:  "{{route('system.access-log.datatable')}}",
             columns: [
                         { data: 'id_log', name: 'id_log' },
-                        { data: 'user', name: 'user' },
+                        { data: 'user', name: 'user_id' },
                         { data: 'log_dt', name: 'log_dt' },
                         { data: 'user_ip', name: 'user_ip' },
-                        { data: 'browse', name: 'browse' },
+                        { data: 'action', name: 'action' },
+                        { data: 'status', name: 'status' },
                         { data: 'view', name: 'view' },
                     ],
             "drawCallback": function( settings ) {
@@ -121,6 +123,11 @@ const app = new Vue({
                     .catch(e=>{
                         alert(e);
                     })
+            },
+            closeModal(){
+                $(".result-modal").on('hide.bs.modal', function(){
+                    $('.result-modal').addClass('fade')
+                }).modal('hide');
             },
         }
     });

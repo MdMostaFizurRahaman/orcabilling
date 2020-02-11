@@ -21,7 +21,7 @@ class ActivityLogController extends Controller
      */
     public function dataTable()
     {
-        $activityLogs = ActivityLog::select(['id_log', 'log_dt', 'user_id', 'user_ip', 'browse'])->orderBy('id_log', 'desc');
+        $activityLogs = ActivityLog::select(['id_log', 'log_dt', 'user_id', 'user_ip', 'action', 'status']);
 
         return DataTables::of($activityLogs)
             ->addColumn('view', function ($query) {
