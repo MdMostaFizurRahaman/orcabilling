@@ -9,7 +9,7 @@
 @endpush
 
 @section('content')
-<div class="container-fluid" id="gateway">
+<div class="container-fluid" id="client">
 
         @if(session()->has("success"))
         <div class="alert alert-bordered alert-success alert-dismissible fade show" role="alert">
@@ -149,7 +149,7 @@
 
 
 const app = new Vue({
-        el: '#gateway',
+        el: '#client',
         data:{
             file: '',
             disabled: false,

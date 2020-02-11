@@ -3,10 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\DB;
+use App\System\ActivityLog;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
-class ActivityWatcher
+class WatchDog
 {
     /**
      * Handle an incoming request.
@@ -17,18 +18,24 @@ class ActivityWatcher
      */
     public function handle($request, Closure $next)
     {
+        $response = $next($request);
+
         $user_id = Auth::user()->id;
         $user_ip = $request->ip();
         $link_uri = $request->url();
         $post_data = $request->isMethod('post') ? json_encode($request->all()) : NULL;
+        $action = Route::currentRouteName();
+        $status = $response->getStatusCode();
 
-        $logActivity = DB::table('users_log')->insert([
+        $logActivity = ActivityLog::create([
                                 'user_id' => $user_id,
                                 'user_ip' => $user_ip,
                                 'link_uri' => $link_uri,
                                 'post_data' => $post_data,
+                                'action' => $action,
+                                'status' => $status,
                             ]);
+        return $response;
 
-        return $next($request);
     }
 }

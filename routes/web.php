@@ -16,14 +16,17 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/test', "ReportController@test");
+Route::get('/test', function(){
+    return Route::currentRouteName();
+})->name('test.route');
+
 Route::get('/parse', "ParseLogController@parse");
 Route::get('/get', "ParseLogController@getPrefix");
 Route::get('/testreport', "ParseLogController@testReport");
 
 
 
-Route::group(['middleware' => ['auth', 'activity_wathcer']], function () {
+Route::group(['middleware' => ['auth', 'watch_dog']], function () {
 
     // ACL Routes
     Route::group(['middleware' => ['role:Super Admin']], function () {
@@ -136,4 +139,14 @@ Route::group(['middleware' => ['auth', 'activity_wathcer']], function () {
     Route::get('/summary/loss-profit/fetch', "ReportController@lossProfitSummary")->name('loss-profit.summary.fetch');
     Route::get('/summary/loss-profit/export', "ReportController@exportlossProfitSummary")->name('loss-profit.summary.export');
 
+
+    Route::prefix('/system')->name('system.')->namespace('System')->group(function () {
+
+        // System Routes
+        // Activity log routes
+        Route::get('/access-log', "ActivityLogController@accessLogs")->name('access-log.index');
+        Route::get('/access-log/{id}', "ActivityLogController@show")->name('access-log.show');
+        Route::get('/access-logs/datatable', "ActivityLogController@dataTable")->name('access-log.datatable');
+
+    });
 });

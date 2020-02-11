@@ -133,13 +133,13 @@
                     </ul>
                 </li>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item {{Request::is('gateways') || Request::is('gateways/*') ? 'selected' : ''}}">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)
                         " aria-expanded="false">
                         <i class="icon-Gears"></i>
                         <span class="hide-menu">Configuration</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level">
+                    <ul aria-expanded="false" class="collapse first-level {{Request::is('gateways') || Request::is('gateways/*') ? 'in' : ''}}">
                         <li class="sidebar-item">
                             <a href="{{route('gateway.index')}}" class="sidebar-link">
                                 <i class="mdi mdi-export"></i>
@@ -160,15 +160,15 @@
                         </li>
                     </ul>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item {{Request::is('system') || Request::is('system/*') ? 'selected' : ''}}">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)
                             " aria-expanded="false">
                         <i class="icon-Settings-Window"></i>
                         <span class="hide-menu">System</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level">
-                        <li class="sidebar-item">
-                            <a href="timeline-center.html" class="sidebar-link">
+                    <ul aria-expanded="false" class="collapse first-level {{Request::is('system') || Request::is('system/*') ? 'in' : ''}}">
+                        <li class="sidebar-item {{Request::is('system/access-log*') ? 'active' : ''}}">
+                            <a href="{{route('system.access-log.index')}}" class="sidebar-link">
                                 <i class="mdi mdi-clock-fast"></i>
                                 <span class="hide-menu"> Access Log </span>
                             </a>

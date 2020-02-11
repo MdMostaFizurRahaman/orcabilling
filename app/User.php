@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\TariffName');
     }
+
+    public function activity()
+    {
+        return $this->hasMany('App\System\ActivityLog');
+    }
 }
