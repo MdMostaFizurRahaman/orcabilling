@@ -18,7 +18,7 @@
             <div class="col-lg-8 col-xl-8 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex no-block align-items-center m-b-30">
+                        <div class="d-flex no-block align-items-center m-b-10">
                             <h4 class="card-title">All Roles</h4>
                         </div>
                         <div class="table-responsive">
@@ -41,7 +41,7 @@
             <div class="col-lg-4 col-xl-4 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex no-block align-items-center m-b-30">
+                        <div class="d-flex no-block align-items-center m-b-10">
                             <h4 v-show="!editMode" class="card-title">Create Role</h4>
                             <h4 v-show="editMode" class="card-title">Edit Role</h4>
                         </div>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex no-block align-items-center m-b-30">
+                        <div class="d-flex no-block align-items-center m-b-10">
                             <h4 class="card-title">Assign Role</h4>
                         </div>
                         <form @submit.prevent = "assignRole()">

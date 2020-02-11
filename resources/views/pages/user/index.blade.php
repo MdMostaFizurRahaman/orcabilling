@@ -23,7 +23,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                     <div class="d-flex no-block align-items-center m-b-30">
+                     <div class="d-flex no-block align-items-center m-b-10">
                         <h4 class="card-title">All Users</h4>
                         <div class="ml-auto">
                             <div class="btn-group">
@@ -32,22 +32,20 @@
                         </div>
                     </div>
 
-                <div class="row">
+                    <div class="row">
                         <div class="col-sm-12">
-                                <table class="table table-striped table-bordered dataTable table-responsive" role="grid" aria-describedby="zero_config_info" id='data_table'>
-                                        <thead>
-                                                <th width='5%'>Id</th>
-                                                <th width='15%'>Name</th>
-                                                <th width="25%">Username</th>
-                                                <th width="15%">Email</th>
-                                                <th  class="text-center d-print-none" width="10%">Edit</th>
-                                                <th  class="text-center d-print-none" width="10%">Delete</th>
-                                            </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                            <table class="table table-striped table-bordered dataTable" role="grid" aria-describedby="zero_config_info" id='data_table'>
+                                <thead>
+                                    <th width='5%'>Id</th>
+                                    <th width='15%'>Name</th>
+                                    <th width="25%">Username</th>
+                                    <th width="15%">Email</th>
+                                    <th  class="text-center d-print-none" width="10%">Edit</th>
+                                    <th  class="text-center d-print-none" width="10%">Delete</th>
+                                </thead>
+                            </table>
                         </div>
-                </div>
+                    </div>
                 </div>
             </div>
         </div>

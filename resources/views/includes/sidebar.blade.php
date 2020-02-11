@@ -107,12 +107,6 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">
-                                <i class="mdi mdi-weather-fog"></i>
-                                <span class="hide-menu">Lot Generator</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
                             <a href="ui-card-draggable.html" class="sidebar-link">
                                 <i class="mdi mdi-bandcamp"></i>
                                 <span class="hide-menu">Generate Invoice</span>
