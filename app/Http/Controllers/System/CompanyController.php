@@ -83,6 +83,7 @@ class CompanyController extends Controller
         $keyValues = [];
         if($request->has('logo') && $CompanyDetails)
         {
+            // $deleteMedia = $CompanyDetails->getFirstMedia('logo')->delete();
             $updateMedia = $CompanyDetails->addMediaFromRequest('logo')->withResponsiveImages()->toMediaCollection('logo');
             $app_logo = asset('public').$CompanyDetails->getFirstMediaUrl('logo');
             $keyValues = [
@@ -96,9 +97,8 @@ class CompanyController extends Controller
 
         if($this->setEnvironmentValue($keyValues))
         {
-            return 'true';
-            // Alert::success('Success', 'Company details updated successfully.');
-            // return redirect()->back();
+            Alert::success('Success', 'Company details updated successfully.');
+            return redirect()->back();
             // return response(['status' => 'success', 'message' => 'Company details added successfully.']);
         }
 
