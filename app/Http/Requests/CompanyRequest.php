@@ -20,7 +20,7 @@ class CompanyRequest extends FormRequest
             case 'POST':
             case 'PUT':
             case 'PATCH':
-                return $company = $this->id ? Company::find($this->id)->exists() : true;
+                return $company = $this->id ? Company::find($this->id)->exists : true;
                 // return $company = Company::find($this->route('id'))->exists();
 
                 // return $company && $this->user()->can('update', $id);

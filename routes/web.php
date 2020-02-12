@@ -152,7 +152,7 @@ Route::group(['middleware' => ['auth', 'watch_dog']], function () {
         Route::get('/', "CompanyController@index")->name('settings');
         Route::post('/', "CompanyController@store")->name('store');
         Route::post('/update', "CompanyController@update")->name('update');
-        Route::get('/{mail_from_email}/{mail_from_name}/{test_mail_address}', "CompanyController@testMail")->name('test-mail');
+        Route::get('/test/delete', "CompanyController@test")->name('test-mail');
     });
 
 

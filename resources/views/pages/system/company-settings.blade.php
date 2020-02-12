@@ -34,11 +34,11 @@
                     <div class="align-items-center">
                         <h4 class="card-title">Company Settings</h4>
                     </div>
-                    @if(!empty($company))
+                    {{-- @if(!empty($company)) --}}
                     {!! Form::model($company, ['id' => 'company_update_form', 'route' => 'company.update', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
-                    @else
+                    {{-- @else
                     {!! Form::model($company, ['id' => 'company_form', 'route' => 'company.store', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
-                    @endif
+                    @endif --}}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card card-primary card-outline mb-2" id="company_deails">
