@@ -139,14 +139,21 @@ Route::group(['middleware' => ['auth', 'watch_dog']], function () {
     Route::get('/summary/loss-profit/fetch', "ReportController@lossProfitSummary")->name('loss-profit.summary.fetch');
     Route::get('/summary/loss-profit/export', "ReportController@exportlossProfitSummary")->name('loss-profit.summary.export');
 
-
+    // System Routes
     Route::prefix('/system')->name('system.')->namespace('System')->group(function () {
-
-        // System Routes
         // Activity log routes
         Route::get('/access-log', "ActivityLogController@accessLogs")->name('access-log.index');
         Route::get('/access-log/{id}', "ActivityLogController@show")->name('access-log.show');
         Route::get('/access-logs/datatable', "ActivityLogController@dataTable")->name('access-log.datatable');
-
     });
+
+    Route::prefix('/company')->name('company.')->namespace('System')->group(function () {
+        // Company Routes
+        Route::get('/', "CompanyController@index")->name('settings');
+        Route::post('/', "CompanyController@store")->name('store');
+        Route::post('/update', "CompanyController@update")->name('update');
+        Route::get('/{mail_from_email}/{mail_from_name}/{test_mail_address}', "CompanyController@testMail")->name('test-mail');
+    });
+
+
 });

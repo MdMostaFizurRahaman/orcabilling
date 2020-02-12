@@ -127,13 +127,13 @@
                     </ul>
                 </li>
                 </li>
-                <li class="sidebar-item {{Request::is('gateways') || Request::is('gateways/*') ? 'selected' : ''}}">
+                <li class="sidebar-item {{Request::is('gateways*') || Request::is('company*') ? 'selected' : ''}}">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)
                         " aria-expanded="false">
                         <i class="icon-Gears"></i>
                         <span class="hide-menu">Configuration</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level {{Request::is('gateways') || Request::is('gateways/*') ? 'in' : ''}}">
+                    <ul aria-expanded="false" class="collapse first-level {{Request::is('gateways*') || Request::is('company*') ? 'in' : ''}}">
                         <li class="sidebar-item">
                             <a href="{{route('gateway.index')}}" class="sidebar-link">
                                 <i class="mdi mdi-export"></i>
@@ -147,7 +147,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="form-mask.html" class="sidebar-link">
+                            <a href="{{route('company.settings')}}" class="sidebar-link">
                                 <i class="mdi mdi-box-shadow"></i>
                                 <span class="hide-menu"> Company Settings</span>
                             </a>

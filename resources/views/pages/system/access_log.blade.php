@@ -11,53 +11,53 @@
 @section('content')
 <div class="container-fluid" id="access_log">
 
-        @if(session()->has("success"))
-        <div class="alert alert-bordered alert-success alert-dismissible fade show" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <strong><i class="fa fa-check-circle"></i> Success!</strong> {{session()->get('success')}}
-        </div>
-        @endif
+    @if(session()->has("success"))
+    <div class="alert alert-bordered alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <strong><i class="fa fa-check-circle"></i> Success!</strong> {{session()->get('success')}}
+    </div>
+    @endif
 
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
-        <div class="row">
-            <div class="col-lg-12 col-xl-12 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex no-block align-items-center m-b-10">
-                            <h4 class="card-title">Activity Log</h4>
-                            <div class="ml-auto">
-                                {{-- Something can go here. --}}
-                            </div>
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-lg-12 col-xl-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex no-block align-items-center m-b-10">
+                        <h4 class="card-title">Activity Log</h4>
+                        <div class="ml-auto">
+                            {{-- Something can go here. --}}
                         </div>
-                        <div class="table-responsive">
-                            <table id="data_table" class="table table-bordered table-striped wrap display">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>User Name</th>
-                                        <th>Date</th>
-                                        <th>IP</th>
-                                        <th>Action</th>
-                                        <th>Status</th>
-                                        <th>View</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="data_table" class="table table-bordered table-striped wrap display">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>User Name</th>
+                                    <th>Date</th>
+                                    <th>IP</th>
+                                    <th>Action</th>
+                                    <th>Status</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
-            <!-- Column -->
-            @include('pages.system.acces-log-modal')
         </div>
-        <!-- ============================================================== -->
-        <!-- End PAge Content -->
-        <!-- ============================================================== -->
+        <!-- Column -->
+        @include('pages.system.acces-log-modal')
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
 
 @endsection
 
