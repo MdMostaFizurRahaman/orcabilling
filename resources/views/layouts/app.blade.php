@@ -13,7 +13,7 @@
 
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="">
-    <title>{{env('APP_NAME')}} | @yield('title')</title>
+    <title>{{config('app.name')}} | @yield('title')</title>
 
     <!-- Custom CSS -->
     <link href="{{asset('theme')}}/dist/css/style.min.css" rel="stylesheet">
