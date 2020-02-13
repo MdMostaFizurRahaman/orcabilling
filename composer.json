@@ -45,6 +45,7 @@
             "App\\": "app/"
         },
         "classmap": [
+            "app/database/migrations",
             "database/seeds",
             "database/factories"
         ]
