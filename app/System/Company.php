@@ -14,6 +14,6 @@ class Company extends Model implements HasMedia
 
     public function registerMediaCollection()
     {
-        $this->addMediaCollection('logo')->singleFile()->withResponsiveImages();
+        $this->addMediaCollection('logo')->singleFile();
     }
 }

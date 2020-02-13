@@ -63,11 +63,12 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <img src="" alt="">
                                         <div class="col-sm-6" style="margin: auto">
                                             <div class="form-group @error('logo'){{'is-invalid'}}@enderror">
                                                 <label for="">Logo Image</label>
                                                 <input class="form-control dropify"  data-height="100" data-allowed-file-extensions="png jpg" type="file" name="logo" data-default-file="@if(!empty($company)){{$company->getFirstMediaUrl('logo')}}@endif">
-                                                <small class="text-info">* Image height should be 200x42 px. </small>
+                                                <small class="text-info">* Image height should be 100x32 px. </small>
                                                 @error('logo')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -197,22 +198,6 @@
     <script src="{{asset('theme')}}/assets/libs/dropify/js/dropify.js"></script>
 
     <script>
-        // $('#logo').change(function readURL()
-        // {
-        //     if (this.files && this.files[0]) {
-        //     var reader = new FileReader();
-
-        //     reader.onload = function (e) {
-        //         $('#selectedImage')
-        //         .attr('src', e.target.result)
-        //         .width(120)
-        //         .height(80);
-        //     };
-
-        //     reader.readAsDataURL(this.files[0]);
-        //     }
-        // });
-
 
         // Dropify
         $('.dropify').dropify();

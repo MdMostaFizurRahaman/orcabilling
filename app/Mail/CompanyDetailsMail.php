@@ -8,11 +8,12 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CompanyTestMail extends Mailable
+class CompanyDetailsMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $company;
+    public $media;
     /**
      * Create a new message instance.
      *
@@ -21,6 +22,7 @@ class CompanyTestMail extends Mailable
     public function __construct(Company $company)
     {
         $this->company = $company;
+        $this->media = (object) array('logo' => $this->company->getFirstMediaUrl('logo'));
     }
 
     /**
@@ -30,8 +32,7 @@ class CompanyTestMail extends Mailable
      */
     public function build()
     {
-        return $this->from(config('mail.from'))
-                ->view('emails.company-test-mail');
-        // return $this->view('view.name');
+        return $this->markdown('emails.company-test-mail')
+                    ->subject('Company Details');
     }
 }

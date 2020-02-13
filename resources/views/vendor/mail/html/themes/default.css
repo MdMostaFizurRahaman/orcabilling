@@ -135,7 +135,7 @@ img {
     background-color: #ffffff;
     margin: 0 auto;
     padding: 0;
-    width: 570px;
+    width: 700px;
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 570px;
@@ -174,7 +174,7 @@ img {
 /* Tables */
 
 .table table {
-    margin: 30px auto;
+    margin: 20px auto;
     width: 100%;
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
@@ -191,8 +191,9 @@ img {
     color: #74787e;
     font-size: 15px;
     line-height: 18px;
-    padding: 10px 0;
+    padding: 5px 0;
     margin: 0;
+    /* text-align: left; */
 }
 
 .content-cell {

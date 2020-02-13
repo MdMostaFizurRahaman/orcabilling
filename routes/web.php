@@ -150,9 +150,8 @@ Route::group(['middleware' => ['auth', 'watch_dog']], function () {
     Route::prefix('/company')->name('company.')->namespace('System')->group(function () {
         // Company Routes
         Route::get('/', "CompanyController@index")->name('settings');
-        Route::post('/', "CompanyController@store")->name('store');
         Route::post('/update', "CompanyController@update")->name('update');
-        Route::get('/test/delete', "CompanyController@test")->name('test-mail');
+        Route::get('/parivacy-policy', "CompanyController@test")->name('privacy-policy');
     });
 
 

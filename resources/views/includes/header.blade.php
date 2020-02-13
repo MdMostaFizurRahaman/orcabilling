@@ -23,7 +23,8 @@
                     <!-- dark Logo text -->
                     <img src="{{asset('theme')}}/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
                     <!-- Light Logo text -->
-                    <img src="{{asset('theme')}}/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+                    <h4 class="text-white mb-0">{{strtoupper(str_replace('-', ' ', env('APP_NAME')))}}</h4>
+                    {{-- <img width="100" height="32" src="{{env('APP_LOGO')}}" class="light-logo" alt="homepage" /> --}}
                 </span>
             </a>
             <!-- ============================================================== -->
