@@ -16,7 +16,7 @@ This is to inform you that you just created your company details and your update
 | Property       	    | Value         		            |
 | ---------------------     |:-------------------------------------:|
 | Company Name		    | {{$company->company_name}}    |
-| Logo                      | <img width="70" height="40" style="vertical-align: middle;" src="{{$company->getFirstMediaUrl('logo')}}" alt=""> |
+| Logo                      | <img width="70" height="40" style="vertical-align: middle;" src="{{'publice/'.$company->getFirstMediaUrl('logo')}}" alt=""> |
 | Phone		            | {{$company->phone}}           |
 | City		            | {{$company->city}}            |
 | Zip Code		    | {{$company->zip_code}}        |
@@ -36,7 +36,7 @@ Thanks.<br>
 
 @slot('header_logo')
 {{-- <img width="70" height="40" style="vertical-align: middle;" src="data:image/png;base64,{{base64_encode(file_get_contents(public_path().$company->getFirstMediaUrl('logo')))}}" alt=""> --}}
-<img width="70" height="40" style="vertical-align: middle;" src="{{$company->getFirstMediaUrl('logo')}}" alt="">
+<img width="70" height="40" style="vertical-align: middle;" src="{{'publice/'.$company->getFirstMediaUrl('logo')}}" alt="">
 @endslot
 
 @slot('footer')
