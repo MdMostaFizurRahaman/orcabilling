@@ -66,7 +66,7 @@ class GatewayController extends Controller
                 return $query->media_proxy ? 'Active' : 'Inactive';
             })
             ->addColumn('tariff', function ($query) {
-                return '<a href="'.route('rate.index', $query->tariff_id).'" class="btn btn-sm btn-success tariff"><i class="fa fa-book"></i> ' . $query->tariff->name . '</a>';
+                return '<a href="'.route('rate.index', $query->tariff_id).'" class="tariff"><i class="fa fa-book"></i> ' . $query->tariff->name . '</a>';
             })
             ->rawColumns(['tariff', 'payment', 'action'])
             ->make(true);

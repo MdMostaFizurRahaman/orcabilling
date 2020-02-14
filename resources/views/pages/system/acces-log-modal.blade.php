@@ -1,6 +1,6 @@
 <!-- Modal -->
-<div class="modal animated slideInDown access-log-modal" id="access-log-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal animated slideInDown" id="access-log-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered access-log-modal" role="document">
         <div class="modal-content" v-bind="log">
             <div class="modal-header card-header">
                 <div class="d-flex no-block align-items-center">
@@ -25,7 +25,7 @@
                         </tr>
                         <tr>
                             <th scope="col">User Name</th>
-                            <td>@{{log.user}}</td>
+                            <td>@{{log.user.username}}</td>
                         </tr>
                         <tr>
                             <th scope="col">Date</th>
@@ -47,7 +47,7 @@
                             <th scope="col">Post Data</th>
                             <td>
                                 <table class="table table-striped mb-0">
-                                    <tr v-for='(key, value) in log.post_data'>
+                                    <tr v-for='(value, key) in log.post_data'>
                                         <th>@{{key}}</th>
                                         <td>@{{value}}</td>
                                     </tr>

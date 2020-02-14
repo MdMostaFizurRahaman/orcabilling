@@ -33,4 +33,11 @@ class ActivityLogController extends Controller
             ->rawColumns(['user', 'view'])
             ->make(true);
     }
+
+    public function show($id)
+    {
+        return ActivityLog::whereIdLog($id)->with(['user' => function($query){
+            $query->select('id', 'username');
+        }])->first();
+    }
 }

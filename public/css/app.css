@@ -1942,6 +1942,15 @@ div.form-group table.radio th,
     padding: 5px;
 }
 
+.access-log-modal {
+    max-width: 60%;
+    width: 60%;
+}
+
+a.tariff {
+    color: gray;
+    /* text-decoration: none; */
+}
 /*////////////////////////////////////
         Preloader
 ////////////////////////////////////*/

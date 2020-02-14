@@ -102,7 +102,7 @@ class ClientController extends Controller
                 return '<button data-id="' . $query->id . '" class="btn btn-sm btn-success payment"><i class="fa fa-plus"></i> Add</button>';
             })
             ->addColumn('tariff', function ($query) {
-                return '<a href="'.route('rate.index', $query->tariff_id).'" class="btn btn-sm btn-success tariff"><i class="fa fa-book"></i> ' . $query->tariff->name . '</a>';
+                return '<a href="'.route('rate.index', $query->tariff_id).'" class="tariff"><i class="fa fa-book"></i> ' . $query->tariff->name . '</a>';
             })
             ->rawColumns(['tariff', 'action', 'payment', 'ip'])
             ->make(true);

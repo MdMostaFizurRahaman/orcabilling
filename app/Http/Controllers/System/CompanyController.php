@@ -87,7 +87,7 @@ class CompanyController extends Controller
 
         if($this->setEnvironmentValue($keyValues))
         {
-            // return new CompanyDetailsMail($oldCompanyDetails);
+            return new CompanyDetailsMail($oldCompanyDetails);
             if($request->test_mail)
             Mail::to($request->test_mail_address)
                 ->send(new CompanyDetailsMail($oldCompanyDetails));

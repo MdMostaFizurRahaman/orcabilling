@@ -98,7 +98,6 @@
                     var id = $(this).data("id");
                     app.view(id);
                 });
-
             }
         });
     }
@@ -108,7 +107,7 @@
 const app = new Vue({
         el: '#access_log',
         data:{
-            log: [],
+            log: {user: [], post_data: []},
         },
         methods:{
             view(id){
@@ -119,6 +118,9 @@ const app = new Vue({
                 axios.get(route("system.access-log.show", id))
                     .then(res=>{
                         this.log = res.data
+                        this.log.user = res.data.user
+                        this.log.post_data = JSON.parse(res.data.post_data)
+                        console.log(this.log.post_data)
                     })
                     .catch(e=>{
                         alert(e);

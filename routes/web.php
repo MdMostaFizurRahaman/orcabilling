@@ -144,6 +144,7 @@ Route::group(['middleware' => ['auth', 'watch_dog']], function () {
         // Activity log routes
         Route::get('/access-log', "ActivityLogController@accessLogs")->name('access-log.index');
         Route::get('/access-log/{id}', "ActivityLogController@show")->name('access-log.show');
+        Route::get('/test/{id}', "ActivityLogController@show")->name('access-log.test');
         Route::get('/access-logs/datatable', "ActivityLogController@dataTable")->name('access-log.datatable');
     });
 

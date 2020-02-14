@@ -23,7 +23,7 @@ class WatchDog
         $user_id = Auth::user()->id;
         $user_ip = $request->ip();
         $link_uri = $request->url();
-        $post_data = $request->isMethod('post') ? json_encode($request->all()) : NULL;
+        $post_data = $request->isMethod('post') ? json_encode($request->except('_token')) : NULL;
         $action = Route::currentRouteName();
         $status = $response->getStatusCode();
 
