@@ -74,23 +74,23 @@ class CompanyController extends Controller
             }
 
             $updateMedia = $oldCompanyDetails->addMediaFromRequest('logo')->toMediaCollection('logo');
-            $newCompanyDetails = $request->id ? Company::find($request->id) : Company::first();
-            $app_logo = $newCompanyDetails->getFirstMediaUrl('logo');
+            $oldCompanyDetails = $request->id ? Company::find($request->id) : Company::first();
+            $app_logo = $oldCompanyDetails->getFirstMediaUrl('logo');
             $keyValues = [
                 'APP_LOGO' => $app_logo,
             ];
         }
 
-        $keyValues['APP_NAME'] = str_replace(' ', '-', $newCompanyDetails->company_name);
-        $keyValues['MAIL_FROM_ADDRESS'] = $newCompanyDetails->mail_from_email;
-        $keyValues['MAIL_FROM_NAME'] = str_replace(' ', '-', $newCompanyDetails->mail_from_name);
+        $keyValues['APP_NAME'] = str_replace(' ', '-', $oldCompanyDetails->company_name);
+        $keyValues['MAIL_FROM_ADDRESS'] = $oldCompanyDetails->mail_from_email;
+        $keyValues['MAIL_FROM_NAME'] = str_replace(' ', '-', $oldCompanyDetails->mail_from_name);
 
         if($this->setEnvironmentValue($keyValues))
         {
-            // return new CompanyDetailsMail($newCompanyDetails);
+            // return new CompanyDetailsMail($oldCompanyDetails);
             if($request->test_mail)
             Mail::to($request->test_mail_address)
-                ->send(new CompanyDetailsMail($newCompanyDetails));
+                ->send(new CompanyDetailsMail($oldCompanyDetails));
 
             Alert::success('Success', 'Company details updated successfully.');
             return redirect()->back();
