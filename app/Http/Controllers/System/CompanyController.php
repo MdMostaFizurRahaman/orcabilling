@@ -81,16 +81,16 @@ class CompanyController extends Controller
             ];
         }
 
-        $keyValues['APP_NAME'] = str_replace(' ', '-', $oldCompanyDetails->company_name);
-        $keyValues['MAIL_FROM_ADDRESS'] = $oldCompanyDetails->mail_from_email;
-        $keyValues['MAIL_FROM_NAME'] = str_replace(' ', '-', $oldCompanyDetails->mail_from_name);
+        $keyValues['APP_NAME'] = str_replace(' ', '-', $newCompanyDetails->company_name);
+        $keyValues['MAIL_FROM_ADDRESS'] = $newCompanyDetails->mail_from_email;
+        $keyValues['MAIL_FROM_NAME'] = str_replace(' ', '-', $newCompanyDetails->mail_from_name);
 
         if($this->setEnvironmentValue($keyValues))
         {
-            // return new CompanyDetailsMail($oldCompanyDetails);
+            // return new CompanyDetailsMail($newCompanyDetails);
             if($request->test_mail)
             Mail::to($request->test_mail_address)
-                ->send(new CompanyDetailsMail($oldCompanyDetails));
+                ->send(new CompanyDetailsMail($newCompanyDetails));
 
             Alert::success('Success', 'Company details updated successfully.');
             return redirect()->back();
