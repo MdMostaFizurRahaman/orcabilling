@@ -8,6 +8,7 @@ use App\TariffName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -33,7 +34,7 @@ class ClientController extends Controller
     {
         $this->validate($request, [
             'username' => 'required|string|unique:clients',
-            'password' => 'required|min:4|max:20',
+            'password' => 'required|string|min:6|max:20',
             'tariff_id' => 'required',
             'credit' => 'required|max:20',
             'capacity' => 'required|max:20',
@@ -48,7 +49,8 @@ class ClientController extends Controller
         ]);
 
         $client = new Client();
-        $client->create($request->all());
+        $request->merge(['password' => Hash::make($request->password)]);
+        $client->create($request->all(),);
         return $client;
     }
 
@@ -132,6 +134,7 @@ class ClientController extends Controller
             'zip' => 'required|max:20',
         ]);
 
+        $request->merge(['password' => Hash::make($request->password)]);
         $client->update($request->all());
         return $client;
     }

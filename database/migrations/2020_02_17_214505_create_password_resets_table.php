@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRawProcess extends Migration
+class CreatePasswordResetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateRawProcess extends Migration
      */
     public function up()
     {
-        Schema::create('raw_process', function (Blueprint $table) {
-            $table->string('file_name')->primary()->unique();
-            $table->string('status')->nullable();
-            $table->string('processed_time')->nullable();
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -27,6 +27,6 @@ class CreateRawProcess extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('raw_process');
+        Schema::dropIfExists('password_resets');
     }
 }

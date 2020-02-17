@@ -17,42 +17,9 @@ class CompanyController extends Controller
         return view('pages.system.company-settings')->with(compact('company'));
     }
 
-    // public function store(CompanyRequest $request)
-    // {
-    //     $companyDetails = Company::firstOrCreate(['company_name' => $request->company_name],
-    //                                 [
-    //                                     'logo' => $request->logo->getClientOriginalName(),
-    //                                     'phone' => $request->phone,
-    //                                     'invoice_prefix' => $request->invoice_prefix,
-    //                                     'city' => $request->city,
-    //                                     'zip_code' => $request->zip_code,
-    //                                     'country' => $request->country,
-    //                                     'postal_address' => $request->postal_address,
-    //                                     'bank_details' => $request->bank_details,
-    //                                     'mail_from_email' => $request->mail_from_email,
-    //                                     'mail_from_name' => $request->mail_from_email,
-    //                                 ]);
-    //     if($request->has('logo') && $companyDetails)
-    //     {
-    //         return $addMedia = $companyDetails->addMediaFromRequest('logo')->withResponsiveImages()->toMediaCollection('logo');
-    //     }
-
-    //     $keyValues = [
-    //         'MAIL_NAME' => $request->mail_form_email,
-    //         'MAIL_LOGO' => $request->mail_form_email,
-    //         'MAIL_FROM_ADDRESS' => $request->mail_form_email,
-    //         'MAIL_FROM_NAME' => $request->mail_from_name,
-    //     ];
-
-    //     if($this->setEnvironmentValue($keyValues)) return 'true';
-    //     Alert::success('Success', 'Company details added successfully.');
-    //     return redirect()->back();
-    //     // return response(['status' => 'success', 'message' => 'Company details added successfully.']);
-    // }
-
     public function update(CompanyRequest $request)
     {
-        $oldCompanyDetails = Company::updateOrCreate(['id' => $request->id],[
+        $updateCompanyDetails = Company::updateOrCreate(['id' => $request->id],[
                                     'company_name' => $request->company_name,
                                     'logo' => $request->hasFile('logo') ? $request->logo->getClientOriginalName() : $request->logo,
                                     'phone' => $request->phone,
@@ -66,31 +33,30 @@ class CompanyController extends Controller
                                     'mail_from_name' => $request->mail_from_name,
                                 ]);
         $keyValues = [];
-        if($request->has('logo') && $oldCompanyDetails)
+        if($request->has('logo') && $updateCompanyDetails)
         {
-            if($oldLogo = $oldCompanyDetails->getFirstMedia('logo'))
+            if($oldLogo = $updateCompanyDetails->getFirstMedia('logo'))
             {
                 $deleteOldLogo = $oldLogo->delete();
             }
 
-            $updateMedia = $oldCompanyDetails->addMediaFromRequest('logo')->toMediaCollection('logo');
-            $oldCompanyDetails = $request->id ? Company::find($request->id) : Company::first();
-            $app_logo = $oldCompanyDetails->getFirstMediaUrl('logo');
+            $updateMedia = $updateCompanyDetails->addMediaFromRequest('logo')->toMediaCollection('logo');
+            $updateCompanyDetails = $request->id ? Company::find($request->id) : Company::first();
+            $app_logo = $updateCompanyDetails->getFirstMediaUrl('logo');
             $keyValues = [
                 'APP_LOGO' => $app_logo,
             ];
         }
 
-        $keyValues['APP_NAME'] = str_replace(' ', '-', $oldCompanyDetails->company_name);
-        $keyValues['MAIL_FROM_ADDRESS'] = $oldCompanyDetails->mail_from_email;
-        $keyValues['MAIL_FROM_NAME'] = str_replace(' ', '-', $oldCompanyDetails->mail_from_name);
+        $keyValues['APP_NAME'] = str_replace(' ', '-', $updateCompanyDetails->company_name);
+        $keyValues['MAIL_FROM_ADDRESS'] = $updateCompanyDetails->mail_from_email;
+        $keyValues['MAIL_FROM_NAME'] = str_replace(' ', '-', $updateCompanyDetails->mail_from_name);
 
         if($this->setEnvironmentValue($keyValues))
         {
-            // return new CompanyDetailsMail($oldCompanyDetails);
             if($request->test_mail)
             Mail::to($request->test_mail_address)
-                ->send(new CompanyDetailsMail($oldCompanyDetails));
+                ->send(new CompanyDetailsMail($updateCompanyDetails));
 
             Alert::success('Success', 'Company details updated successfully.');
             return redirect()->back();

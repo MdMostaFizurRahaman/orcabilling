@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller
 {
+    use SendsPasswordResetEmails;
     /*
     |--------------------------------------------------------------------------
     | Password Reset Controller
@@ -17,6 +19,14 @@ class ForgotPasswordController extends Controller
     | your application to your users. Feel free to explore this trait.
     |
     */
+    protected function sendResetLinkResponse(Request $request, $response)
+    {
+        if($request->expectsJson())
+        {
+            return response()->json(['message' => trans($response)]);
+        }
 
-    use SendsPasswordResetEmails;
+        return back()->with('status', trans($response));
+    }
+
 }

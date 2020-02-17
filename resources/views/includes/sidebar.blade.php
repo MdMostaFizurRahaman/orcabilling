@@ -127,13 +127,13 @@
                     </ul>
                 </li>
                 </li>
-                <li class="sidebar-item {{Request::is('gateways*') || Request::is('company*') ? 'selected' : ''}}">
+                <li class="sidebar-item {{Request::is('gateways*') || Request::is('company') ? 'selected' : ''}}">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)
                         " aria-expanded="false">
                         <i class="icon-Gears"></i>
                         <span class="hide-menu">Configuration</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level {{Request::is('gateways*') || Request::is('company*') ? 'in' : ''}}">
+                    <ul aria-expanded="false" class="collapse first-level {{Request::is('gateways*') || Request::is('company') ? 'in' : ''}}">
                         <li class="sidebar-item">
                             <a href="{{route('gateway.index')}}" class="sidebar-link">
                                 <i class="mdi mdi-export"></i>
@@ -162,7 +162,8 @@
                     </a>
                     <ul aria-expanded="false" class="collapse first-level {{Request::is('system') || Request::is('system/*') ? 'in' : ''}}">
                         <li class="sidebar-item {{Request::is('system/access-log*') ? 'active' : ''}}">
-                            <a href="{{route('system.access-log.index')}}" class="sidebar-link">
+                            {{-- <a href="{{route('system.access-log.panel')}}" class="sidebar-link"> --}}
+                            <a href="{{route('system.access-log.fetch')}}" class="sidebar-link">
                                 <i class="mdi mdi-clock-fast"></i>
                                 <span class="hide-menu"> Access Log </span>
                             </a>
@@ -183,12 +184,6 @@
                             <a href="timeline-right.html" class="sidebar-link">
                                 <i class="mdi mdi-clock-start"></i>
                                 <span class="hide-menu"> Media IP Blocker</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="authentication-login1.html" class="sidebar-link">
-                                <i class="mdi mdi-account-key"></i>
-                                <span class="hide-menu"> Active Calls </span>
                             </a>
                         </li>
                         <li class="sidebar-item">

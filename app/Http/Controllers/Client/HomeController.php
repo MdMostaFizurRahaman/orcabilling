@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        // $this->middleware('auth:client');
     }
 
     /**
@@ -27,19 +27,4 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function clientHome(){
-
-        return view('home');
-    }
-
-
-    public function getCountries()
-    {
-        return DB::table('countries')->get();
-    }
-
-    public function getPaymentTypes()
-    {
-        return DB::table('payment_types')->get();
-    }
 }

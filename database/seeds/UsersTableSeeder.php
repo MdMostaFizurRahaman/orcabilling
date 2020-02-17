@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class UserTableSeeder extends Seeder
+class UsersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = 
+        $users =
     		[
     			['name' => 'Shahadat Hossen', 'email' => 'shobuj@bansberrysg.com', 'password' => Hash::make('asdfgh')],
         	];

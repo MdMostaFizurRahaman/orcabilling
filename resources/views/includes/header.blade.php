@@ -246,11 +246,11 @@
                                 <i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
                             <a class="dropdown-item" href="javascript:void(0)">
                                 <i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            <a class="dropdown-item" href="{{ Auth::user() instanceof App\Client ? route('client.logout') : route('logout') }}"
                                             onclick="event.preventDefault();
                                           document.getElementById('logout-form').submit();">
                                 <i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                <form id="logout-form" action="{{ Auth::user() instanceof App\Client ? route('client.logout') : route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                 </form>
                         </div>

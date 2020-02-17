@@ -20,7 +20,11 @@ class WatchDog
     {
         $response = $next($request);
 
-        $user_id = Auth::user()->id;
+        $subject = Auth::user();
+
+        $user_id = $subject instanceof App\User ? $subject->id : NULL;
+        $client_id = $subject instanceof App\Client ? $subject->id : NULL;
+        $user_type = $subject instanceof App\User ? 'admin' : 'client';
         $user_ip = $request->ip();
         $link_uri = $request->url();
         $post_data = $request->isMethod('post') ? json_encode($request->except('_token')) : NULL;
@@ -29,6 +33,8 @@ class WatchDog
 
         $logActivity = ActivityLog::create([
                                 'user_id' => $user_id,
+                                'client_id' => $client_id,
+                                'user_type' => $user_type,
                                 'user_ip' => $user_ip,
                                 'link_uri' => $link_uri,
                                 'post_data' => $post_data,

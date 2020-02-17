@@ -69,9 +69,7 @@ class RateController extends Controller
             'effective_date' => 'required|string|max:20',
         ]);
 
-
         $rate = Rate::create($request->all());
-
     }
 
     /**
@@ -141,10 +139,8 @@ class RateController extends Controller
         }
     }
 
-
     public function export($tariff)
     {
-        // return $tariff;
         return (new RatesExport)->forTariff($tariff)->download('rates.xlsx');
     }
 

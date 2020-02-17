@@ -53,7 +53,7 @@
             </div>
         </div>
         <!-- Column -->
-        @include('pages.system.acces-log-modal')
+        @include('pages.system.access-log-modal')
     </div>
     <!-- ============================================================== -->
     <!-- End PAge Content -->

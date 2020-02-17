@@ -43,7 +43,7 @@
                     <!-- Form -->
                     <div class="row">
                         <div class="col-12">
-                            <form method="POST" action="{{ route('login') }}">
+                            <form method="POST" action="{{ Request::is('client/login') ? route('client.login') : route('login') }}">
                                 @csrf
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -71,11 +71,14 @@
                                     <div class="col-md-12">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-        
+
                                             <label class="form-check-label" for="remember">
                                                 {{ __('Remember Me') }}
                                             </label>
-                                            <a href="javascript:void(0)" id="to-recover" class="text-dark float-right"><i class="fa fa-lock m-r-5"></i> Forgot pwd?</a>
+                                            @if (Route::has('password.request'))
+                                                {{-- <a class="btn btn-link text-dark float-right" href="{{ route('password.request') }}">{{ __('Forgot pwd?') }}</a> --}}
+                                                <a href="javascript:void(0)" id="to-recover" class="text-dark float-right"><i class="fa fa-lock m-r-5"></i> Forgot pwd?</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -92,21 +95,22 @@
                     <div class="logo">
                         <h2 class="font-medium text-uppercase"><span>[</span><span class="text-info">{{env('APP_NAME')}}</span><span>]</span></h2>
                         <h4 class="font-medium m-b-20 ">Welcome, Back</h4>
-                        <span>Enter your Email and instructions will be sent to you!</span>
+                        <span id="message">Enter your Email and instructions will be sent to you!</span>
                     </div>
                     <div class="row m-t-20">
                         <!-- Form -->
-                        <form class="col-12" action="index.html">
+                        <form id="reset_pass" class="col-12" action="{{ route('password.email') }}" method="POST">
+                            @csrf
                             <!-- email -->
                             <div class="form-group row">
                                 <div class="col-12">
-                                    <input class="form-control form-control-lg" type="email" required="" placeholder="Username">
+                                    <input class="form-control form-control-lg" type="email" name="email" required="" placeholder="youremail@domain.com">
                                 </div>
                             </div>
                             <!-- pwd -->
                             <div class="row m-t-20">
                                 <div class="col-12">
-                                    <button class="btn btn-block btn-lg btn-danger" type="submit" name="action">Reset</button>
+                                    <button class="btn btn-block btn-lg btn-danger" type="submit" name="">Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -128,13 +132,31 @@
     <script>
     $('[data-toggle="tooltip"]').tooltip();
     $(".preloader").fadeOut();
-    // ============================================================== 
-    // Login and Recover Password 
-    // ============================================================== 
+    // ==============================================================
+    // Login and Recover Password
+    // ==============================================================
     $('#to-recover').on("click", function() {
         $("#loginform").slideUp();
         $("#recoverform").fadeIn();
     });
+
+    $('#reset_pass').on('submit', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('action'), // Get the action URL to send AJAX to
+            type: "post",
+            data: new FormData(this), // get all form variables
+            cache:false,
+            contentType: false,
+            processData: false,
+            success: function(response){
+                console.log(response.message)
+                $('#message').addClass('alert alert-success').html(response.message)
+            }
+        });
+    });
+
     </script>
 </body>
 
