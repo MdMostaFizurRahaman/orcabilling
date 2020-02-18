@@ -46,7 +46,7 @@ class CompanyRequest extends FormRequest
             case 'PATCH':
                 return [
                     'company_name' => 'required|unique:companies,id,' . $this->route('id') ?: NULL,
-                    'logo' => 'required_without:id|image|mimes:jpeg,jpg,png,gif|max:2048',
+                    'logo' => 'required_without:id|image|mimes:jpeg,jpg,png,gif|max:1024',
                     'phone' => 'required',
                     'invoice_prefix' => 'required',
                     'city' => 'required',

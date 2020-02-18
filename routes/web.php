@@ -156,8 +156,8 @@ Route::group(['middleware' => ['watch_dog']], function () {
 
         Route::prefix('/company')->name('company.')->namespace('System')->group(function () {
             // Company Routes
-            Route::get('/', "CompanyController@index")->name('settings')->middleware('permission:read company-settings');
-            Route::post('/', "CompanyController@update")->name('update')->middleware('permission:update company-settings');
+            Route::get('/', "CompanyController@index")->name('settings');
+            Route::post('/', "CompanyController@update")->name('update');
             Route::get('/parivacy-policy', "CompanyController@test")->name('privacy-policy')->middleware('permission:read privacy-policy');
             Route::post('/parivacy-policy', "CompanyController@test")->name('privacy-policy')->middleware('permission:update privacy-policy');
         });

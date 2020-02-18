@@ -121,7 +121,7 @@ class ClientController extends Controller
     {
         $this->validate($request, [
             'username' => 'required|string|unique:clients,username,' . $request->id,
-            'password' => 'required|min:4|max:20',
+            'password' => 'required|min:6|max:20',
             'tariff_id' => 'required',
             'credit' => 'required|max:20',
             'capacity' => 'required|max:20',
@@ -136,7 +136,7 @@ class ClientController extends Controller
         ]);
 
         // $request->merge(['password' => Hash::make($request->password)]);
-        $client->update($request->except('password'));
+        // $client->update($request->except('password'));
         $client->update($request->all());
         return $client;
     }

@@ -78,6 +78,10 @@ class RolesAndPermissionsTableSeeder extends Seeder
         // access-logs permissions
         Permission::create(['name' => 'read access-logs']);
 
+        // company-settings permissions
+        Permission::create(['name' => 'read company-settings']);
+        Permission::create(['name' => 'update company-settings']);
+
         // privacy-policy permissions
         Permission::create(['name' => 'read privacy-policy']);
         Permission::create(['name' => 'update privacy-policy']);

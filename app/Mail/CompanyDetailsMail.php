@@ -33,6 +33,7 @@ class CompanyDetailsMail extends Mailable
     public function build()
     {
         return $this->markdown('emails.company-test-mail')
+                    ->from(config('mail.from.address'), strtoupper(str_replace('-', ' ', config('mail.from.name'))))
                     ->subject('Company Details');
     }
 }
