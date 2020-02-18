@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -46,7 +45,6 @@ class LoginController extends Controller
 
     //     if (Auth::guard('client')->attempt($request->only('username', 'password'), $request->filled('remember'))) {
     //         //Authentication passed...
-    //         // return 'true';
     //         return redirect()
     //             ->intended(route('client.home'))
     //             ->with('status', 'You are Logged in as client!');
@@ -83,9 +81,9 @@ class LoginController extends Controller
     {
         $this->guard()->logout();
 
-        $request->session($this->guard())->invalidate();
+        $request->session()->invalidate();
 
-        // $request->session()->forget('client');
+        // $request->session()->forget($this->guard());
 
         $request->session()->regenerateToken();
 

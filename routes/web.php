@@ -27,7 +27,11 @@ Route::get('/testreport', "ParseLogController@testReport");
 Route::group(['middleware' => ['watch_dog']], function () {
     // Admin Routes
     Route::group(['middleware' => ['auth']], function () {
+
         Route::get('/', 'HomeController@index')->name('home');
+        Route::get('/profile', 'ProfileController@profile')->name('user.profile');
+        Route::get('/password/change', 'UserController@showPasswordForm')->name('password.change.request')->middleware('password.confirm');
+        Route::post('/password/change', 'UserController@changePassword')->name('password.change');
 
         // ACL Routes
         Route::group(['middleware' => ['role:Super Admin']], function () {
@@ -37,6 +41,7 @@ Route::group(['middleware' => ['watch_dog']], function () {
             Route::get('/users/delete/{user}', "UserController@destroy")->middleware('permission:delete users');
             Route::get('/user/all', 'UserController@users')->name('users')->middleware('permission:read users');
             Route::get('/user/datatable', "UserController@dataTable")->name('users.datatable')->middleware('permission:read users');
+
 
             // Roles Routes
             Route::resource('roles', "RoleController");
@@ -160,29 +165,44 @@ Route::group(['middleware' => ['watch_dog']], function () {
     });
 });
 
-Route::prefix('/client')->name('client.')->namespace('Client')->group(function () {
-    Route::namespace('Auth')->group(function () {
-
-        //Login Routes
-        Route::get('/login', 'LoginController@showLoginForm')->name('login');
-        Route::post('/login', 'LoginController@login');
-        Route::post('/logout', 'LoginController@logout')->name('logout');
-
-        // //Forgot Password Routes
-        // Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
-        // Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-
-        // //Reset Password Routes
-        // Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
-        // Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.update');
-    });
-
+Route::prefix('/client')->name('client.')->group(function () {
     Route::group(['middleware' => ['auth:client']], function () {
+
         Route::get('/home', 'HomeController@index')->name('home');
+
+        Route::group(['middleware' => ['watch_dog']], function () {
+            // Change Password Routes
+            Route::get('/password/change', 'ClientController@showPasswordForm')->name('password.change.request')->middleware('password.confirm:client.password.confirm-request');
+            Route::post('/password/change', 'ClientController@changePassword')->name('password.change');
+
+        });
     });
 
-    Route::group(['middleware' => ['watch_dog']], function () {
+    Route::namespace('Client')->group(function () {
+        Route::namespace('Auth')->group(function () {
 
+            //Login Routes
+            Route::get('/login', 'LoginController@showLoginForm')->name('login');
+            Route::post('/login', 'LoginController@login');
+            Route::post('/logout', 'LoginController@logout')->name('logout');
+            // Forgot Password Routes
+            Route::get('/password/update', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+            Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+            // Reset Password Routes
+            Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+            Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.update');
+            Route::get('/password/confirm', 'ConfirmPasswordController@showConfirmForm')->name('password.confirm-request');
+            Route::post('password/confirm', 'ConfirmPasswordController@confirm')->name('password.confirm');
+
+        });
+
+        Route::group(['middleware' => ['auth:client']], function () {
+            Route::get('/profile', 'ProfileController@profile')->name('profile');
+
+            Route::group(['middleware' => ['watch_dog']], function () {
+
+            });
+        });
     });
 
 });

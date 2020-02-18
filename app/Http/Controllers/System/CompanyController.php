@@ -64,7 +64,7 @@ class CompanyController extends Controller
         }
 
         Alert::alert('Oops!', 'Company details not updated.');
-        return redirect()->back();;
+        return redirect()->back();
     }
 
     public function setEnvironmentValue($keyValues)

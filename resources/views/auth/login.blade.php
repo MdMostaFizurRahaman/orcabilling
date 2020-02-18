@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('theme')}}/assets/images/favicon.png">
-    <title>{{env('APP_NAME')}} | Login</title>
+    <title>{{config('app.name')}} | Login</title>
     <!-- Custom CSS -->
     <link href="{{asset('theme')}}/dist/css/style.min.css" rel="stylesheet">
 </head>
@@ -37,7 +37,7 @@
                 <div id="loginform">
                     <div class="logo">
                         {{-- <span class="db"><img src="{{asset('theme')}}/assets/images/logo-icon.png" alt="logo" /></span> --}}
-                    <h2 class="font-medium text-uppercase"><span>[</span><span class="text-info">{{env('APP_NAME')}}</span><span>]</span></h2>
+                    <h2 class="font-medium text-uppercase"><span>[</span><span class="text-info">{{config('app.name')}}</span><span>]</span></h2>
                     <h4 class="font-medium m-b-20 ">Welcome, Back</h4>
                     </div>
                     <!-- Form -->
@@ -93,13 +93,13 @@
                 </div>
                 <div id="recoverform">
                     <div class="logo">
-                        <h2 class="font-medium text-uppercase"><span>[</span><span class="text-info">{{env('APP_NAME')}}</span><span>]</span></h2>
+                        <h2 class="font-medium text-uppercase"><span>[</span><span class="text-info">{{config('app.name')}}</span><span>]</span></h2>
                         <h4 class="font-medium m-b-20 ">Welcome, Back</h4>
                         <span id="message">Enter your Email and instructions will be sent to you!</span>
                     </div>
                     <div class="row m-t-20">
                         <!-- Form -->
-                        <form id="reset_pass" class="col-12" action="{{ route('password.email') }}" method="POST">
+                        <form id="reset_pass" class="col-12" action="{{ Request::is('client/login') ? route('client.password.email') : route('password.email') }}" method="POST">
                             @csrf
                             <!-- email -->
                             <div class="form-group row">

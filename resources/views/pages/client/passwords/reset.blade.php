@@ -43,7 +43,7 @@
                     <!-- Form -->
                     <div class="row">
                         <div class="col-12">
-                    <form method="POST" action="{{ route('password.update') }}">
+                    <form method="POST" action="{{ route('client.password.update') }}">
                         @csrf
 
                         <input type="hidden" name="token" value="{{ $token }}">

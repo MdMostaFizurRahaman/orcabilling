@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use App\Client;
 use App\Payment;
 use App\TariffName;
@@ -134,7 +135,8 @@ class ClientController extends Controller
             'zip' => 'required|max:20',
         ]);
 
-        $request->merge(['password' => Hash::make($request->password)]);
+        // $request->merge(['password' => Hash::make($request->password)]);
+        $client->update($request->except('password'));
         $client->update($request->all());
         return $client;
     }
@@ -193,5 +195,36 @@ class ClientController extends Controller
     public function payment(Request $request)
     {
         return DB::table('payments')->where('client_id', $request->id)->where('client_type', $request->type)->latest()->limit(10)->get();
+    }
+
+    // Client functions
+    public function showPasswordForm()
+    {
+        return view('pages.client.passwords.change');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $this->validate($request, [
+             'old_password' => 'required',
+             'password' => 'required|string|min:6|confirmed'
+        ]);
+
+        $user = $request->user();
+
+        if (Hash::check($request->old_password, $user->password)) {
+            $updatePassword = $user->update(['password' => Hash::make($request->password)]);
+            if ($updatePassword) {
+                Alert::success('Success', 'Password has been updated successfully');
+                return redirect()->back()->with('status', 'Password has been updated successfully');
+            } else {
+                Alert::warning('Oops..!', 'Something went wrong!');
+                return redirect()->back()->with('warning', 'Oops..! Something went wrong!');
+            }
+        } else {
+            Alert::warning('Oops..!', 'Please, make sure you provide the right info!');
+            return redirect()->back()->with('warning', 'Please, make sure you provide the right info!', 'Oops..!');
+
+        }
     }
 }

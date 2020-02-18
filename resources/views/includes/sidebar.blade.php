@@ -1,3 +1,6 @@
+@php
+    $user = Auth::user();
+@endphp
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
@@ -5,7 +8,7 @@
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
                 <li class="sidebar-item {{Request::is('/') ? 'selected': ''}}">
-                    <a href="{{url('/')}}" class="sidebar-link waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                    <a href="{{$user instanceof App\Client ? route('client.home') : route('home')}}" class="sidebar-link waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="icon-Car-Wheel"></i>
                         <span class="hide-menu">Dashboards </span>
                     </a>

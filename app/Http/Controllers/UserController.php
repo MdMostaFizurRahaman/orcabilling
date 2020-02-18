@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
@@ -125,6 +126,8 @@ class UserController extends Controller
             'country' => 'required|string|max:45',
         ]);
 
+        // $request->merge(['password' => Hash::make($request->password)]);
+        // $client->update($request->except('password'));
         $user->update($request->all());
         return $user;
     }
@@ -145,4 +148,35 @@ class UserController extends Controller
                             ->with('error','Cannot delete user');
         }
     }
+
+        // User functions
+        public function showPasswordForm()
+        {
+            return view('auth.passwords.change');
+        }
+
+        public function changePassword(Request $request)
+        {
+            $this->validate($request, [
+                //  'old_password' => 'required',
+                 'password' => 'required|string|min:6|confirmed'
+            ]);
+
+            $user = $request->user();
+
+            // if (Hash::check($request->old_password, $user->password)) {
+                $updatePassword = $user->update(['password' => Hash::make($request->password)]);
+                if ($updatePassword) {
+                    Alert::success('Success', 'Password has been updated successfully');
+                    return redirect()->back()->with('status', 'Password has been updated successfully');
+                } else {
+                    Alert::warning('Oops..!', 'Something went wrong!');
+                    return redirect()->back()->with('warning', 'Oops..! Something went wrong!');
+                }
+            // } else {
+            //     Alert::warning('Oops..!', 'Please, make sure you provide the right info!');
+            //     return redirect()->back()->with('warning', 'Please, make sure you provide the right info!', 'Oops..!');
+
+            // }
+        }
 }

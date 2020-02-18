@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\ClientPasswordResetNotification;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Client extends Authenticatable
 {
@@ -41,5 +42,16 @@ class Client extends Authenticatable
     public function getNameAttribute()
     {
         return $this->full_name;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ClientPasswordResetNotification($token));
     }
 }
