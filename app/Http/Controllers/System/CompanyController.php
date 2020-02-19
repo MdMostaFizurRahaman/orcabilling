@@ -9,6 +9,8 @@ use App\Mail\CompanyDetailsMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CompanyRequest;
+use Illuminate\Support\Facades\Artisan;
+
 class CompanyController extends Controller
 {
     public function index()
@@ -33,34 +35,31 @@ class CompanyController extends Controller
                                     'mail_from_name' => $request->mail_from_name,
                                 ]);
         $keyValues = [];
-        if($request->has('logo') && $updateCompanyDetails)
+        if($updateCompanyDetails)
         {
-            if($oldLogo = $updateCompanyDetails->getFirstMedia('logo'))
+            if($request->has('logo'))
             {
-                $deleteOldLogo = $oldLogo->delete();
+                $updateMedia = $updateCompanyDetails->addMediaFromRequest('logo')->toMediaCollection('avatar');
+                $keyValues = [
+                    'APP_LOGO' => $updateCompanyDetails->logo,
+                ];
             }
 
-            $updateMedia = $updateCompanyDetails->addMediaFromRequest('logo')->toMediaCollection('logo');
-            $updateCompanyDetails = $request->id ? Company::find($request->id) : Company::first();
-            $app_logo = $updateCompanyDetails->getFirstMediaUrl('logo');
-            $keyValues = [
-                'APP_LOGO' => $app_logo,
-            ];
-        }
+            $keyValues['APP_NAME'] = str_replace(' ', '-', $updateCompanyDetails->company_name);
+            $keyValues['MAIL_FROM_ADDRESS'] = $updateCompanyDetails->mail_from_email;
+            $keyValues['MAIL_FROM_NAME'] = str_replace(' ', '-', $updateCompanyDetails->mail_from_name);
 
-        $keyValues['APP_NAME'] = str_replace(' ', '-', $updateCompanyDetails->company_name);
-        $keyValues['MAIL_FROM_ADDRESS'] = $updateCompanyDetails->mail_from_email;
-        $keyValues['MAIL_FROM_NAME'] = str_replace(' ', '-', $updateCompanyDetails->mail_from_name);
+            if($this->setEnvironmentValue($keyValues))
+            {
+                $this->refreshApp();
+                if($request->test_mail)
+                Mail::to($request->test_mail_address)
+                    ->send(new CompanyDetailsMail($updateCompanyDetails));
 
-        if($this->setEnvironmentValue($keyValues))
-        {
-            if($request->test_mail)
-            Mail::to($request->test_mail_address)
-                ->send(new CompanyDetailsMail($updateCompanyDetails));
-
-            Alert::success('Success', 'Company details updated successfully.');
-            return redirect()->back();
-            // return response(['status' => 'success', 'message' => 'Company details added successfully.']);
+                Alert::success('Success', 'Company details updated successfully.');
+                return redirect()->back();
+                // return response(['status' => 'success', 'message' => 'Company details added successfully.']);
+            }
         }
 
         Alert::alert('Oops!', 'Company details not updated.');
@@ -87,6 +86,15 @@ class CompanyController extends Controller
         $str = substr($str, 0, -1);
         if (!file_put_contents($envFile, $str)) return false;
         return true;
+    }
+
+    public function refreshApp()
+    {
+        $configClear = Artisan::call('config:clear');
+        $cacheClear = Artisan::call('cache:clear');
+        // $routeClear = Artisan::call('route:cache');
+        // $viewClear = Artisan::call('view:cache');
+        return true; //Return anything
     }
 
 

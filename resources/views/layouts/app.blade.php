@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('theme/assets/images/logo-light-icon.png')}}">
     <title>{{config('app.name')}} | @yield('title')</title>
 
     <!-- Custom CSS -->

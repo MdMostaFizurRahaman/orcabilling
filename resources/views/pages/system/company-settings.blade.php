@@ -67,8 +67,8 @@
                                         <div class="col-sm-6" style="margin: auto">
                                             <div class="form-group @error('logo'){{'is-invalid'}}@enderror">
                                                 <label for="">Logo Image</label>
-                                                <input class="form-control dropify"  data-height="100" data-allowed-file-extensions="png jpg" type="file" name="logo" data-default-file="@if(!empty($company)){{asset($company->getFirstMediaUrl('logo'))}}@endif">
-                                                <small class="text-info">* Image height should be 100x32 px. </small>
+                                                <input class="form-control dropify"  data-height="100" data-allowed-file-extensions="png jpg" type="file" name="logo" data-default-file="@if(!empty($company)){{asset($company->logo)}}@endif">
+                                                <small class="text-info">* Image height should be 200x50 px. </small>
                                                 @error('logo')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror

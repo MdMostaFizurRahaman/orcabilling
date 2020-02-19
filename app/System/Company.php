@@ -18,22 +18,23 @@ class Company extends Model implements HasMedia
     //     $this->addMediaCollection('avatar')->singleFile();
     // }
 
-    public function registerMediaCollection()
+    public function registerMediaCollections()
     {
         $this->addMediaCollection('avatar')->singleFile()
-            ->registerMediaConversion(function(Media $media){
-                $this->addMediaConversion('logo')->width(100)->height(30);
-                $this->addMediaConversion('icon')->width(50)->height(30);
+            ->registerMediaConversions(function(Media $media){
+                $this->addMediaConversion('logo')->width(200);
+                $this->addMediaConversion('icon')->width(50);
+                // $this->addMediaConversion('icon')->width(50)->height(30);
             });
     }
 
     public function getLogoAttribute()
     {
-        return $this->getFirstMediaUrl('logo');
+        return $this->getFirstMedia('avatar')->getUrl('logo');
     }
 
     public function getIconAttribute()
     {
-        return $this->getFirstMediaUrl('icon');
+        return $this->getFirstMedia('avatar')->getUrl('icon');
     }
 }

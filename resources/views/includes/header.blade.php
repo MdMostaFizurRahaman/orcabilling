@@ -18,7 +18,7 @@
                     <!-- Dark Logo icon -->
                     <img src="{{asset('theme')}}/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
                     <!-- Light Logo icon -->
-                    <img src="{{asset('theme')}}/assets/images/logo-light-icon.png" width='20' height='20' alt="homepage" class="light-logo" />
+                    <img src="{{asset('theme')}}/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
                 </b>
                 <!--End Logo icon -->
                 <!-- Logo text -->
@@ -26,8 +26,9 @@
                     <!-- dark Logo text -->
                     <img src="{{asset('theme')}}/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
                     <!-- Light Logo text -->
-                    <h4 class="text-white mb-0">{{strtoupper(str_replace('-', ' ', config('app.name')))}}</h4>
-                    {{-- <img width="100" height="32" src="{{env('APP_LOGO')}}" class="light-logo" alt="homepage" /> --}}
+                    <h3 class="text-white mb-0 light-logo">
+                        <img width="100" height="40" src="{{asset(env('APP_LOGO'))}}" class="light-logo" alt="{{strtoupper(str_replace('-', ' ', config('app.name')))}}" />
+                    </h3>
                 </span>
             </a>
             <!-- ============================================================== -->
