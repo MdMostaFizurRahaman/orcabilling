@@ -24,8 +24,8 @@
                                     </div>
                                     <div class="ml-auto">
                                         <div class="btn-group">
-                                            <a href="{{route('success-calls.summary.export', array_merge(request()->all(), ['mime' => 'csv']))}}" data-toggle="tooltip" title="Export to csv"  class="btn btn-rounded btn-info"> <span class="fa fa-file-code"></span> Export CSV</a>
-                                            <a href="{{route('success-calls.summary.export', array_merge(request()->all(), ['mime' => 'xlsx']))}}" data-toggle="tooltip" title="Export to excel"  class="btn btn-rounded btn-info"> <span class="far fa-file-excel"></span> Export Excel</a>
+                                            <a href="{{route('client.calls-summary.export', array_merge(request()->all(), ['mime' => 'csv']))}}" data-toggle="tooltip" title="Export to csv"  class="btn btn-rounded btn-info"> <span class="fa fa-file-code"></span> Export CSV</a>
+                                            <a href="{{route('client.calls-summary.export', array_merge(request()->all(), ['mime' => 'xlsx']))}}" data-toggle="tooltip" title="Export to excel"  class="btn btn-rounded btn-info"> <span class="far fa-file-excel"></span> Export Excel</a>
                                         </div>
                                     </div>
                                 </div>
@@ -67,8 +67,6 @@
                                             <td>{{$call->tariff_prefix }}</td>
                                             <td>{{number_format($call->cost, 2)}}</td>
                                             <td>{{$call->gateway_name}}</td>
-                                            <td>{{$call->route_rate_prefix}}</td>
-                                            <td>{{number_format($call->costD, 2)}}</td>
                                             <td>{{$call->pdd}}</td>
                                         </tr>
                                         @endforeach
@@ -86,9 +84,6 @@
                                             <th></th>
                                             <th>{{$collection['totalCost']}}</th>
                                             <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th>{{$collection['totalCostD']}}</th>
                                             <th></th>
                                         </tr>
                                     </tfoot>
@@ -130,10 +125,7 @@ $(document).ready( function () {
                     { data: 'tariff_prefix', name: 'tariff_prefix' },
                     { data: 'tariffdesc', name: 'tariffdesc' },
                     { data: 'cost', name: 'cost' },
-                    { data: '', name: 'Dialing Prefix' },
-                    { data: 'route_rate_prefix', name: 'route_rate_prefix' },
                     { data: 'gateway_name', name: 'gateway_name' },
-                    { data: 'costD', name: 'costD' },
                     { data: 'pdd', name: 'pdd' },
                 ],
     });

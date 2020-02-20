@@ -148,7 +148,7 @@
                     })
             },
             getClientIps(){
-                axios.get('{{route("clients.ips")}}')
+                axios.get('{{route("ips.index")}}')
                     .then(res=>{
                         this.clientIps = res.data
                     })

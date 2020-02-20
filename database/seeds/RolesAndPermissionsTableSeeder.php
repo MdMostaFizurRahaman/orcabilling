@@ -102,7 +102,12 @@ class RolesAndPermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'read client-payments']);
         Permission::create(['name' => 'create client-payments']);
 
+        // General action permisssions
+        Permission::create(['name' => 'read payments-types']);
+        Permission::create(['name' => 'read countries']);
 
+        Permission::create(['name' => 'read calls-summary client']);
+        Permission::create(['name' => 'export calls-summary client']);
 
         // create roles and assign created permissions
 

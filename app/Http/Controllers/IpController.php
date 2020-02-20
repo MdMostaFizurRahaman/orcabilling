@@ -13,9 +13,9 @@ class IpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        return Ip::where('client_id', $request->id)->get();
+        return $clientsIps = Ip::all();
     }
 
     /**
@@ -101,9 +101,10 @@ class IpController extends Controller
         }
     }
 
-    public function clientsIps()
+    public function clientIps(Request $request)
     {
-        return $clientsIps = Ip::all();
+        $client_id = $request->client_id ?: $request->user()->id;
+        return Ip::where('client_id', $client_id)->get();
     }
 
 }

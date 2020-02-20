@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
@@ -39,6 +40,9 @@ class PermissionController extends Controller
                 $permissions = $request->checkedPermissions;
                 $role->syncPermissions($permissions);
             }
+
+            $this->refreshApp();
+
        } catch (\Throwable $th) {
            return $th;
        }
@@ -59,5 +63,14 @@ class PermissionController extends Controller
     {
         $role = Role::findByName($request->role);
         return $role->getAllPermissions()->pluck('name');
+    }
+
+    public function refreshApp()
+    {
+        $configClear = Artisan::call('config:clear');
+        $cacheClear = Artisan::call('cache:clear');
+        $routeClear = Artisan::call('route:cache');
+        // $viewClear = Artisan::call('view:cache');
+        return true; //Return anything
     }
 }

@@ -16,7 +16,7 @@ This is to inform you that you just created your company details and your update
 | Property       	    | Value         		            |
 | ---------------------     |:-------------------------------------:|
 | Company Name		    | {{$company->company_name}}    |
-| Logo                      | <img width="70" height="40" style="vertical-align: middle;" src="{{asset($company->getFirstMediaUrl('logo'))}}" alt=""> |
+| Logo                      | <img width="70" height="40" style="vertical-align: middle;" src="{{asset($company->logo)}}" alt=""> |
 | Phone		            | {{$company->phone}}           |
 | City		            | {{$company->city}}            |
 | Zip Code		    | {{$company->zip_code}}        |
@@ -35,7 +35,7 @@ Thanks.<br>
 {{ config('app.name') }}
 
 @slot('header_logo')
-<img width="70" height="40" style="vertical-align: middle;" src="{{asset($company->getFirstMediaUrl('logo'))}}" alt="">
+<img width="70" height="40" style="vertical-align: middle;" src="{{asset($company->logo)}}" alt="">
 @endslot
 
 @slot('footer')

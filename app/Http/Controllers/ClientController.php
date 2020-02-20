@@ -179,7 +179,7 @@ class ClientController extends Controller
 
         $payment = Payment::create([
             'client_id' => $request->client_id,
-            'client_type' => 2,
+            'client_type' => 1,
             'balance' => $request->balance,
             'date' => Carbon::today()->toDateString(),
             'type' => $request->type,
@@ -192,7 +192,7 @@ class ClientController extends Controller
         return $payment;
     }
 
-    public function payment(Request $request)
+    public function payments(Request $request)
     {
         return DB::table('payments')->where('client_id', $request->id)->where('client_type', $request->type)->latest()->limit(10)->get();
     }
@@ -224,7 +224,37 @@ class ClientController extends Controller
         } else {
             Alert::warning('Oops..!', 'Please, make sure you provide the right info!');
             return redirect()->back()->with('warning', 'Please, make sure you provide the right info!', 'Oops..!');
-
         }
+
     }
+
+    public function profile(Request $request)
+    {
+        $client = Client::find($request->user()->id);
+        return view('pages.client.pages.profile')->with(compact('client'));
+    }
+
+    public function showPaymentForm()
+    {
+        return view('pages.client.pages.reports.payment-history-panel');
+    }
+
+    public function paymentHistory(Request $request)
+    {
+        $this->validateSummaryRequest($request);
+
+        $payments = DB::table('payments')->select(['id', 'date', 'balance', 'type', 'description', 'actual_value'])
+                            // ->where('client_id', $request->user()->id)->whereClientType(1)
+                            ->whereBetween('date', [$request->from_date, $request->to_date ?: date('Y-m-d')])->get();
+        return Datatables::of($payments)->make(true);
+    }
+
+    public function validateSummaryRequest(Request $request)
+    {
+        return $validation = $this->validate($request, [
+            'from_date' => 'required|date|before:tomorrow',
+            'to_date' => 'nullable|date|after_or_equal:from_date',
+        ]);
+    }
+
 }

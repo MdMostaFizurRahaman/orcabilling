@@ -210,7 +210,6 @@ const app = new Vue({
                 this.disabled = true;
                 this.form.post('{{route("client.store")}}')
                     .then(response => {
-                        console.log(response.data)
                         this.disabled = false
                         this.form.reset()
                         $('#fullscreen-modal').modal('hide')
@@ -275,15 +274,16 @@ const app = new Vue({
                 this.getPaymentTypes()
                 $('#payment-fullscreen-modal').modal('show')
             },
-            clientIps(id){
-                this.getIPs(id)
+            clientIps(client_id){
+                axios.post('{{route("client.ips")}}', {client_id:client_id})
+                    .then(res=>this.ips=res.data)
+                    .catch(e=>alert(e))
                 $('#ip-fullscreen-modal').modal('show')
             },
             savePayment(){
                 this.disabled = true;
                 this.form2.post('{{route("client.payment.store")}}')
                     .then(res=>{
-                        console.log(res.data)
                         this.disabled = false
                         this.form2.reset()
                         $('#payment-fullscreen-modal').modal('hide')
@@ -328,15 +328,11 @@ const app = new Vue({
                     })
             },
             getPayments(id){
-                axios.post('{{route("client.payments")}}', {id:id, type:2})
+                axios.post('{{route("client.payments")}}', {id:id, type:'1'})
                     .then(res=>this.payments=res.data)
                     .catch(e=>alert(e))
             },
-            getIPs(id){
-                axios.post('{{route("ip.index")}}', {id:id})
-                    .then(res=>this.ips=res.data)
-                    .catch(e=>alert(e))
-            },
+
             getPaymentTypes(){
                 axios.get('{{route("payment-types")}}')
                     .then(res=>{

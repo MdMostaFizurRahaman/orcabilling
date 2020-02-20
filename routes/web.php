@@ -25,6 +25,7 @@ Route::get('/testreport', "ParseLogController@testReport");
 
 
 Route::group(['middleware' => ['watch_dog']], function () {
+
     // Admin Routes
     Route::group(['middleware' => ['auth']], function () {
 
@@ -93,13 +94,13 @@ Route::group(['middleware' => ['watch_dog']], function () {
         Route::post('/gateways/show', 'GatewayController@show')->name('gateway.show')->middleware('permission:read gateways');
         Route::post('/gateways/store', "GatewayController@store")->name('gateway.store')->middleware('permission:create gateways');
         Route::put('/gateways/{gateway}', 'GatewayController@update')->name('gateway.update')->middleware('permission:update gateways');
-        Route::post('/gateways/payments', 'GatewayController@payment')->name('gateway.payments')->middleware('permission:read gateway-payments');
+        Route::post('/gateways/payments', 'GatewayController@payments')->name('gateway.payments')->middleware('permission:read gateway-payments');
         Route::delete('/gateways/{gateway}', 'GatewayController@destroy')->name('gateway.delete')->middleware('permission:delete gateways');
         Route::get('/gateways/datatable', 'GatewayController@dataTable')->name('gateways.datatable')->middleware('permission:read gateways');
         Route::post('/gateways/payment/store', 'GatewayController@paymentStore')->name('gateway.payment.store')->middleware('permission:create gateway-payments');
 
         // General Queries
-        Route::get('/getCountries', "Homecontroller@getCountries")->name('countries')->middleware('permission:read cuountries');
+        Route::get('/getCountries', "Homecontroller@getCountries")->name('countries')->middleware('permission:read countries');
         Route::get('/payment-types', 'Homecontroller@getPaymentTypes')->name('payment-types')->middleware('permission:read payment-types');
 
         // Clients Routes
@@ -108,7 +109,7 @@ Route::group(['middleware' => ['watch_dog']], function () {
         Route::post('/clients/show', "ClientController@show")->name('client.show')->middleware('permission:read clients');
         Route::post('/clients/store', "ClientController@store")->name('client.store')->middleware('permission:create clients');
         Route::put('/clients/{client}', "ClientController@update")->name('client.update')->middleware('permission:update clients');
-        Route::post('/clients/payments', 'ClientController@payment')->name('client.payments')->middleware('permission:read client-payments');
+        Route::post('/clients/payments', 'ClientController@payments')->name('client.payments')->middleware('permission:read client-payments');
         Route::delete('/clients/{client}', 'ClientController@destroy')->name('client.delete')->middleware('permission:delete clients');
         Route::get('/clients/datatable', "ClientController@dataTable")->name('clients.datatable')->middleware('permission:read clients');
         Route::post('/clients/payment/store', 'ClientController@paymentStore')->name('client.payment.store')->middleware('permission:create client-payments');
@@ -116,10 +117,10 @@ Route::group(['middleware' => ['watch_dog']], function () {
         // IP Routes
         Route::post('/clients/ips', "IpController@store")->name('ip.store')->middleware('permission:create ips');
         Route::post('/clients/ips/show', "IpController@show")->name('ip.show')->middleware('permission:read ips');
-        Route::post('/clients/ips/get', "IpController@index")->name('ip.index')->middleware('permission:read ips');
+        Route::post('/clients/ips/get', "IpController@clientIps")->name('client.ips')->middleware('permission:read ips');
         Route::put('/clients/ips/update', "IpController@update")->name('ip.update')->middleware('permission:update ips');
         Route::delete('/clients/ips/{ip}', "IpController@destroy")->name('ip.delete')->middleware('permission:delete ips');
-        Route::get('/clients/ips/all', "IpController@clientsIps")->name('clients.ips')->middleware('permission:read ips');
+        Route::get('/clients/ips/all', "IpController@index")->name('ips.index')->middleware('permission:read ips');
 
         // Simulation Routes
         Route::post('/bill/simulate', "ParseLogController@simulate")->name('bill.simulate')->middleware('permission:simulate bill');
@@ -166,18 +167,6 @@ Route::group(['middleware' => ['watch_dog']], function () {
 });
 
 Route::prefix('/client')->name('client.')->group(function () {
-    Route::group(['middleware' => ['auth:client']], function () {
-
-        Route::get('/home', 'HomeController@index')->name('home');
-
-        Route::group(['middleware' => ['watch_dog']], function () {
-            // Change Password Routes
-            Route::get('/password/change', 'ClientController@showPasswordForm')->name('password.change.request')->middleware('password.confirm:client.password.confirm-request');
-            Route::post('/password/change', 'ClientController@changePassword')->name('password.change');
-
-        });
-    });
-
     Route::namespace('Client')->group(function () {
         Route::namespace('Auth')->group(function () {
 
@@ -197,12 +186,40 @@ Route::prefix('/client')->name('client.')->group(function () {
         });
 
         Route::group(['middleware' => ['auth:client']], function () {
-            Route::get('/profile', 'ProfileController@profile')->name('profile');
 
             Route::group(['middleware' => ['watch_dog']], function () {
 
             });
         });
     });
+
+    Route::group(['middleware' => ['auth:client']], function () {
+        // Client Home
+        Route::get('/home', 'HomeController@index')->name('home');
+
+        Route::group(['middleware' => ['watch_dog']], function () {
+            // Change Password Routes
+            Route::get('/password/change', 'ClientController@showPasswordForm')->name('password.change.request')->middleware('password.confirm:client.password.confirm-request');
+            Route::post('/password/change', 'ClientController@changePassword')->name('password.change');
+
+            // Client profile
+            Route::get('/profile', 'ClientController@profile')->name('profile');
+
+            // Client IPs
+            Route::get('/ips', "IpController@clientIps")->name('get-ips');
+
+            // Client Report Routes
+            Route::get('/calls', "ReportController@ClientCallsSearchPanel")->name('calls-summary.panel');
+            Route::get('/calls/summary', "ReportController@ClientCallsSummary")->name('calls-summary');
+            Route::get('/calls/export', "ReportController@exportClientCallsSummary")->name('calls-summary.export');
+            Route::get('/payments', 'ClientController@showPaymentForm')->name('payments.panel');
+            Route::post('/payments/history', 'ClientController@paymentHistory')->name('payments.history');
+            Route::get('/report', 'ReportController@clientReportSearchPanel')->name('report');
+            Route::get('/report/summary', 'ReportController@clientCallsReport')->name('report.summary');
+            Route::get('/report/export', 'ReportController@exportClientCallsReport')->name('report.export');
+        });
+    });
+
+
 
 });

@@ -1,14 +1,13 @@
-@php
-    $user = Auth::user();
-@endphp
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
+                <!-- User Dash Menu -->
+                @user
                 <li class="sidebar-item {{Request::is('/') ? 'selected': ''}}">
-                    <a href="{{$user instanceof App\Client ? route('client.home') : route('home')}}" class="sidebar-link waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                    <a href="{{route('home')}}" class="sidebar-link waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="icon-Car-Wheel"></i>
                         <span class="hide-menu">Dashboards </span>
                     </a>
@@ -158,7 +157,7 @@
                     </ul>
                 </li>
                 <li class="sidebar-item {{Request::is('system') || Request::is('system/*') ? 'selected' : ''}}">
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javajavascript:void(0)
                             " aria-expanded="false">
                         <i class="icon-Settings-Window"></i>
                         <span class="hide-menu">System</span>
@@ -209,6 +208,37 @@
                         </li>
                     </ul>
                 </li>
+                @enduser
+                <!-- End of User Dash Menu -->
+
+                <!-- Client Dash Menu -->
+                @client
+                <li class="sidebar-item {{Request::is('/') ? 'selected': ''}}">
+                    <a href="{{route('client.home')}}" class="sidebar-link waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i class="icon-Car-Wheel"></i>
+                        <span class="hide-menu">Dashboards </span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{Request::is('client/calls*') ? 'selected': ''}}">
+                    <a href="{{route('client.calls-summary.panel')}}" class="sidebar-link waves-effect waves-dark" aria-expanded="false">
+                        <i class="fas fa-phone"></i>
+                        <span class="hide-menu"> Calls Summary</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{Request::is('client/report*') ? 'selected': ''}}">
+                    <a href="{{route('client.report')}}" class="sidebar-link waves-effect waves-dark" aria-expanded="false">
+                        <i class="icon-Statistic"></i>
+                        <span class="hide-menu"> Report</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{Request::is('client/payments*') ? 'selected': ''}}">
+                    <a href="{{route('client.payments.panel')}}" class="sidebar-link waves-effect waves-dark" aria-expanded="false">
+                        <i class="far fa-money-bill-alt"></i>
+                        <span class="hide-menu"> Payments</span>
+                    </a>
+                </li>
+                @endclient
+                <!-- End of Client Dash Menu -->
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

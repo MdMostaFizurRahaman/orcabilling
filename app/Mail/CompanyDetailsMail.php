@@ -22,7 +22,7 @@ class CompanyDetailsMail extends Mailable
     public function __construct(Company $company)
     {
         $this->company = $company;
-        $this->media = (object) array('logo' => $this->company->getFirstMediaUrl('logo'));
+        $this->media = (object) array('logo' => $this->company->logo);
     }
 
     /**

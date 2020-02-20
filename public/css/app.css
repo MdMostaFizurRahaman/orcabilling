@@ -1914,6 +1914,7 @@ div.form-group table.radio th,
 #summary_table th,
 #origination_table tr,
 #origination_table th,
+#payment_history th,
 #termination_table tr,
 #termination_table th
 {
@@ -1935,6 +1936,8 @@ div.form-group table.radio th,
 }
 
 #data_table th,
+#payment_history tr,
+#payment_history td,
 #data_table tr,
 #data_table td {
     height: 30px;

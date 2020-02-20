@@ -272,7 +272,7 @@ const app = new Vue({
                     })
             },
             getPayments(id){
-                axios.post('{{route("gateway.payments")}}', {id:id, type:100})
+                axios.post('{{route("gateway.payments")}}', {id:id, type:2})
                     .then(res=>this.payments=res.data)
                     .catch(e=>alert(e))
             },

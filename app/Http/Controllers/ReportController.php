@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ReportController extends Controller
 {
+    // Summary Panel factory IN
     public function successCallsSearchPanel()
     {
         return view('pages.reports.success-panel');
@@ -37,6 +38,21 @@ class ReportController extends Controller
         return view('pages.reports.loss-profit-panel');
     }
 
+
+    // Client functions
+    public function clientCallsSearchPanel()
+    {
+        return view('pages.client.pages.reports.calls-summary-panel');
+    }
+
+    public function clientReportSearchPanel()
+    {
+        return view('pages.client.pages.reports.report-panel');
+    }
+    // Summary Panel factory OUT
+
+
+    // Summary factory for report IN
     public function successCallsSummary(Request $request)
     {
         $this->validateSummaryRequest($request);
@@ -75,6 +91,24 @@ class ReportController extends Controller
         return view('pages.reports.loss-profit-summary')->with(compact('report'));
     }
 
+
+    // Clietn summary functions
+    public function ClientCallsSummary(Request $request)
+    {
+        $this->validateSummaryRequest($request);
+        $collection = $this->fetchSuccessSummary($request);
+        return view('pages.client.pages.reports.calls-summary')->with(compact('collection'));
+    }
+
+    public function clientCallsReport(Request $request)
+    {
+        $this->validateSummaryRequest($request);
+        $report = $this->fetchClientCallsSummary($request);
+        return view('pages.client.pages.reports.report-summary')->with(compact('report'));
+    }
+    // Summary factory for report OUT
+
+    // Export factory for summary report IN
     public function exportLossProfitSummary(Request $request)
     {
         $validate = $this->validateSummaryRequest($request);
@@ -82,8 +116,9 @@ class ReportController extends Controller
         $collection = $this->fetchLossProfitSummary($request);
 
         $file_name = 'Loss-Profit Summary ('.$request->from_date.' - '.$request->to_date.').'.$request->mime;
+        $export_file = 'pages.reports.loss-profit-summary';
 
-        return $this->export($collection, $file_name, 'loss-profit', $request->mime);
+        return $this->export($collection, $file_name, $export_file, $request->mime);
     }
 
     public function exportOrigTermSummary(Request $request)
@@ -99,8 +134,9 @@ class ReportController extends Controller
         $collection['termination'] = $this->prepareTerminationReport($groupedTerminationColleciton);
 
         $file_name = 'Orig-Term Calls Summary ('.$request->from_date.' - '.$request->to_date.').'.$request->mime;
+        $export_file = 'pages.reports.orig-term-summary';
 
-        return $this->export($collection, $file_name, 'orig-term', $request->mime);
+        return $this->export($collection, $file_name, $export_file, $request->mime);
     }
 
     public function exportSuccessSummary(Request $request)
@@ -109,8 +145,9 @@ class ReportController extends Controller
 
         $collection = $this->fetchSuccessSummary($request);
         $file_name = 'Success Calls Summary ('.$request->from_date.' - '.$request->to_date.').'.$request->mime;
+        $export_file = 'pages.reports.success-summary';
 
-        return $this->export($collection, $file_name, 'success', $request->mime);
+        return $this->export($collection, $file_name, $export_file, $request->mime);
     }
 
     public function exportFailedSummary(Request $request)
@@ -119,13 +156,440 @@ class ReportController extends Controller
 
         $collection = $this->fetchFailedSummary($request);
         $file_name = 'Failed Calls Summary ('.$request->from_date.' - '.$request->to_date.').'.$request->mime;
-        // return view('pages.reports.export-success-summary', [
-        //     'collection' => $collection,
-        // ]);
-        return $this->export($collection, $file_name, 'failed', $request->mime);
+        $export_file = 'pages.reports.failed-summary';
+
+        return $this->export($collection, $file_name, $export_file, $request->mime);
     }
 
-    public function fetchClientsSummary($request)
+    // Client summary export factory
+    public function exportClientCallsSummary(Request $request)
+    {
+        $validate = $this->validateSummaryRequest($request);
+
+        $collection = $this->fetchSuccessSummary($request);
+        $file_name = 'Success Calls Summary ('.$request->from_date.' - '.$request->to_date.').'.$request->mime;
+        $export_file = 'pages.reports.success-summary';
+
+        return $this->export($collection, $file_name, $export_file, $request->mime);
+    }
+
+    public function exportClientCallsReport(Request $request)
+    {
+        $validate = $this->validateSummaryRequest($request);
+
+        $collection = $this->fetchClientCallsSummary($request);
+        $file_name = 'Calls Report ('.$request->from_date.' - '.$request->to_date.').'.$request->mime;
+        $export_file = 'pages.client.pages.reports.export-report-summary';
+        return $this->export($collection, $file_name, $export_file, $request->mime);
+    }
+    // Export factory for summary report OUT
+
+
+    // Collection factory for summary report IN
+    public function fetchLossProfitSummary ($request)
+    {
+        $collection = $this->searchCallsSummary('App\Call', $request)->get();
+
+        $calls = $collection->map(function($call){
+            $call->client_id = $call->client->id;
+            $call->gateway_id = $call->gateway->id;
+            $call->clientRatio = $call->client->tariff->currency->ratio;
+            $call->gatewayRatio = $call->gateway->tariff->currency->ratio;
+            $call->convertedCost = (1 / $call->clientRatio) * $call->cost;
+            $call->convertedCostD = (1 / $call->gatewayRatio) * $call->costD;
+            $call->gateway_id = $call->gateway->id;
+            $call->monthly = Carbon::parse($call->call_start)->format('m');
+            $call->daily = Carbon::parse($call->call_start)->toDateString();
+            $call->hourly = Carbon::parse($call->call_start)->format('Y-m-d H:00')->format('Y-m-d H:00');
+            return $call;
+        });
+
+        $sortedCalls = $calls->sortBy($request->sort_by ?: 'daily');
+        $groupedCalls = $sortedCalls->groupBy($request->group_by, $preserveKeys = true);
+
+        $groupedCallsSummary = $groupedCalls->transform(function($clients, $key) {
+                return $clients->groupBy(function($call, $key) {
+                    return $call['client_id'] . ':' . $call['gateway_id'];
+                })
+                ->map(function ($calls) {
+                    $groupSummary = new stdClass();
+                    $groupSummary->totalCalls = $calls->count();
+                    $groupSummary->totalDuration = $calls->sum('duration');
+                    $groupSummary->totalCost = $calls->sum('convertedCost');
+                    $groupSummary->totalCostD = $calls->sum('convertedCostD');
+                    $groupSummary->totalMargin = $groupSummary->totalCost - $groupSummary->totalCostD;
+                    $groupSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
+                    $groupSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
+                    return $groupSummary;
+                });
+            });
+
+        $totalCalls = $totalDuration = $totalCost = $totalCostD = $totalMargin = 0;
+
+        foreach($groupedCallsSummary as $groupName => $group){
+            foreach($group as $clientAndGatewayId => $callsSummary){
+                $totalCalls += $callsSummary->totalCalls;
+                $totalDuration += $callsSummary->totalDuration;
+                $totalCost += $callsSummary->totalCost;
+                $totalCostD += $callsSummary->totalCostD;
+                $totalMargin += $callsSummary->totalMargin;
+            }
+        }
+
+        $lossProfitReport['groupedCallsSummary'] = $groupedCallsSummary;
+        $lossProfitReport['totalCalls'] = number_format($totalCalls);
+        $lossProfitReport['totalDuration'] = number_format($totalDuration / 60, 2);
+        $lossProfitReport['totalCost'] = number_format($totalCost, 2);
+        $lossProfitReport['totalCostD'] = number_format($totalCostD, 2);
+        $lossProfitReport['totalMargin'] = number_format($totalMargin, 2);
+
+        return $lossProfitReport;
+    }
+
+    public function fetchSuccessSummary($request)
+    {
+        $collection = $this->searchCallsSummary("App\Call", $request)->get();
+        foreach($collection as $call){
+            $call->client_name = $call->client->username;
+            $call->gateway_name = $call->gateway->name;
+            $call->monthly = Carbon::parse($call->call_start)->format('m');
+            $call->daily = Carbon::parse($call->call_start)->toDateString();
+            $call->hourly = Carbon::parse($call->call_start)->format('Y-m-d H:00')->format('Y-m-d H:00');
+        }
+        $totalCalls = number_format($collection->count());
+        $totalCost = number_format($collection->sum('cost'), 2);
+        $totalCostD = number_format($collection->sum('costD'), 2);
+        $totalDuration = number_format($collection->sum('duration') / 60, 2);
+
+        $collection = $collection->sortBy($request->sort_by ?: 'daily');
+        $calls = $collection->groupBy($request->group_by ?: 'monthly');
+        $data['calls'] = $calls;
+        $data['totalCalls'] = $totalCalls;
+        $data['totalCost'] = $totalCost;
+        $data['totalCostD'] = $totalCostD;
+        $data['totalDuration'] = $totalDuration;
+
+        return $data;
+    }
+
+    public function fetchFailedSummary($request)
+    {
+        $collection = $this->searchCallsSummary("App\FailedCall", $request)->get();
+
+        foreach($collection as $call){
+            $call->client_name = $call->client->username;
+            $call->gateway_name = $call->gateway->name;
+            $call->monthly = Carbon::parse($call->call_start)->format('m');
+            $call->daily = Carbon::parse($call->call_start)->toDateString();
+            $call->hourly = Carbon::parse($call->call_start)->format('Y-m-d H:00');
+        }
+        $totalCalls = $collection->count();
+
+        $collection = $collection->sortBy($request->sort_by ?: 'daily');
+        $calls = $collection->groupBy($request->group_by ?: 'monthly');
+        $data['calls'] = $calls;
+        $data['totalCalls'] = $totalCalls;
+
+        return $data;
+    }
+
+    public function fetchOrigTermSummary($request)
+    {
+        $calls = $this->searchCallsSummary('App\Call', $request)->get();
+        $failedCalls = $this->searchCallsSummary('App\FailedCall', $request)->get();
+
+        $mergedCollections = $calls->merge($failedCalls);
+
+        $mergedCollections = $mergedCollections->map(function($call){
+            $className = get_class($call);
+            $baseClass = Str::camel(class_basename($className));
+            $call->type = $baseClass;
+            $call->client_id = $call->client->id;
+            $call->gateway_id = $call->gateway->id;
+            $call->monthly = Carbon::parse($call->call_start)->format('m');
+            $call->daily = Carbon::parse($call->call_start)->toDateString();
+            $call->hourly = Carbon::parse($call->call_start)->format('Y-m-d H:00');
+            return $call;
+        });
+
+        $mergedCollections = $mergedCollections->sortBy($request->sort_by ?: 'daily');
+        $groupedCollection = $mergedCollections->groupBy($request->group_by, $preserveKeys = true);
+        return $groupedCollection;
+    }
+
+    public function fetchClientCallsSummary ($request)
+    {
+        $collection = $this->searchCallsSummary('App\Call', $request)->get();
+
+        $calls = $collection->map(function($call){
+            $call->monthly = Carbon::parse($call->call_start)->format('F Y');
+            $call->daily = Carbon::parse($call->call_start)->toDateString();
+            $call->hourly = Carbon::parse($call->call_start)->format('Y-m-d H:00');
+            return $call;
+        });
+
+        $sortedCalls = $calls->sortBy($request->sort_by ?: 'daily');
+        $groupedCalls = $sortedCalls->groupBy($request->group_by);
+        $groupedCallsSummary = $groupedCalls
+                                ->map(function ($calls) {
+                                    $groupSummary = new stdClass();
+                                    $groupSummary->totalCalls = $calls->count();
+                                    $groupSummary->totalDuration = $calls->sum('duration');
+                                    $groupSummary->totalCost = $calls->sum('cost');
+                                    $groupSummary->totalCostD = $calls->sum('costD');
+                                    $groupSummary->totalMargin = $groupSummary->totalCost - $groupSummary->totalCostD;
+                                    $groupSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
+                                    $groupSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
+                                    return $groupSummary;
+                                });
+
+
+        $totalCalls = $totalDuration = $totalCost = $totalCostD = $totalMargin = 0;
+
+        foreach($groupedCallsSummary as $clientAndGatewayId => $callsSummary){
+            $totalCalls += $callsSummary->totalCalls;
+            $totalDuration += $callsSummary->totalDuration;
+            $totalCost += $callsSummary->totalCost;
+            $totalCostD += $callsSummary->totalCostD;
+            $totalMargin += $callsSummary->totalMargin;
+        }
+
+        $clientCallsReport['groupedCallsSummary'] = $groupedCallsSummary;
+        $clientCallsReport['totalCalls'] = number_format($totalCalls);
+        $clientCallsReport['totalDuration'] = number_format($totalDuration / 60, 2);
+        $clientCallsReport['totalCost'] = number_format($totalCost, 2);
+
+
+        return $clientCallsReport;
+    }
+
+    protected function prepareOriginationReport($groupedCollection)
+    {
+        $groupedOriginationSummary = $groupedCollection->transform(function($clients, $key) {
+            return $clients->groupBy('client_id')->map(function ($calls) {
+                $clientSummary = new stdClass();
+                $clientSummary->callsCount = $calls->countBy('type');
+                $clientSummary->totalSuccessCalls =  !empty($clientSummary->callsCount['call']) ? $clientSummary->callsCount['call'] : 0;
+                $clientSummary->totalFailedCalls =  !empty($clientSummary->callsCount['failed_call']) ? $clientSummary->callsCount['failed_call'] : 0;
+                $clientSummary->totalCalls = $calls->count();
+                $clientSummary->totalDuration = $calls->sum('duration');
+                $clientSummary->totalCost = $calls->sum('cost');
+                $clientSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
+                $clientSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
+                $clientSummary->ASR = ($clientSummary->totalSuccessCalls / $clientSummary->totalCalls) * 100;
+                return $clientSummary;
+            });
+        });
+
+        $totalOriginationCalls = $totalOriginationSuccessCalls = $totalOriginationFailedCalls = $totalOriginationDuration = $totalOriginationCost = 0;
+
+        foreach($groupedOriginationSummary as $groupName => $group){
+            foreach($group as $client_id => $clientSummary){
+                $totalOriginationSuccessCalls += $clientSummary->totalSuccessCalls;
+                $totalOriginationFailedCalls += $clientSummary->totalFailedCalls;
+                $totalOriginationCalls += $clientSummary->totalCalls;
+                $totalOriginationDuration += $clientSummary->totalDuration;
+                $totalOriginationCost += $clientSummary->totalCost;
+            }
+        }
+
+        $originationSummary['groupedOriginationSummary'] = $groupedOriginationSummary;
+        $originationSummary['totalCalls'] = number_format($totalOriginationCalls);
+        $originationSummary['totalSuccessCalls'] = number_format($totalOriginationSuccessCalls);
+        $originationSummary['totalDuration'] = number_format($totalOriginationDuration / 60, 2);
+        $originationSummary['totalCost'] = number_format($totalOriginationCost, 2);
+
+        return $originationSummary;
+    }
+
+    protected function prepareTerminationReport($groupedCollection)
+    {
+        $groupedTerminationSummary = $groupedCollection->transform(function($gateways, $key) {
+            return $gateways->groupBy('gateway_id')->map(function ($calls) {
+                $routeSummary = new stdClass();
+                $routeSummary->callsCount = $calls->countBy('type');
+                $routeSummary->totalSuccessCalls =  !empty($routeSummary->callsCount['call']) ? $routeSummary->callsCount['call'] : 0;
+                $routeSummary->totalFailedCalls =  !empty($routeSummary->callsCount['failed_call']) ? $routeSummary->callsCount['failed_call'] : 0;
+                $routeSummary->totalCalls = $calls->count();
+                $routeSummary->totalDuration = $calls->sum('duration');
+                $routeSummary->totalCost = $calls->sum('costD');
+                $routeSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
+                $routeSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
+                $routeSummary->ASR = ($routeSummary->totalSuccessCalls / $routeSummary->totalCalls) * 100;
+                return $routeSummary;
+            });
+        });
+
+        $totalTerminationCalls = $totalTerminationSuccessCalls = $totalTerminationFailedCalls = $totalTerminationDuration = $totalTerminationCost = 0;
+
+        foreach($groupedTerminationSummary as $groupName => $group){
+            foreach($group as $gateway_id => $gatewaySummary){
+                $totalTerminationSuccessCalls += $gatewaySummary->totalSuccessCalls;
+                $totalTerminationFailedCalls += $gatewaySummary->totalFailedCalls;
+                $totalTerminationCalls += $gatewaySummary->totalCalls;
+                $totalTerminationDuration += $gatewaySummary->totalDuration;
+                $totalTerminationCost += $gatewaySummary->totalCost;
+            }
+        }
+
+        $terminationSummary['groupedTerminationSummary'] = $groupedTerminationSummary;
+        $terminationSummary['totalCalls'] = number_format($totalTerminationCalls);
+        $terminationSummary['totalSuccessCalls'] = number_format($totalTerminationSuccessCalls);
+        $terminationSummary['totalDuration'] = number_format($totalTerminationDuration / 60, 2);
+        $terminationSummary['totalCost'] = number_format($totalTerminationCost, 2);
+
+        return $terminationSummary;
+    }
+
+    public function validateSummaryRequest(Request $request)
+    {
+        return $validation = $this->validate($request, [
+            'client_id' => 'string|nullable',
+            'client_ip' => 'ip|nullable',
+            'gateway_id' => 'string|nullable',
+            'called' => 'string|nullable',
+            'calling' => 'string|nullable',
+            'from_date' => 'required|date|before:tomorrow',
+            'to_date' => 'nullable|date|after_or_equal:from_date',
+            'group_by' => 'string|nullable',
+            'sort_by' => 'string|nullable',
+        ]);
+    }
+
+    public function searchCallsSummary($model, $request)
+    {
+        $query = $model::whereBetween('call_start', [$request->from_date, $request->to_date ?: date('Y-m-d')]);
+        if($request->client_id){
+            $query = $query->whereClientId($request->client_id);
+        }
+        if($request->client_ip){
+            $query = $query->whereIpNumber($request->client_ip);
+        }
+        if($request->gateway_id){
+            $query = $query->where('id_route', $request->gateway_id);
+        }
+        if($request->prefix){
+            $query = $query->where('tariff_prefix', $request->prefix)
+                        ->orWhere('route_rate_prefix', $request->prefix);
+        }
+        if($request->calling){
+            $query = $query->where('calling', $request->calling);
+        }
+        if($request->called){
+            $query = $query->where('called', $request->called);
+        }
+
+        return $query;
+    }
+
+    protected function getFormattedNumber($num){
+        return preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))?/i", "$1,", $num);
+    }
+
+    protected function getFormattedCurrency($num){
+        return preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $num);
+    }
+
+    protected function getSecondsToTimeFormat($seconds)
+    {
+        $hours = floor($seconds / 3600);
+        $mins = floor($seconds / 60 % 60);
+        $secs = round($seconds % 60);
+        return $timeFormat = sprintf('%02d:%02d:%02d', $hours, $mins, $secs);
+    }
+
+    protected function getTotalDuration($times)
+    {
+        $all_seconds= 0;
+        foreach ($times as $time)
+        {
+            list($hour, $minute, $second) = explode(':', $time);
+            $all_seconds += $hour * 3600;
+            $all_seconds += $minute * 60;
+            $all_seconds += $second;
+        }
+
+        $total_minutes = floor($all_seconds/60);
+        $seconds = $all_seconds % 60;
+        $hours = floor($total_minutes / 60);
+        $minutes = $total_minutes % 60;
+
+        // returns the time already formatted
+        return sprintf('%02d:%02d:%02d', $hours, $minutes,$seconds);
+    }
+
+    public function export($collection, $file_name, $exportPage, $mime_type)
+    {
+        $export = new SummaryExport();
+        $export->forCollection($collection);
+        $export->forExportPage($exportPage);
+        if($mime_type == 'csv'){
+            return Excel::download($export, $file_name, \Maatwebsite\Excel\Excel::CSV, [
+                        'Content-Type' => 'text/csv',
+                ]);
+        } else {
+            return Excel::download($export, $file_name);
+        }
+    }
+
+    public function testClientReportSummary (Request $request)
+    {
+        $collection = $this->searchCallsSummary('App\Call', $request)->get();
+
+        $calls = $collection->map(function($call){
+            $call->monthly = Carbon::parse($call->call_start)->format('F Y');
+            $call->daily = Carbon::parse($call->call_start)->toDateString();
+            $call->hourly = Carbon::parse($call->call_start)->format('Y-m-d H:00');
+            return $call;
+        });
+
+        $sortedCalls = $calls->sortBy($request->sort_by ?: 'daily');
+        $groupedCalls = $sortedCalls->groupBy($request->group_by);
+        $groupedCallsSummary = $groupedCalls
+                // ->transform(function($clients, $key) {
+                // return $clients->groupBy(function($call, $key) {
+                //     return $call['client_id'].':'.$call['gateway_id'];
+                // })
+                ->map(function ($calls) {
+                    $groupSummary = new stdClass();
+                    $groupSummary->totalCalls = $calls->count();
+                    $groupSummary->totalDuration = $calls->sum('duration');
+                    $groupSummary->totalCost = $calls->sum('cost');
+                    $groupSummary->totalCostD = $calls->sum('costD');
+                    $groupSummary->totalMargin = $groupSummary->totalCost - $groupSummary->totalCostD;
+                    $groupSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
+                    $groupSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
+                    return $groupSummary;
+                });
+            // });
+
+
+        $totalCalls = $totalDuration = $totalCost = $totalCostD = $totalMargin = 0;
+
+        // foreach($groupedCallsSummary as $groupName => $sortedCalls){
+            foreach($groupedCallsSummary as $clientAndGatewayId => $callsSummary){
+                $totalCalls += $callsSummary->totalCalls;
+                $totalDuration += $callsSummary->totalDuration;
+                $totalCost += $callsSummary->totalCost;
+                $totalCostD += $callsSummary->totalCostD;
+                $totalMargin += $callsSummary->totalMargin;
+            }
+        // }
+
+        $clientCallsReport['groupedCallsSummary'] = $groupedCallsSummary;
+        $clientCallsReport['totalCalls'] = number_format($totalCalls);
+        $clientCallsReport['totalDuration'] = number_format($totalDuration / 60, 2);
+        $clientCallsReport['totalCost'] = number_format($totalCost, 2);
+        $clientCallsReport['totalCostD'] = number_format($totalCostD, 2);
+        $clientCallsReport['totalMargin'] = number_format($totalMargin, 2);
+
+        return dump($clientCallsReport);
+
+        return $clientCallsReport;
+    }
+
+    // Client based calls search test function
+    public function fetchClientsCallsSummary($request)
     {
         $clientCollection = Client::whereHas('calls', function (Builder $query) use ($request) {
                                 $query = $query->whereBetween('call_start', [$request->from_date, $request->to_date]);
@@ -268,357 +732,6 @@ class ReportController extends Controller
         $summary['client'] = $clientSummary;
         $summary['gateway'] = $gatewaySummary;
         return $summary;
-    }
-
-    public function fetchLossProfitSummary ($request)
-    {
-        $collection = $this->searchCallsSummary('App\Call', $request)->get();
-
-        $calls = $collection->map(function($call){
-            $call->client_id = $call->client->id;
-            $call->gateway_id = $call->gateway->id;
-            $call->clientRatio = $call->client->tariff->currency->ratio;
-            $call->gatewayRatio = $call->gateway->tariff->currency->ratio;
-            $call->convertedCost = (1 / $call->clientRatio) * $call->cost;
-            $call->convertedCostD = (1 / $call->gatewayRatio) * $call->costD;
-            $call->gateway_id = $call->gateway->id;
-            $call->monthly = Carbon::parse($call->call_start)->format('m');
-            $call->daily = Carbon::parse($call->call_start)->toDateString();
-            $call->hourly = Carbon::parse($call->call_start);
-            return $call;
-        });
-
-        $sortedCalls = $calls->sortBy($request->sort_by ?: 'daily');
-        $groupedCalls = $sortedCalls->groupBy($request->group_by, $preserveKeys = true);
-
-        $groupedCallsSummary = $groupedCalls->transform(function($clients, $key) {
-                return $clients->groupBy(function($call, $key) {
-                    return $call['client_id'] . ':' . $call['gateway_id'];
-                })
-                ->map(function ($calls) {
-                    $groupSummary = new stdClass();
-                    $groupSummary->totalCalls = $calls->count();
-                    $groupSummary->totalDuration = $calls->sum('duration');
-                    $groupSummary->totalCost = $calls->sum('convertedCost');
-                    $groupSummary->totalCostD = $calls->sum('convertedCostD');
-                    $groupSummary->totalMargin = $groupSummary->totalCost - $groupSummary->totalCostD;
-                    $groupSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
-                    $groupSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
-                    return $groupSummary;
-                });
-            });
-
-        $totalCalls = $totalDuration = $totalCost = $totalCostD = $totalMargin = 0;
-
-        foreach($groupedCallsSummary as $groupName => $group){
-            foreach($group as $clientAndGatewayId => $callsSummary){
-                $totalCalls += $callsSummary->totalCalls;
-                $totalDuration += $callsSummary->totalDuration;
-                $totalCost += $callsSummary->totalCost;
-                $totalCostD += $callsSummary->totalCostD;
-                $totalMargin += $callsSummary->totalMargin;
-            }
-        }
-
-        $lossProfitReport['groupedCallsSummary'] = $groupedCallsSummary;
-        $lossProfitReport['totalCalls'] = number_format($totalCalls);
-        $lossProfitReport['totalDuration'] = number_format($totalDuration / 60, 2);
-        $lossProfitReport['totalCost'] = number_format($totalCost, 2);
-        $lossProfitReport['totalCostD'] = number_format($totalCostD, 2);
-        $lossProfitReport['totalMargin'] = number_format($totalMargin, 2);
-
-        return $lossProfitReport;
-    }
-
-    public function fetchSuccessSummary($request)
-    {
-        $collection = $this->searchCallsSummary("App\Call", $request)->get();
-        foreach($collection as $call){
-            $call->client_name = $call->client->username;
-            $call->gateway_name = $call->gateway->name;
-            $call->monthly = Carbon::parse($call->call_start)->format('m');
-            $call->daily = Carbon::parse($call->call_start)->toDateString();
-            $call->hourly = Carbon::parse($call->call_start);
-        }
-        $totalCalls = number_format($collection->count());
-        $totalCost = number_format($collection->sum('cost'), 2);
-        $totalCostD = number_format($collection->sum('costD'), 2);
-        $totalDuration = number_format($collection->sum('duration') / 60, 2);
-
-        $collection = $collection->sortBy($request->sort_by ?: 'daily');
-        $calls = $collection->groupBy($request->group_by ?: 'monthly');
-        $data['calls'] = $calls;
-        $data['totalCalls'] = $totalCalls;
-        $data['totalCost'] = $totalCost;
-        $data['totalCostD'] = $totalCostD;
-        $data['totalDuration'] = $totalDuration;
-
-        return $data;
-    }
-
-    public function fetchFailedSummary($request)
-    {
-        $collection = $this->searchCallsSummary("App\FailedCall", $request)->get();
-
-        foreach($collection as $call){
-            $call->client_name = $call->client->username;
-            $call->gateway_name = $call->gateway->name;
-            $call->monthly = Carbon::parse($call->call_start)->format('m');
-            $call->daily = Carbon::parse($call->call_start)->toDateString();
-            $call->hourly = Carbon::parse($call->call_start);
-        }
-        $totalCalls = $collection->count();
-
-        $collection = $collection->sortBy($request->sort_by ?: 'daily');
-        $calls = $collection->groupBy($request->group_by ?: 'monthly');
-        $data['calls'] = $calls;
-        $data['totalCalls'] = $totalCalls;
-
-        return $data;
-    }
-
-    public function fetchOrigTermSummary($request)
-    {
-        $calls = $this->searchCallsSummary('App\Call', $request)->get();
-        $failedCalls = $this->searchCallsSummary('App\FailedCall', $request)->get();
-
-        $mergedCollections = $calls->merge($failedCalls);
-
-        $mergedCollections = $mergedCollections->map(function($call){
-            $className = get_class($call);
-            $baseClass = Str::camel(class_basename($className));
-            $call->type = $baseClass;
-            $call->client_id = $call->client->id;
-            $call->gateway_id = $call->gateway->id;
-            $call->monthly = Carbon::parse($call->call_start)->format('m');
-            $call->daily = Carbon::parse($call->call_start)->toDateString();
-            $call->hourly = Carbon::parse($call->call_start);
-            return $call;
-        });
-
-        $mergedCollections = $mergedCollections->sortBy($request->sort_by ?: 'daily');
-        $groupedCollection = $mergedCollections->groupBy($request->group_by, $preserveKeys = true);
-        return $groupedCollection;
-    }
-
-    protected function prepareOriginationReport($groupedCollection)
-    {
-        $groupedOriginationSummary = $groupedCollection->transform(function($clients, $key) {
-            return $clients->groupBy('client_id')->map(function ($calls) {
-                $clientSummary = new stdClass();
-                $clientSummary->callsCount = $calls->countBy('type');
-                $clientSummary->totalSuccessCalls =  !empty($clientSummary->callsCount['call']) ? $clientSummary->callsCount['call'] : 0;
-                $clientSummary->totalFailedCalls =  !empty($clientSummary->callsCount['failed_call']) ? $clientSummary->callsCount['failed_call'] : 0;
-                $clientSummary->totalCalls = $calls->count();
-                $clientSummary->totalDuration = $calls->sum('duration');
-                $clientSummary->totalCost = $calls->sum('cost');
-                $clientSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
-                $clientSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
-                $clientSummary->ASR = ($clientSummary->totalSuccessCalls / $clientSummary->totalCalls) * 100;
-                return $clientSummary;
-            });
-        });
-
-        $totalOriginationCalls = $totalOriginationSuccessCalls = $totalOriginationFailedCalls = $totalOriginationDuration = $totalOriginationCost = 0;
-
-        foreach($groupedOriginationSummary as $groupName => $group){
-            foreach($group as $client_id => $clientSummary){
-                $totalOriginationSuccessCalls += $clientSummary->totalSuccessCalls;
-                $totalOriginationFailedCalls += $clientSummary->totalFailedCalls;
-                $totalOriginationCalls += $clientSummary->totalCalls;
-                $totalOriginationDuration += $clientSummary->totalDuration;
-                $totalOriginationCost += $clientSummary->totalCost;
-            }
-        }
-
-        $originationSummary['groupedOriginationSummary'] = $groupedOriginationSummary;
-        $originationSummary['totalCalls'] = number_format($totalOriginationCalls);
-        $originationSummary['totalSuccessCalls'] = number_format($totalOriginationSuccessCalls);
-        $originationSummary['totalDuration'] = number_format($totalOriginationDuration / 60, 2);
-        $originationSummary['totalCost'] = number_format($totalOriginationCost, 2);
-
-        return $originationSummary;
-    }
-
-    protected function prepareTerminationReport($groupedCollection)
-    {
-        $groupedTerminationSummary = $groupedCollection->transform(function($gateways, $key) {
-            return $gateways->groupBy('gateway_id')->map(function ($calls) {
-                $routeSummary = new stdClass();
-                $routeSummary->callsCount = $calls->countBy('type');
-                $routeSummary->totalSuccessCalls =  !empty($routeSummary->callsCount['call']) ? $routeSummary->callsCount['call'] : 0;
-                $routeSummary->totalFailedCalls =  !empty($routeSummary->callsCount['failed_call']) ? $routeSummary->callsCount['failed_call'] : 0;
-                $routeSummary->totalCalls = $calls->count();
-                $routeSummary->totalDuration = $calls->sum('duration');
-                $routeSummary->totalCost = $calls->sum('costD');
-                $routeSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
-                $routeSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
-                $routeSummary->ASR = ($routeSummary->totalSuccessCalls / $routeSummary->totalCalls) * 100;
-                return $routeSummary;
-            });
-        });
-
-        $totalTerminationCalls = $totalTerminationSuccessCalls = $totalTerminationFailedCalls = $totalTerminationDuration = $totalTerminationCost = 0;
-
-        foreach($groupedTerminationSummary as $groupName => $group){
-            foreach($group as $gateway_id => $gatewaySummary){
-                $totalTerminationSuccessCalls += $gatewaySummary->totalSuccessCalls;
-                $totalTerminationFailedCalls += $gatewaySummary->totalFailedCalls;
-                $totalTerminationCalls += $gatewaySummary->totalCalls;
-                $totalTerminationDuration += $gatewaySummary->totalDuration;
-                $totalTerminationCost += $gatewaySummary->totalCost;
-            }
-        }
-
-        $terminationSummary['groupedTerminationSummary'] = $groupedTerminationSummary;
-        $terminationSummary['totalCalls'] = number_format($totalTerminationCalls);
-        $terminationSummary['totalSuccessCalls'] = number_format($totalTerminationSuccessCalls);
-        $terminationSummary['totalDuration'] = number_format($totalTerminationDuration / 60, 2);
-        $terminationSummary['totalCost'] = number_format($totalTerminationCost, 2);
-
-        return $terminationSummary;
-    }
-
-    public function validateSummaryRequest(Request $request)
-    {
-        return $validation = $this->validate($request, [
-            'client_id' => 'string|nullable',
-            'gateway_id' => 'string|nullable',
-            'called' => 'string|nullable',
-            'calling' => 'string|nullable',
-            'from_date' => 'required|date',
-            'to_date' => 'required|date',
-            'group_by' => 'string',
-            'sort_by' => 'string',
-        ]);
-    }
-
-    public function searchCallsSummary($model, $request)
-    {
-        $query = $model::whereBetween('call_start', [$request->from_date, $request->to_date]);
-        if($request->client_id){
-            $query = $query->whereClientId($request->client_id);
-        }
-        if($request->gateway_id){
-            $query = $query->where('id_route', $request->gateway_id);
-        }
-        if($request->prefix){
-            $query = $query->where('tariff_prefix', $request->prefix)
-                        ->orWhere('route_rate_prefix', $request->prefix);
-        }
-        if($request->calling){
-            $query = $query->where('calling', $request->calling);
-        }
-        if($request->called){
-            $query = $query->where('called', $request->called);
-        }
-
-        return $query;
-    }
-
-    protected function getFormattedNumber($num){
-        return preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))?/i", "$1,", $num);
-    }
-
-    protected function getFormattedCurrency($num){
-        return preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $num);
-    }
-
-    protected function getSecondsToTimeFormat($seconds)
-    {
-        $hours = floor($seconds / 3600);
-        $mins = floor($seconds / 60 % 60);
-        $secs = round($seconds % 60);
-        return $timeFormat = sprintf('%02d:%02d:%02d', $hours, $mins, $secs);
-    }
-
-    protected function getTotalDuration($times)
-    {
-        $all_seconds= 0;
-        foreach ($times as $time)
-        {
-            list($hour, $minute, $second) = explode(':', $time);
-            $all_seconds += $hour * 3600;
-            $all_seconds += $minute * 60;
-            $all_seconds += $second;
-        }
-
-        $total_minutes = floor($all_seconds/60);
-        $seconds = $all_seconds % 60;
-        $hours = floor($total_minutes / 60);
-        $minutes = $total_minutes % 60;
-
-        // returns the time already formatted
-        return sprintf('%02d:%02d:%02d', $hours, $minutes,$seconds);
-    }
-
-    public function export($collection, $file_name, $summary_type, $mime_type)
-    {
-        $export = new SummaryExport();
-        $export->forCollection($collection);
-        $export->forSummaryType($summary_type);
-        if($mime_type == 'csv'){
-            return Excel::download($export, $file_name, \Maatwebsite\Excel\Excel::CSV, [
-                        'Content-Type' => 'text/csv',
-                ]);
-        } else {
-            return Excel::download($export, $file_name);
-        }
-    }
-
-    public function testLossProfitSummary ($request)
-    {
-        $collection = $this->searchCallsSummary('App\Call', $request)->get();
-
-        $calls = $collection->map(function($call){
-            $call->client_id = $call->client->id;
-            $call->gateway_id = $call->gateway->id;
-            $call->monthly = Carbon::parse($call->call_start)->format('m');
-            $call->daily = Carbon::parse($call->call_start)->toDateString();
-            $call->hourly = Carbon::parse($call->call_start);
-            return $call;
-        });
-
-        $sortedCalls = $calls->sortBy($request->sort_by ?: 'daily');
-        $groupedCalls = $sortedCalls->groupBy($request->group_by);
-
-        $groupedCallsSummary = $groupedCalls->transform(function($clients, $key) {
-                return $clients->groupBy(function($call, $key) {
-                    return $call['client_id'].':'.$call['gateway_id'];
-                })
-                ->map(function ($calls) {
-                    $groupSummary = new stdClass();
-                    $groupSummary->totalCalls = $calls->count();
-                    $groupSummary->totalDuration = $calls->sum('duration');
-                    $groupSummary->totalCost = $calls->sum('cost');
-                    $groupSummary->totalCostD = $calls->sum('costD');
-                    $groupSummary->totalMargin = $groupSummary->totalCost - $groupSummary->totalCostD;
-                    $groupSummary->ACD = $this->getSecondsToTimeFormat($calls->avg('duration'));
-                    $groupSummary->avgPdd = $this->getSecondsToTimeFormat($calls->avg('pdd'));
-                    return $groupSummary;
-                });
-            });
-
-        $totalCalls = $totalDuration = $totalCost = $totalCostD = $totalMargin = 0;
-
-        foreach($groupedCallsSummary as $groupName => $group){
-            foreach($group as $clientAndGatewayId => $callsSummary){
-                $totalCalls += $callsSummary->totalCalls;
-                $totalDuration += $callsSummary->totalDuration;
-                $totalCost += $callsSummary->totalCost;
-                $totalCostD += $callsSummary->totalCostD;
-                $totalMargin += $callsSummary->totalMargin;
-            }
-        }
-
-        $lossProfitReport['groupedCallsSummary'] = $groupedCallsSummary;
-        $lossProfitReport['totalCalls'] = number_format($totalCalls);
-        $lossProfitReport['totalDuration'] = number_format($totalDuration / 60, 2);
-        $lossProfitReport['totalCost'] = number_format($totalCost, 2);
-        $lossProfitReport['totalCostD'] = number_format($totalCostD, 2);
-        $lossProfitReport['totalMargin'] = number_format($totalMargin, 2);
-
-        return $lossProfitReport;
     }
 
 }

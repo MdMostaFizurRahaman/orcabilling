@@ -188,7 +188,7 @@ class GatewayController extends Controller
 
         $payment = Payment::create([
             'client_id' => $request->client_id,
-            'client_type' => 100,
+            'client_type' => 2,
             'balance' => $request->balance,
             'date' => Carbon::today()->toDateString(),
             'type' => $request->type,
@@ -201,7 +201,7 @@ class GatewayController extends Controller
         return $payment;
     }
 
-    public function payment(Request $request)
+    public function payments(Request $request)
     {
         return DB::table('payments')->where('client_id', $request->id)->where('client_type', $request->type)->latest()->limit(10)->get();
     }

@@ -1,6 +1,3 @@
-@php
-    $user = Auth::user();
-@endphp
 <header class="topbar">
     <nav class="navbar top-navbar navbar-expand-md navbar-dark">
         <div class="navbar-header">
@@ -11,7 +8,12 @@
             <!-- ============================================================== -->
             <!-- Logo -->
             <!-- ============================================================== -->
-            <a class="navbar-brand" href="{{$user instanceof App\Client ? route('client.home') : route('home')}}">
+            @client
+            <a class="navbar-brand" href="{{route('client.home')}}">
+            @endclient
+            @user
+            <a class="navbar-brand" href="{{route('home')}}">
+            @enduser
                 <!-- Logo icon -->
                 <b class="logo-icon">
                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -246,17 +248,39 @@
                                     <p class=" m-b-0">{{Auth::user()->email}}</p>
                                 </div>
                             </div>
-                            <a class="dropdown-item" href="{{$user instanceof App\Client ? route('client.profile') : route('user.profile')}}">
-                                <i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
-                            <a class="dropdown-item" href="{{$user instanceof App\Client ? route('client.password.change.request') : route('password.change.request')}}">
-                                <i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
-                            <a class="dropdown-item" href="{{ Auth::user() instanceof App\Client ? route('client.logout') : route('logout') }}"
-                                            onclick="event.preventDefault();
-                                          document.getElementById('logout-form').submit();">
-                                <i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
-                                <form id="logout-form" action="{{ Auth::user() instanceof App\Client ? route('client.logout') : route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                </form>
+                            <a class="dropdown-item"
+                            @client
+                                href="{{route('client.profile')}}"
+                            @endclient
+                            @user
+                                href="{{route('user.profile')}}"
+                            @enduser
+                            >
+                                <i class="ti-user m-r-5 m-l-5"></i> My Profile
+                            </a>
+                            <a class="dropdown-item"
+                            @client
+                                href="{{route('client.password.change.request')}}"
+                            @endclient
+                            @user
+                                href="{{route('password.change.request')}}"
+                            @enduser
+                            >
+                                <i class="ti-settings m-r-5 m-l-5"></i> Account Setting
+                            </a>
+                            <a class="dropdown-item" href="javajavascript:void(0)" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fa fa-power-off m-r-5 m-l-5"></i> Logout
+                            </a>
+                            <form id="logout-form"
+                            @client
+                                action="{{route('client.logout')}}"
+                            @endclient
+                            @user
+                                action="{{route('logout')}}"
+                            @enduser
+                            method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </div>
                     </li>
                     <!-- ============================================================== -->

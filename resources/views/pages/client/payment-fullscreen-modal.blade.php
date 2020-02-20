@@ -56,16 +56,16 @@
                                             <h5>Payment History (Last 10 Entry)</h5>
                                         </div>
                                     </div>
-                                    <div class="card-body"> 
+                                    <div class="card-body">
                                         <table class="table table-bordered">
                                             <thead>
-                                                <th>Id</th>    
-                                                <th>Date</th>    
-                                                <th>Amount</th>    
-                                                <th>Type</th>    
-                                                <th>Description</th>    
-                                                <th>Actual Balance</th>    
-                                            </thead>    
+                                                <th>Id</th>
+                                                <th>Date</th>
+                                                <th>Amount</th>
+                                                <th>Type</th>
+                                                <th>Description</th>
+                                                <th>Previous Balance</th>
+                                            </thead>
                                             <tbody>
                                                 <tr v-for="payment in payments" :key="payment.id">
                                                     <td>@{{payment.id}}</td>
@@ -74,15 +74,15 @@
                                                     <td>@{{payment.type |capitalize}}</td>
                                                     <td>@{{payment.description}}</td>
                                                     <td>@{{payment.actual_value}}</td>
-                                                </tr>    
-                                            </tbody>             
-                                        </table>  
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                             </div>
-                            
-                            
+
+
                         </div>
                 </div>
             </div>
