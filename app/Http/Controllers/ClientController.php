@@ -225,7 +225,6 @@ class ClientController extends Controller
             Alert::warning('Oops..!', 'Please, make sure you provide the right info!');
             return redirect()->back()->with('warning', 'Please, make sure you provide the right info!', 'Oops..!');
         }
-
     }
 
     public function profile(Request $request)
@@ -244,7 +243,7 @@ class ClientController extends Controller
         $this->validateSummaryRequest($request);
 
         $payments = DB::table('payments')->select(['id', 'date', 'balance', 'type', 'description', 'actual_value'])
-                            // ->where('client_id', $request->user()->id)->whereClientType(1)
+                            ->where('client_id', $request->user()->id)->whereClientType(1)
                             ->whereBetween('date', [$request->from_date, $request->to_date ?: date('Y-m-d')])->get();
         return Datatables::of($payments)->make(true);
     }

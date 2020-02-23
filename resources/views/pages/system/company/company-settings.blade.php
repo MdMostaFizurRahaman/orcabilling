@@ -35,9 +35,9 @@
                         <h4 class="card-title">Company Settings</h4>
                     </div>
                     {{-- @if(!empty($company)) --}}
-                    {!! Form::model($company, ['id' => 'company_update_form', 'route' => 'company.update', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+                    {!! Form::model($company, ['id' => 'company_update_form', 'route' => 'company.settings.update', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
                     {{-- @else
-                    {!! Form::model($company, ['id' => 'company_form', 'route' => 'company.store', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+                    {!! Form::open(['id' => 'company_form', 'route' => 'company.settings.update', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
                     @endif --}}
                     <div class="row">
                         <div class="col-md-6">
@@ -47,7 +47,10 @@
                                         <div class="col-lg-6">
                                             <div class="form-group @error('company_name'){{'is-invalid'}}@enderror">
                                                 {{-- @csrf --}}
-                                                {!! Form::hidden('id', null, ['class' => 'form-control']) !!}
+                                                {!! Form::hidden('id', null, []) !!}
+                                                @if(!empty($company))
+                                                    {!! Form::hidden('avatar', null, []) !!}
+                                                @endif
 
                                                 {!! Form::label('company_name', 'Company Name') !!}
                                                 {!! Form::text('company_name', null, ['class' => 'form-control']) !!}
@@ -63,11 +66,10 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <img src="" alt="">
                                         <div class="col-sm-6" style="margin: auto">
                                             <div class="form-group @error('logo'){{'is-invalid'}}@enderror">
                                                 <label for="">Logo Image</label>
-                                                <input class="form-control dropify"  data-height="100" data-allowed-file-extensions="png jpg" type="file" name="logo" data-default-file="@if(!empty($company)){{asset($company->getFirstMediaUrl('avatar'))}}@endif">
+                                                <input class="form-control dropify" data-height="100" data-allowed-file-extensions="png jpg" type="file" value="@if(!empty($company)){{$company->avatar}}@endif" name="logo" data-default-file="@if(!empty($company)){{asset($company->getFirstMediaUrl('avatar'))}}@endif">
                                                 <small class="text-info">* Image height should be 200x50 px. </small>
                                                 @error('logo')
                                                     <div class="text-danger">{{ $message }}</div>
@@ -146,19 +148,28 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group custom-control custome-checkbox @error('test_mail'){{'is-invalid'}}@enderror">
-                                                {!! Form::label('test_mail', 'Send Test Mail', ['calss' => 'custom-control-label']) !!}
-                                                {!! Form::checkbox('test_mail', '1', false, ['class' => 'form-control']) !!}
-                                                @error('test_mail')
+                                            <div class="form-group custom-control custome-checkbox @error('default_company'){{'is-invalid'}}@enderror">
+                                                {!! Form::label('default_company', 'Make Default', ['calss' => 'custom-control-label']) !!}
+                                                {!! Form::checkbox('default_company', '1', (!empty($company) && $company->default_company) ? true : false, ['class' => 'form-control']) !!}
+                                                @error('default_company')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group @error('test_mail_address'){{'is-invalid'}}@enderror">
                                                 {!! Form::label('test_mail_address', 'Test Mail Address') !!}
                                                 {!! Form::email('test_mail_address', null, ['class' => 'form-control']) !!}
                                                 @error('test_mail_address')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group custom-control custome-checkbox @error('test_mail'){{'is-invalid'}}@enderror">
+                                                {!! Form::label('test_mail', 'Send Test Mail', ['calss' => 'custom-control-label']) !!}
+                                                {!! Form::checkbox('test_mail', '1', false, ['class' => 'form-control']) !!}
+                                                @error('test_mail')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>

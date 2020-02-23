@@ -45,10 +45,10 @@ class CompanyRequest extends FormRequest
             case 'PUT':
             case 'PATCH':
                 return [
-                    'company_name' => 'required|unique:companies,id,' . $this->route('id') ?: NULL,
+                    'company_name' => 'required|unique:companies,company_name,' . $this->id ?: NULL,
                     'logo' => 'required_without:id|image|mimes:jpeg,jpg,png,gif|max:1024',
                     'phone' => 'required',
-                    'invoice_prefix' => 'required',
+                    'invoice_prefix' => 'required|unique:companies,invoice_prefix,' . $this->id ?: NULL,
                     'city' => 'required',
                     'zip_code' => 'required',
                     'country' => 'required',
@@ -57,6 +57,7 @@ class CompanyRequest extends FormRequest
                     'mail_from_email' => 'required|email',
                     'mail_from_name' => 'required',
                     'test_mail' => 'boolean',
+                    'default_company' => 'boolean',
                     'test_mail_address' => 'bail|required_if:test_mail,1|nullable|email',
                 ];
             default:break;

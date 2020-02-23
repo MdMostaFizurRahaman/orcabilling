@@ -158,7 +158,16 @@ Route::group(['middleware' => ['watch_dog']], function () {
         Route::prefix('/company')->name('company.')->namespace('System')->group(function () {
             // Company Routes
             Route::get('/', "CompanyController@index")->name('settings')->middleware('permission:read company-settings');
-            Route::post('/', "CompanyController@update")->name('update')->middleware('permission:update company-settings');
+            Route::get('/datatable', "CompanyController@datatable")->name('settings.datatable')->middleware('permission:read company-settings');
+            Route::get('/create', "CompanyController@create")->name('settings.create')
+            // ->middleware('permission:create company-settings')
+            ;
+            Route::get('/{company}/show', "CompanyController@view")->name('settings.view')->middleware('permission:read company-settings');
+            Route::get('/{company}/edit', "CompanyController@edit")->name('settings.edit')->middleware('permission:update company-settings');
+            Route::get('/{company}/delete', "CompanyController@delete")->name('settings.delete')
+            // ->middleware('permission:delete company-settings')
+            ;
+            Route::post('/', "CompanyController@update")->name('settings.update')->middleware('permission:update company-settings');
             Route::get('/parivacy-policy', "CompanyController@test")->name('privacy-policy')->middleware('permission:read privacy-policy');
             Route::post('/parivacy-policy', "CompanyController@test")->name('privacy-policy')->middleware('permission:update privacy-policy');
         });
