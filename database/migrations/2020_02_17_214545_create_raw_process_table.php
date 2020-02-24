@@ -15,8 +15,10 @@ class CreateRawProcessTable extends Migration
     {
         Schema::create('raw_process', function (Blueprint $table) {
             $table->string('file_name')->primary()->unique();
-            $table->string('status')->nullable();
-            $table->string('processed_time')->nullable();
+            $table->string('status')->default(0);
+            $table->bigInteger('rows_count')->default(0);
+            $table->text('status_report')->nullable();
+            $table->dateTime('processed_time');
         });
     }
 
