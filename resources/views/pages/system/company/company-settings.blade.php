@@ -5,7 +5,7 @@
 @endsection
 
 @push('styles')
-    {{-- <link rel="stylesheet" href="{{asset('css/app.css')}}"> --}}
+    <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link href="{{asset('theme')}}/assets/libs/dropify/css/dropify.css" rel="stylesheet">
 @endpush
 
@@ -34,11 +34,11 @@
                     <div class="align-items-center">
                         <h4 class="card-title">Company Settings</h4>
                     </div>
-                    {{-- @if(!empty($company)) --}}
+                    @if(!empty($company))
                     {!! Form::model($company, ['id' => 'company_update_form', 'route' => 'company.settings.update', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
-                    {{-- @else
+                    @else
                     {!! Form::open(['id' => 'company_form', 'route' => 'company.settings.update', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
-                    @endif --}}
+                    @endif
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card card-primary card-outline mb-2" id="company_deails">
@@ -232,11 +232,7 @@
                     contentType: false,
                     processData: false,
                     success: function(response){
-                        if(response.status){
-                            responseToast(response)
-                        } else {
-                            responseToast(response)
-                        }
+                        responseToast(response)
                     }
                 });
             });
@@ -255,8 +251,8 @@
                 // transition : 'slide',
             })
             setTimeout(function(){
-                window.location.reload(true);
-                // window.location.replace("http://logicbag.com.bd/backend/products");
+                // window.location.reload(true);
+                window.location.replace("{{route('company.settings')}}");
             }, 2000)
         }
 

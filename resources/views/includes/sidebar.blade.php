@@ -109,13 +109,13 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="ui-card-draggable.html" class="sidebar-link">
+                            <a href="{{route('invoice.generate.panel')}}" class="sidebar-link">
                                 <i class="mdi mdi-bandcamp"></i>
                                 <span class="hide-menu">Generate Invoice</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="form-basic.html" class="sidebar-link">
+                            <a href="{{route('invoice.history')}}" class="sidebar-link">
                                 <i class="mdi mdi-vector-difference-ba"></i>
                                 <span class="hide-menu"> Invoice History</span>
                             </a>

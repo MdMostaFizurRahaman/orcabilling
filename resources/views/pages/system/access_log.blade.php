@@ -40,6 +40,7 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>User Name</th>
+                                    <th>User Type</th>
                                     <th>Date</th>
                                     <th>IP</th>
                                     <th>Action</th>
@@ -86,7 +87,8 @@
             ajax:  "{{route('system.access-log.datatable')}}",
             columns: [
                         { data: 'id_log', name: 'id_log' },
-                        { data: 'user', name: 'user_id' },
+                        { data: 'subject', name: 'subject' },
+                        { data: 'user_type', name: 'user_type' },
                         { data: 'log_dt', name: 'log_dt' },
                         { data: 'user_ip', name: 'user_ip' },
                         { data: 'action', name: 'action' },

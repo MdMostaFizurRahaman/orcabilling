@@ -20,11 +20,12 @@ class WatchDog
     {
         $response = $next($request);
 
-        $subject = Auth::user();
+        $subject_id = $request->user()->id;
+        $is_admin = Auth::guard('web')->check();
 
-        $user_id = $subject instanceof App\User ? $subject->id : NULL;
-        $client_id = $subject instanceof App\Client ? $subject->id : NULL;
-        $user_type = $subject instanceof App\User ? 'admin' : 'client';
+        $user_id = $is_admin ? $subject_id : NULL;
+        $client_id = $is_admin ? NULL : $subject_id;
+        $user_type = $is_admin ? 'admin' : 'client';
         $user_ip = $request->ip();
         $link_uri = $request->url();
         $post_data = $request->isMethod('post') ? json_encode($request->except('_token')) : NULL;

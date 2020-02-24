@@ -43,7 +43,7 @@
                             <div class="card animated slideInRight">
                                 <div class="card-header">
                                     <div class="d-flex no-block align-items-center">
-                                        <h4 class="card-title">Carrier - Router</h4>
+                                        <h4 class="card-title">Search Calls</h4>
                                     </div>
                                 </div>
                                 <div class="card-body">

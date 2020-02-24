@@ -31,7 +31,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-body table-responsive">
+                            <div class="card-body">
                                 <table id="payment_history" style="font-size: 13px;" class="table table-bordered nowrap display" v-bind="summary">
                                     <thead class="bg-dark text-white" style="font-size: 12px;">
                                         <th>Id</th>

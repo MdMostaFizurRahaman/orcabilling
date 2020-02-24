@@ -19,7 +19,7 @@ Route::get('/test', function(){
 })->name('test.route');
 
 Route::get('/parse', "ParseLogController@parse");
-Route::get('/get', "ParseLogController@getPrefix");
+// Route::get('/invoice/test', "InvoiceController@show");
 Route::get('/testreport', "ParseLogController@testReport");
 
 
@@ -162,6 +162,7 @@ Route::group(['middleware' => ['watch_dog']], function () {
             Route::get('/create', "CompanyController@create")->name('settings.create')
             // ->middleware('permission:create company-settings')
             ;
+            Route::get('/all', "CompanyController@companies")->name('all')->middleware('permission:read company-settings');
             Route::get('/{company}/show', "CompanyController@view")->name('settings.view')->middleware('permission:read company-settings');
             Route::get('/{company}/edit', "CompanyController@edit")->name('settings.edit')->middleware('permission:update company-settings');
             Route::get('/{company}/delete', "CompanyController@delete")->name('settings.delete')
@@ -172,6 +173,28 @@ Route::group(['middleware' => ['watch_dog']], function () {
             Route::post('/parivacy-policy', "CompanyController@test")->name('privacy-policy')->middleware('permission:update privacy-policy');
         });
 
+        Route::prefix('/invoice')->name('invoice.')->group(function () {
+            // Invoice Routes
+            Route::get('/generate', 'InvoiceController@invoiceFormShow')->name('generate.panel')
+            // ->middleware('permission:create invoice')
+            ;
+            Route::get('/test', "InvoiceController@show")->name('show');
+            Route::post('/generate', 'InvoiceController@genearate')->name('generate')
+            // ->middleware('permission:create invoice')
+            ;
+            Route::get('/history', 'InvoiceController@index')->name('history')
+            // ->middleware('permission:read invoice')
+            ;
+            Route::get('/datatable', 'InvoiceController@datatable')->name('datatable')
+            // ->middleware('permission:read invoice')
+            ;
+            Route::get('/{invoice}/show', 'InvoiceController@show')->name('report.show')
+            // ->middleware('permission:read invoice')
+            ;
+            Route::get('/{invoice}/export', 'InvoiceController@export')->name('report.export')
+            // ->middleware('permission:export invoice')
+            ;
+        });
     });
 });
 

@@ -17,6 +17,7 @@
 
     <!-- Custom CSS -->
     <link href="{{asset('theme')}}/dist/css/style.min.css" rel="stylesheet">
+    <link href="{{asset('theme')}}/dist/css/custom.css" rel="stylesheet">
 
     @stack('styles')
 </head>

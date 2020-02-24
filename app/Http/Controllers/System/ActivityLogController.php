@@ -34,9 +34,9 @@ class ActivityLogController extends Controller
                 return '<button data-id="' . $query->id_log . '" class="btn btn-sm btn-primary view"><i class="fas fa-binoculars"></i> View</button>';
             })
             ->addColumn('subject', function ($query) {
-                return $query->subject->username;
+                return $query->subject()->username;
             })
-            ->rawColumns(['user', 'view'])
+            ->rawColumns(['subject', 'view'])
             ->make(true);
     }
 

@@ -26,7 +26,7 @@ class CompanyRequest extends FormRequest
                 // return $company && $this->user()->can('update', $id);
             default:break;
         }
-        return true;
+        return false;
 
     }
 

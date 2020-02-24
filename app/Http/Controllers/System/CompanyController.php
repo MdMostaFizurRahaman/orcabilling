@@ -111,6 +111,25 @@ class CompanyController extends Controller
         return redirect()->back();
     }
 
+    public function delete(Company $company)
+    {
+        if($company->default_company)
+        {
+            return response(['status' => 'warning', 'message' => 'Default company can\'t be deleted.']);
+        } else {
+
+            if($company->delete())
+            return response(['status' => 'success', 'message' => 'Company deleted successfully.']);
+        }
+    // if($company->hasInvoices())
+        // {
+        //     return response(['status' => 'warning', 'message' => 'Company has invoices in record.']);
+        // } else {
+        //     if($company->delete())
+        //     return response(['status' => 'success', 'message' => 'Company deleted successfully.']);
+        // }
+    }
+
     public function setEnvironmentValue($keyValues)
     {
         $envFile = app()->environmentFilePath();
@@ -140,6 +159,11 @@ class CompanyController extends Controller
         // $routeClear = Artisan::call('route:cache');
         // $viewClear = Artisan::call('view:cache');
         return true; //Return anything
+    }
+
+    public function companies()
+    {
+        return $companies = Company::all();
     }
 
 
