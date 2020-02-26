@@ -19,6 +19,12 @@ class Client extends Authenticatable
         return $this->belongsTo("App\TariffName", 'tariff_id', 'id');
     }
 
+    public function currency()
+    {
+                                // $related, $through, $through local_key, $related local_key, $through foreign_key, $related foreign_key
+        return $this->hasOneThrough("App\Currency", "App\TariffName", 'id', 'id', 'tariff_id', 'currency_id');
+    }
+
     public function ips()
     {
         return $this->hasMany('App\Ip');

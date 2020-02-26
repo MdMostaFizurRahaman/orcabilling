@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use stdClass;
 use App\Call;
+use App\Client;
 use App\Invoice;
 use Carbon\Carbon;
 use App\System\Company;
@@ -56,13 +58,16 @@ class InvoiceController extends Controller
         $request->to_date = '2020-02-01';
         $invoiceSummary = $this->prepareInvoieSummary($request);
 
+        // Test purpose
+        $company = Company::find($request->company_id);
+        $client = Client::find($request->client_id);
+
         if($request->generate_invoice)
         {
            $newInvoice = $this->generateInvoice($request);
         }
 
-        return dump($invoiceSummary);
-        return view('pages.invoice.show')->with('invoiceSummary', $invoiceSummary);
+        return view('pages.invoice.show')->with(compact('invoiceSummary', 'company', 'client'));
     }
 
     public function generate($request)
@@ -80,7 +85,6 @@ class InvoiceController extends Controller
 
     public function prepareInvoieSummary($request)
     {
-
         $query = Call::whereBetween('call_start', [$request->from_date, $request->to_date ?: date('Y-m-d')])
                         ->whereClientId($request->client_id);
 
@@ -91,7 +95,7 @@ class InvoiceController extends Controller
         $calls = $query->get();
 
         foreach($calls as $call){
-            $call->clientRatio = $call->client->tariff->currency->ratio;
+            $call->clientRatio = $call->client->currency->ratio;
             $call->convertedCost = ($call->cost / $call->clientRatio);
         }
 
@@ -126,11 +130,17 @@ class InvoiceController extends Controller
             $totalCost += $callsSummary->totalCost;
         }
 
+
         $invoiceSummary['groupedCallsSummary'] = $groupedCallsSummary;
         $invoiceSummary['invoiceNumber'] = $this->getInvoiceNumber($request->company_id);
+        $invoiceSummary['invoiceDate'] = Carbon::today()->format('Y-m-d');
+        $invoiceSummary['invoiceDueDate'] = Carbon::today()->addDays(3)->format('Y-m-d');
+        $invoiceSummary['invoiceFromDate'] = $request->from_date;
+        $invoiceSummary['invoiceToDate'] = $request->to_date;
+
         $invoiceSummary['totalCalls'] = number_format($totalCalls);
         $invoiceSummary['totalDuration'] = number_format($totalDuration, 2);
-        $invoiceSummary['totalCost'] = number_format($totalCost, 2);
+        $invoiceSummary['totalCost'] = $totalCost;
 
         return $invoiceSummary;
     }
@@ -166,5 +176,26 @@ class InvoiceController extends Controller
         $invPrefix = Company::find($company_id)->invoice_prefix;
         return $invPrefix . $newDateString . '-' . sprintf('%06d', intval($number) + 1);
     }
+
+    public function downloadPDF() {
+        $request = new stdClass();
+        $request->client_id = '2';
+        $request->company_id = 17;
+        $request->prefix = '';
+        $request->generate_invoice = '';
+        $request->from_date = '2019-11-01';
+        $request->to_date = '2020-02-01';
+        $invoiceSummary = $this->prepareInvoieSummary($request);
+
+        // Test purpose
+        $company = Company::find($request->company_id);
+        $client = Client::find($request->client_id);
+
+        // return view('pages.invoice.test')->with(compact('invoiceSummary', 'company', 'client'));
+
+        $invoice = PDF::loadView('pages.invoice.test', compact('invoiceSummary', 'company', 'client'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+
+        return $invoice->stream();
+}
 
 }

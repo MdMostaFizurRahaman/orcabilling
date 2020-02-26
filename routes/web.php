@@ -179,6 +179,7 @@ Route::group(['middleware' => ['watch_dog']], function () {
             // ->middleware('permission:create invoice')
             ;
             Route::get('/test', "InvoiceController@show")->name('show');
+            Route::get('/test/export', "InvoiceController@downloadPDF")->name('download');
             Route::post('/generate', 'InvoiceController@genearate')->name('generate')
             // ->middleware('permission:create invoice')
             ;

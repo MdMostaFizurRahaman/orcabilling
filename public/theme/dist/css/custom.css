@@ -1,4 +1,33 @@
 
+
+/* Invoice CSS */
+.address{
+    max-width: 60%;
+}
+
+.column-table tr {
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.column-table tr td,
+.column-table tr th
+ {
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 1px gray;
+
+}
+.summary-table tr,
+.summary-table th,
+.summary-table td
+{
+    height: 30px;
+    line-height: 25px;
+    padding: 5px 10px;
+}
+/* End of Invoice CSS */
+
 div.form-group table.radio tr,
 div.form-group table.radio th,
 #summary_table tr,
