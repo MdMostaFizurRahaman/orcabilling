@@ -4,13 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Invoice</title>
+    <title>Invoice | {{$invoice->company->company_name}}</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
     <link href="{{asset('theme')}}/assets/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{asset('theme')}}/dist/css/custom.css" rel="stylesheet">
     <style>
-        .address{
-            max-width: 60%;
+        @page {
+            margin: -15px 50px 40px 72px;
         }
+
+        .page-break {
+		    page-break-after: always;
+		}
+
+
+		body {
+			font-family: "Poppins";
+			font-weight: 400;
+            font-size: 12px;
+        }
+
+        strong, th {
+			font-weight: 500;
+        }
+
+        h3, h4 {
+			font-weight: 600;
+        }
+
+        .logo {
+            vertical-align: baseline;
+            transform: translateY(15px);
+        }
+
+        .name h3 {
+            transform: translateY(15px);
+        }
+
+        .address {
+            /* transform: translateY(-15px); */
+        }
+
+        .company,
+        .address-section {
+            width: 100%;
+        }
+
+        .client, .invoice
+        {
+			display: inline-block;
+			width: 50%;
+		}
 
         .column-table tr {
             border-top: 0;
@@ -23,15 +66,70 @@
             border-top: 0;
             border-bottom: 0;
             border-right: 1px gray;
-
         }
+
+        .general-table tr,
+        .general-table th,
+        .general-table td
+        {
+            vertical-align: baseline;
+            max-height: 16px;
+            line-height: 12px;
+            padding: 0 2px;
+        }
+
+        .period-table {
+            /* margin-right: auto; */
+        }
+
+        .period-table tr,
+        .period-table th,
+        .period-table td
+        {
+            max-height: 16px;
+            line-height: 12px;
+            padding: 0 2px;
+        }
+
+        .column-table tr,
+        .column-table th,
+        .column-table td
+        {
+            max-height: 22px;
+            line-height: 14px;
+            padding: 2px 10px;
+        }
+
+        .currency-table tr,
+        .currency-table th,
+        .currency-table td,
+
         .summary-table tr,
         .summary-table th,
         .summary-table td
         {
-            height: 30px;
-            line-height: 25px;
-            padding: 5px 10px;
+            max-height: 22px;
+            line-height: 14px;
+            padding: 2px 5px
+        }
+        .summary-table td
+        {
+            border-left: 1px solid #E2E6E9;
+            /* border-collapse: collapse; */
+        }
+
+        thead tr,
+        thead th,
+        thead td,
+        tfoot tr,
+        tfoot th,
+        tfoot td
+        {
+            font-size: 12px;
+            line-height: 15px;
+            max-height: 25px;
+            padding: 0px 5px 2px;
+            margin: 0
         }
     </style>
 </head>
@@ -43,120 +141,94 @@
         <!-- ============================================================== -->
         <div class="row justify-content-center no-gutters">
             <div class="col-md-12">
-
                 <div class="card">
-                    {{-- <div class="card-header">
-                        <div class="d-flex no-block align-items-center m-b-0">
-                            <div class="card-title">
-                                <h5>Invoice</h5>
-                                <small>{{$invoiceSummary['invoiceFromDate'].' to '. $invoiceSummary['invoiceToDate']}}</small>
-                            </div>
-                            <div class="ml-auto">
-                                <div class="btn-group">
-                                    <a href="{{route('failed-calls.summary.export', array_merge(request()->all(), ['mime' => 'csv']))}}" data-toggle="tooltip" title="Export to csv"  class="btn btn-rounded btn-danger"> <i class="fas fa-file-pdf"></i> PDF</a>
-                                    <a href="{{route('failed-calls.summary.export', array_merge(request()->all(), ['mime' => 'csv']))}}" data-toggle="tooltip" title="Export to csv"  class="btn btn-rounded btn-secondary"> <i class="fas fa-print"></i> Print</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="card-body">
-                        <div class="container">
-                        <div id="invoice">
-                            <div class="top-bar">
-                                <div class="company d-flex justify-content-between">
-                                    <div class="">
-                                        <img class="logo" src="{{asset($company->logo)}}" width="150" height="50" alt="LogicBag-logo">
-                                    </div>
-                                    <div class="d-flex-column text-right">
-                                        <div class="name h3">{{strtoupper($company->company_name)}}</div>
-                                        <div class="h6">{{$company->postal_address}}</div>
-                                    </div>
-                                </div>
-                                <hr class="mt-0 mb-0">
-                                <hr class="mt-0">
+                        <div id="">
+                            <div class="top-bar" style="border-bottom: 2px gray">
+                                <table class="company">
+                                    <tr>
+                                        <td class="">
+                                            <img class="logo" src="{{asset($invoice->company->logo)}}" width="100" height="30" alt="LogicBag-logo">
+                                        </td>
+                                        <td class="text-right">
+                                            <div class="name"><h3 class="mb-0">{{strtoupper($invoice->company->company_name)}}</h3></div>
+                                            <div class="address" style="top: 90.5px;"><strong>{{$invoice->company->postal_address}}</strong></div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
-
-                            <div class="address-section d-flex justify-content-between">
+                            <hr class="mt-0 mb-0">
+                            <hr class="mt-0 mb-0">
+                            <div class="address-section">
                                 <div class="client">
-                                    <table>
-                                        <thead>
-                                            <td colspan="2">To</td>
-                                        </thead>
+                                    <table class=" general-table" style="margin-right: auto;">
                                         <tbody>
-                                            <tr>
-                                                <td colspan="2"><strong>{{$client->name}}</strong></td>
+                                            <tr><td colspan="2">To</td></tr>
+                                            <tr><td colspan="2">{{$invoice->client->name}}</td></tr>
+                                            <tr><td colspan="2">
+                                                {{$invoice->client->address}}, {{$invoice->client->zip}},<br>
+                                                {{$invoice->client->city}}, {{$invoice->client->country}}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2">{{$client->address}}, {{$client->zip}}<br>
-                                                    {{$client->city}}-{{$client->country}}
-                                                </td>
+                                                <td colspan="2">Phone : {{$invoice->client->mobile}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Phone </td>
-                                                <td>: {{$client->mobile}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Email </td>
-                                                <td>: {{$client->email}}</td>
+                                                <td colspan="2">Email : {{$invoice->client->email}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="invoice">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th colspan="2">&nbsp;</th>
-                                            </tr>
-                                        </thead>
+                                    <table class="period-table" style="margin-left: auto;">
                                         <tbody>
-                                            <tr></tr>
+                                            <tr><td colsapn="2">&nbsp;</td></tr>
                                             <tr>
                                                 <td><strong>Invoice Number</strong></td>
-                                                <td>: {{$invoiceSummary['invoiceNumber']}}</td>
+                                                <td>: {{$invoice->inv_number}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Date</strong></td>
-                                                <td>: {{$invoiceSummary['invoiceDate']}}</td>
+                                                <td>: {{$invoice->inv_date}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Period</strong></td>
-                                                <td>: {{$invoiceSummary['invoiceFromDate'].' to '. $invoiceSummary['invoiceToDate']}}</td>
+                                                <td>: {{$invoice->from_date.' to '. $invoice->to_date}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Due On</strong></td>
-                                                <td>: {{$invoiceSummary['invoiceDueDate']}}</td>
+                                                <td>: {{$invoice->due_date}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                            </div><br><br>
+                            </div><br><br><br><br><br><br>
+
                             <div class="title-section text-center">
-                                <h2>INVOICE</h2>
-                            </div><br>
+                                <h4 class="text-center">INVOICE</h4>
+                            </div>
                             <div class="items-section">
                                 <table class="table table-bordered">
                                     <thead class="bg-dark text-white">
                                         <tr>
-                                            <th style="max-width: 5%;">Sl #</th>
-                                            <th style="min-width: 25%; max-width: 30%;">Description</th>
+                                            <th class="serial">Sl #</th>
+                                            <th class="description">Description</th>
                                             <th >Prefix</th>
-                                            <th class="text-right">Call Rate</th>
+                                            <th class="text-right">Rate</th>
                                             <th class="text-right">Calls</th>
-                                            <th class="text-right">Duration (min.)</th>
+                                            <th class="text-right">Duration (m)</th>
                                             <th class="text-right">Amount (USD)</th>
                                         </tr>
                                     </thead>
                                     <tbody class="column-table">
-                                        @foreach ($invoiceSummary['groupedCallsSummary'] as $summary)
+                                        @foreach ($invoice->items as $item)
                                         <tr>
-                                            <th>{{sprintf('%02d', $loop->count)}}</th>
-                                            <td>{{$summary->description}}</td>
-                                            <td>{{$summary->prefix}}</td>
-                                            <td class="text-right">{{number_format($summary->call_rate, 2)}}</td>
-                                            <td class="text-right">{{number_format($summary->totalCalls)}}</td>
-                                            <td class="text-right">{{number_format($summary->totalDuration, 2)}}</td>
-                                            <td class="text-right">{{number_format($summary->totalCost, 2)}}</td>
+                                            <td>{{sprintf('%02d', $loop->count)}}</td>
+                                            <td>{{$item->description}}</td>
+                                            <td>{{$item->prefix}}</td>
+                                            <td class="text-right">{{number_format($item->call_rate, 2)}}</td>
+                                            <td class="text-right">{{number_format($item->total_calls)}}</td>
+                                            <td class="text-right">{{number_format($item->total_duration, 2)}}</td>
+                                            <td class="text-right">{{number_format($item->total_cost, 2)}}</td>
                                         </tr>
                                             @if ($loop->count < 3)
                                                 <tr>
@@ -177,106 +249,102 @@
                                                     <td>&nbsp;</td>
                                                     <td>&nbsp;</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>&nbsp;</td>
-                                                    <td>&nbsp;</td>
-                                                    <td>&nbsp;</td>
-                                                    <td>&nbsp;</td>
-                                                    <td>&nbsp;</td>
-                                                    <td>&nbsp;</td>
-                                                    <td>&nbsp;</td>
-                                                </tr>
                                             @endif
                                         @endforeach
-
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="4"></th>
-                                            <th class="text-right">{{$invoiceSummary['totalCalls']}}</th>
-                                            <th class="text-right">{{$invoiceSummary['totalDuration']}}</th>
-                                            <th class="text-right">{{number_format($invoiceSummary['totalCost'], 2)}}</th>
+                                            <th colspan="4" class="text-right">{{'Total'}}</th>
+                                            <th class="text-right">{{number_format($invoice->total_calls)}}</th>
+                                            <th class="text-right">{{number_format($invoice->total_duration, 2)}}</th>
+                                            <th class="text-right">{{number_format($invoice->sub_total, 2)}}</th>
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="summary-section row justify-content-between">
-                                <div class="col-6 payment-overview">
-                                    <table class="">
-                                        <tbody>
-                                            <tr>
-                                                <td>Customer Currency</td>
-                                                <td>&nbsp;&nbsp;&nbsp;:</td>
-                                                <th><strong> &nbsp;&nbsp;&nbsp;{{$client->currency->name}}</strong></th>
-                                            </tr>
-                                            <tr>
-                                                <td>Invoice Currency</td>
-                                                <td>&nbsp;&nbsp;&nbsp;:</td>
-                                                <th><strong> &nbsp;&nbsp;&nbsp;{{'USD'}}</strong></th>
-                                            </tr>
-                                            <tr>
-                                                <td>1 USD</td>
-                                                <td> &nbsp;&nbsp;= </td>
-                                                <th> &nbsp;&nbsp;&nbsp;{{number_format($client->currency->ratio, 2) . ' ' . strtoupper($client->currency->name)}}</th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-6 summary-table">
-                                    <table class="table table-bordered table-striped">
-                                        @php
-                                            $subTotal = $invoiceSummary['totalCost'];
-                                            $vatTotal = $subTotal * config('app.vat');
-                                            $totalIncludingVat = $subTotal + $vatTotal;
-                                            $previousBalance = $client->accoutn_state ?: 0;
-                                            $grandTotal = $totalIncludingVat + ($client->accoutn_state < 0 ? -($client->accoutn_state) : 0);
-                                            $dueAmount = number_format($grandTotal, 4);
-                                            $speller = new NumberFormatter("en", NumberFormatter::SPELLOUT);
-                                        @endphp
-                                        <tbody class="text-right">
-                                            <tr>
-                                                <td>Sub Total</td>
-                                                <th>{{number_format($subTotal, 4) . ' USD'}}</th>
-                                            </tr>
-                                            <tr>
-                                                <td>VAT (0%)</td>
-                                                <th>{{number_format($vatTotal, 4) . ' USD'}}</th>
-                                            </tr>
-                                            <tr>
-                                                <td>Total inc. VAT</td>
-                                                <th>{{number_format($totalIncludingVat, 4) . ' USD'}}</th>
-                                            </tr>
-                                            <tr>
-                                                <td>Previous Balance</td>
-                                                <th>{{number_format($previousBalance, 4) . ' USD'}}</th>
-                                            </tr>
-                                            <tr>
-                                                <td>Invoice Total</td>
-                                                <th>{{number_format($grandTotal, 4) . ' USD'}}</th>
-                                            </tr>
-                                            <tr>
-                                                <td>Amount Due</td>
-                                                <th>{{number_format($grandTotal, 4) . ' USD'}}</th>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="2">
-                                                    In words: {{strtoupper($speller->format($dueAmount)). ' USD'}}
-                                                </th>
-                                            </tr>
+                            <div class="summary-section">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td style="width: 30%;">
+                                            <div class="general-table">
+                                                <table class="table table-borderless">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Customer Currency</td>
+                                                            <td> : &nbsp;&nbsp;&nbsp;{{$invoice->client->currency->name}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Invoice Currency</td>
+                                                            <td> : &nbsp;&nbsp;&nbsp;{{$invoice->inv_currency}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{number_format(1, 2) . ' USD'}}</td>
+                                                            <td> = &nbsp;&nbsp;&nbsp;{{number_format($invoice->client->currency->ratio, 2) . ' ' . strtoupper($invoice->client->currency->name)}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                        <td style="width: 50%;">
+                                            <div class="summary-table">
+                                                <table class="table table-bordered table-striped">
+                                                    <tbody class="text-right">
+                                                        <tr>
+                                                            <td>Sub Total</td>
+                                                            <td>
+                                                                <strong>
+                                                                    {{number_format($invoice->sub_total, 4) . ' USD'}}
+                                                                </strong>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>VAT (0%)</td>
+                                                            <td>
+                                                            <strong>
+                                                                {{number_format($invoice->vat_total, 4) . ' USD'}}
+                                                                </strong>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Total inc. VAT</td>
+                                                            <td>
+                                                                <strong>
+                                                                {{number_format($invoice->total_inc_vat, 4) . ' USD'}}
+                                                                </strong>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Invoice Total</td>
+                                                            <td>
+                                                                <strong>
+                                                                    {{number_format($invoice->inv_total, 4) . ' USD'}}
+                                                                </strong>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                @php
+                                                                    $speller = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+                                                                @endphp
+                                                                In Words: <strong>{{strtoupper($speller->format($invoice->inv_total)) . ' USD'}}</strong>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
 
-                                        </tbody>
-                                        <tfoot>
-
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div><br><br>
-                            <p>
-                                <span class="text-danger">{{'Note : '}}</span> {{'This is a computer generated Invoice,No signature is required.
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </tr>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div>
+                                <span class="text-danger">{{'Note : '}}</span> {{'This is a computer generated Invoice, no signature is required.
                                                     '}}
-                            </p>
                             </div>
                         </div>
+                        {{-- </div> --}}
                     </div>
                     {{-- @endif --}}
                 </div>

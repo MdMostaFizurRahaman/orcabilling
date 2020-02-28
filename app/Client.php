@@ -60,4 +60,9 @@ class Client extends Authenticatable
     {
         $this->notify(new ClientPasswordResetNotification($token));
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }

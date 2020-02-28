@@ -18,18 +18,20 @@
                 <b class="logo-icon">
                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                     <!-- Dark Logo icon -->
-                    <img src="{{asset('theme')}}/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                    {{-- <img src="{{asset('theme')}}/assets/images/logo-icon.png" alt="homepage" class="dark-logo" /> --}}
+                    <img src="{{asset(env('APP_LOGO'))}}" class="dark-logo" style="max-width: 150px; overflow: hidden;" alt="{{strtoupper(str_replace('-', ' ', config('app.name')))}}" />
                     <!-- Light Logo icon -->
-                    <img src="{{asset('theme')}}/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                    {{-- <img src="{{asset('theme')}}/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> --}}
+                    <img src="{{asset(env('APP_LOGO'))}}" class="light-logo" style="max-width: 150px; overflow: hidden;" alt="{{strtoupper(str_replace('-', ' ', config('app.name')))}}" />
                 </b>
                 <!--End Logo icon -->
                 <!-- Logo text -->
                 <span class="logo-text">
                     <!-- dark Logo text -->
-                    <img src="{{asset('theme')}}/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                    {{-- <img src="{{asset('theme')}}/assets/images/logo-text.png" alt="homepage" class="dark-logo" /> --}}
                     <!-- Light Logo text -->
                     <h3 class="text-white mb-0 light-logo">
-                        <img width="100" height="40" src="{{asset(env('APP_LOGO'))}}" class="light-logo" alt="{{strtoupper(str_replace('-', ' ', config('app.name')))}}" />
+                        {{-- <img width="100" height="40" src="{{asset(env('APP_LOGO'))}}" class="light-logo" alt="{{strtoupper(str_replace('-', ' ', config('app.name')))}}" /> --}}
                     </h3>
                 </span>
             </a>

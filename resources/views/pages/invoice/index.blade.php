@@ -30,24 +30,22 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex no-block align-items-center m-b-30">
-                            <h4 class="card-title">All Companies</h4>
+                            <h4 class="card-title">All Invoices</h4>
                             <div class="ml-auto">
-                                <div class="btn-group">
-                                    <a href="{{route('company.settings.create')}}" class="btn btn-rounded btn-dark">Add New Company</a>
-                                </div>
+
                             </div>
                         </div>
                         <div class="table-responsive">
                             <table id="data_table" class="table table-bordered wrap display">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>city</th>
-                                        <th>Country</th>
-                                        <th>Logo</th>
+                                        <th>Invoice Number</th>
+                                        <th>Client</th>
+                                        <th>Date</th>
+                                        <th>Invoice Amount</th>
+                                        <th>Added By</th>
+                                        <th>Download</th>
                                         <th>View</th>
-                                        <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
                                 </thead>
@@ -84,19 +82,22 @@
                 serverSide: true,
                 destroy: true,
                 "order": [[ 0, "desc" ]],
-                ajax:  "{{route('company.settings.datatable')}}",
+                ajax:  "{{route('invoice.datatable')}}",
+                columnDefs: [
+                                { "className": "text-right", "targets": [3] }
+                            ],
                 columns: [
-                            { data: 'id', name: 'id' },
-                            { data: 'company_name', name: 'company_name' },
-                            { data: 'city', name: 'city' },
-                            { data: 'country', name: 'country' },
+                            { data: 'inv_number', name: 'inv_number' },
+                            { data: 'client', name: 'client' },
+                            { data: 'inv_date', name: 'inv_date' },
+                            { data: 'inv_total', name: 'inv_total' },
                             // { data: 'tariff_id', name: 'tariff_id', render:function(data, type, row){
                             //         return "<a href='" + route('rate.index', row.tariff_id) + "' class='view' data-id='" + row.tariff_id +"'>" + row.tariff_id + "</a>"
                             //     }
                             // },
-                            { data: 'logo', name: 'logo' },
-                            { data: 'view', name: 'view' },
-                            { data: 'edit', name: 'edit' },
+                            { data: 'user', name: 'user' },
+                            { data: 'download', name: 'download' },
+                            { data: 'print', name: 'print' },
                             { data: 'delete', name: 'delete' },
                         ],
                 "drawCallback": function( settings ) {

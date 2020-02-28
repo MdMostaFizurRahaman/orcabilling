@@ -120,6 +120,9 @@
 
 
 @push('scripts')
+
+    @include('sweetalert::alert')
+
     {{-- Datetime Picker --}}
     <script src="{{asset('theme')}}/assets/libs/moment/moment.js"></script>
     <script src="{{asset('theme')}}/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>

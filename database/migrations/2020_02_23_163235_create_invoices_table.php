@@ -20,10 +20,18 @@ class CreateInvoicesTable extends Migration
             $table->bigInteger('client_id');
             $table->date('from_date');
             $table->date('to_date');
-            $table->string('tariff_prefix')->nullable();
+            $table->integer('total_calls');
+            $table->double('total_duration');
+            $table->double('sub_total');
+            $table->double('vat_total');
+            $table->double('total_inc_vat');
+            $table->double('inv_total');
+            $table->date('inv_date');
+            $table->date('due_date');
+            $table->string('inv_currency');
             $table->bigInteger('user_id');
-            $table->foreign('company_id')->references('id')->on('companies');
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
 

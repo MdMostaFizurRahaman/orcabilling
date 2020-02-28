@@ -118,16 +118,14 @@ class CompanyController extends Controller
             return response(['status' => 'warning', 'message' => 'Default company can\'t be deleted.']);
         } else {
 
-            if($company->delete())
-            return response(['status' => 'success', 'message' => 'Company deleted successfully.']);
+            if($company->hasInvoices())
+            {
+                return response(['status' => 'warning', 'message' => 'Company has invoices in record.']);
+            } else {
+                if($company->delete())
+                return response(['status' => 'success', 'message' => 'Company deleted successfully.']);
+            }
         }
-    // if($company->hasInvoices())
-        // {
-        //     return response(['status' => 'warning', 'message' => 'Company has invoices in record.']);
-        // } else {
-        //     if($company->delete())
-        //     return response(['status' => 'success', 'message' => 'Company deleted successfully.']);
-        // }
     }
 
     public function setEnvironmentValue($keyValues)

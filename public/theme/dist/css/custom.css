@@ -1,6 +1,19 @@
 
+/* Invoice CSS */
+.topbar .top-navbar .navbar-header .navbar-brand .logo-icon {
+    margin-right: o;
+    overflow: hidden;
+}
 
 /* Invoice CSS */
+.isDisabled {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
+    pointer-events: none;
+  }
+
 .address{
     max-width: 60%;
 }

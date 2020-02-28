@@ -175,25 +175,30 @@ Route::group(['middleware' => ['watch_dog']], function () {
 
         Route::prefix('/invoice')->name('invoice.')->group(function () {
             // Invoice Routes
-            Route::get('/generate', 'InvoiceController@invoiceFormShow')->name('generate.panel')
+            Route::get('/generate', 'InvoiceController@draftFormShow')->name('generate.panel')
             // ->middleware('permission:create invoice')
             ;
-            Route::get('/test', "InvoiceController@show")->name('show');
-            Route::get('/test/export', "InvoiceController@downloadPDF")->name('download');
-            Route::post('/generate', 'InvoiceController@genearate')->name('generate')
+            Route::post('/generate', 'InvoiceController@draft')->name('generate')
             // ->middleware('permission:create invoice')
             ;
+            Route::get('/{invoice}/show', "InvoiceController@show")->name('show');
+            // ->middleware('permission:read invoice')
+            ;
+            Route::get('/{invoice}/download', "InvoiceController@downloadPDF")->name('download');
+            // ->middleware('permission:read invoice')
+            ;
+            Route::get('/{invoice}/pdf', "InvoiceController@viewPDF")->name('view-pdf');
+            // ->middleware('permission:read invoice')
+            ;
+            Route::get('/{invoice}/preview', "InvoiceController@printPreview")->name('preview');
             Route::get('/history', 'InvoiceController@index')->name('history')
             // ->middleware('permission:read invoice')
             ;
             Route::get('/datatable', 'InvoiceController@datatable')->name('datatable')
             // ->middleware('permission:read invoice')
             ;
-            Route::get('/{invoice}/show', 'InvoiceController@show')->name('report.show')
-            // ->middleware('permission:read invoice')
-            ;
-            Route::get('/{invoice}/export', 'InvoiceController@export')->name('report.export')
-            // ->middleware('permission:export invoice')
+            Route::get('/{invoice}/delete', 'InvoiceController@delete')->name('delete')
+            // ->middleware('permission:delete invoice')
             ;
         });
     });

@@ -6,18 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    public function client()
-    {
-        return $this->hasOne('App\Client');
-    }
+    protected $guarded = [];
 
     public function user()
     {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User');
     }
 
     public function company()
     {
-        return $this->hasOne('App\System\Company');
+        return $this->belongsTo('App\System\Company');
     }
+
+    public function client()
+    {
+        return $this->belongsTo('App\Client');
+    }
+
+    public function items()
+    {
+        return $this->hasMany('App\InvoiceItems');
+    }
+
 }

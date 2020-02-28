@@ -5,9 +5,14 @@
 @endsection
 
 @push('styles')
-    <link href="{{asset('theme')}}/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
 @endpush
+
+@php
+    $disabled = $invoice->id == 'draft' ? 'isDisabled' : false;
+    $draft = $invoice->id == 'draft' ? 'Draft' : '';
+@endphp
 
 @section('content')
 <div class="container-fluid loaded" id="invoice">
@@ -22,15 +27,13 @@
                 <div class="card-header">
                     <div class="d-flex no-block align-items-center m-b-0">
                         <div class="card-title">
-                            <h5>Invoice</h5>
-                            <small>{{$invoiceSummary['invoiceFromDate'].' to '. $invoiceSummary['invoiceToDate']}}</small>
+                            <h5>Invoice {{$draft}}</h5>
+                            <small>{{$invoice->from_date.' to '. $invoice->to_date}}</small>
                         </div>
                         <div class="ml-auto">
                             <div class="btn-group">
-                                <a href="{{route('invoice.download')}}" data-toggle="tooltip" title="Export to pdf"  class="btn btn-rounded btn-danger"> <i class="fas fa-file-pdf"></i> PDF</a>
-                                <a href="{{route('failed-calls.summary.export', array_merge(request()->all(), ['mime' => 'csv']))}}" data-toggle="tooltip" title="Export to csv"  class="btn btn-rounded btn-secondary"> <i class="fas fa-print"></i> Print</a>
-                                {{-- <a class="btn" href="" target="_blank" title="Export as PDF"><i class="fas fa-file-pdf"></i></a>
-                                <a class="btn" href="" target="_blank" title="Print Invoice"><i class="fas fa-print"></i></a> --}}
+                                <a href="{{route('invoice.download', $invoice->id)}}" data-toggle="tooltip" title="Download to pdf"  class="btn btn-rounded btn-danger {{$disabled}}"> <i class="fas fa-file-pdf"></i> PDF</a>
+                                <a href="{{route('invoice.preview', $invoice->id)}}" data-toggle="tooltip" title="Preview Invoice"  class="btn btn-rounded btn-secondary {{$disabled}}"> <i class="fas fa-eye"></i> Preview</a>
                             </div>
                         </div>
                     </div>
@@ -41,11 +44,11 @@
                         <div class="top-bar">
                             <div class="company d-flex justify-content-between">
                                 <div class="">
-                                    <img class="logo" src="{{asset($company->logo)}}" width="150" height="50" alt="LogicBag-logo">
+                                    <img class="logo" src="{{asset($invoice->company->logo)}}" style="max-width: 150px;" alt="LogicBag-logo">
                                 </div>
                                 <div class="d-flex-column text-right">
-                                    <div class="name h3">{{strtoupper($company->company_name)}}</div>
-                                    <div class="h6">{{$company->postal_address}}</div>
+                                    <div class="name h3">{{strtoupper($invoice->company->company_name)}}</div>
+                                    <div class="h6">{{$invoice->company->postal_address}}</div>
                                 </div>
                             </div>
                             <hr class="mt-0 mb-0">
@@ -60,20 +63,20 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td colspan="2"><strong>{{$client->name}}</strong></td>
+                                            <td colspan="2"><strong>{{$invoice->client->name}}</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">{{$client->address}}, {{$client->zip}}<br>
-                                                {{$client->city}}-{{$client->country}}
+                                            <td colspan="2">{{$invoice->client->address}}, {{$invoice->client->zip}}<br>
+                                                {{$invoice->client->city}}-{{$invoice->client->country}}
                                             </td>
                                         </tr>
                                         <tr>
                                             <td><strong>Phone</strong> </td>
-                                            <td>: {{$client->mobile}}</td>
+                                            <td>: {{$invoice->client->mobile}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Email</strong> </td>
-                                            <td>: {{$client->email}}</td>
+                                            <td>: {{$invoice->client->email}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -86,22 +89,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr></tr>
+                                        <tr><td colsapn="2">&nbsp;</td></tr>
                                         <tr>
                                             <td><strong>Invoice Number</strong></td>
-                                            <td>: {{$invoiceSummary['invoiceNumber']}}</td>
+                                            <td>: {{$invoice->inv_number}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Date</strong></td>
-                                            <td>: {{$invoiceSummary['invoiceDate']}}</td>
+                                            <td>: {{$invoice->inv_date}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Period</strong></td>
-                                            <td>: {{$invoiceSummary['invoiceFromDate'].' to '. $invoiceSummary['invoiceToDate']}}</td>
+                                            <td>: {{$invoice->from_date.' to '. $invoice->to_date}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Due On</strong></td>
-                                            <td>: {{$invoiceSummary['invoiceDueDate']}}</td>
+                                            <td>: {{$invoice->due_date}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -124,54 +127,35 @@
                                     </tr>
                                 </thead>
                                 <tbody class="column-table">
-                                    @foreach ($invoiceSummary['groupedCallsSummary'] as $summary)
+                                    @foreach ($invoice->items as $item)
                                     <tr>
                                         <th>{{sprintf('%02d', $loop->count)}}</th>
-                                        <td>{{$summary->description}}</td>
-                                        <td>{{$summary->prefix}}</td>
-                                        <td class="text-right">{{number_format($summary->call_rate, 2)}}</td>
-                                        <td class="text-right">{{number_format($summary->totalCalls)}}</td>
-                                        <td class="text-right">{{number_format($summary->totalDuration, 2)}}</td>
-                                        <td class="text-right">{{number_format($summary->totalCost, 2)}}</td>
+                                        <td>{{$item->description}}</td>
+                                        <td>{{$item->prefix}}</td>
+                                        <td class="text-right">{{number_format($item->rate, 2)}}</td>
+                                        <td class="text-right">{{number_format($item->total_calls)}}</td>
+                                        <td class="text-right">{{number_format($item->total_duration, 2)}}</td>
+                                        <td class="text-right">{{number_format($item->total_cost, 2)}}</td>
                                     </tr>
                                         @if ($loop->count < 3)
                                             <tr>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
                                             </tr>
                                             <tr>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
                                             </tr>
                                             <tr>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
                                             </tr>
                                         @endif
                                     @endforeach
-
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="4"></th>
-                                        <th class="text-right">{{$invoiceSummary['totalCalls']}}</th>
-                                        <th class="text-right">{{$invoiceSummary['totalDuration']}}</th>
-                                        <th class="text-right">{{number_format($invoiceSummary['totalCost'], 2)}}</th>
+                                        <th colspan="4" class="text-right">Total</th>
+                                        <th class="text-right">{{number_format($invoice->total_calls)}}</th>
+                                        <th class="text-right">{{number_format($invoice->total_duration, 2)}}</th>
+                                        <th class="text-right">{{number_format($invoice->sub_total, 2)}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -183,60 +167,46 @@
                                         <tr>
                                             <td>Customer Currency</td>
                                             <td>&nbsp;&nbsp;&nbsp;:</td>
-                                            <th><strong> &nbsp;&nbsp;&nbsp;{{$client->currency->name}}</strong></th>
+                                            <th><strong> &nbsp;&nbsp;&nbsp;{{$invoice->client->currency->name}}</strong></th>
                                         </tr>
                                         <tr>
                                             <td>Invoice Currency</td>
                                             <td>&nbsp;&nbsp;&nbsp;:</td>
-                                            <th><strong> &nbsp;&nbsp;&nbsp;{{'USD'}}</strong></th>
+                                            <th><strong> &nbsp;&nbsp;&nbsp;{{$invoice->inv_currency}}</strong></th>
                                         </tr>
                                         <tr>
                                             <td>1 USD</td>
                                             <td> &nbsp;&nbsp;= </td>
-                                            <th> &nbsp;&nbsp;&nbsp;{{number_format($client->currency->ratio, 2) . ' ' . strtoupper($client->currency->name)}}</th>
+                                            <th> &nbsp;&nbsp;&nbsp;{{number_format($invoice->client->currency->ratio, 2) . ' ' . strtoupper($invoice->client->currency->name)}}</th>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="col-6 summary-table">
                                 <table class="table table-bordered table-striped">
-                                    @php
-                                        $subTotal = $invoiceSummary['totalCost'];
-                                        $vatTotal = $subTotal * config('app.vat');
-                                        $totalIncludingVat = $subTotal + $vatTotal;
-                                        $previousBalance = $client->accoutn_state ?: 0;
-                                        $grandTotal = $totalIncludingVat + ($client->accoutn_state < 0 ? -($client->accoutn_state) : 0);
-                                        $dueAmount = number_format($grandTotal, 4);
-                                        $speller = new NumberFormatter("en", NumberFormatter::SPELLOUT);
-                                    @endphp
                                     <tbody class="text-right">
                                         <tr>
                                             <td>Sub Total</td>
-                                            <th>{{number_format($subTotal, 4) . ' USD'}}</th>
+                                            <th>{{number_format($invoice->sub_total, 4) . ' USD'}}</th>
                                         </tr>
                                         <tr>
                                             <td>VAT (0%)</td>
-                                            <th>{{number_format($vatTotal, 4) . ' USD'}}</th>
+                                            <th>{{number_format($invoice->vat_total, 4) . ' USD'}}</th>
                                         </tr>
                                         <tr>
                                             <td>Total inc. VAT</td>
-                                            <th>{{number_format($totalIncludingVat, 4) . ' USD'}}</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Previous Balance</td>
-                                            <th>{{number_format($previousBalance, 4) . ' USD'}}</th>
+                                            <th>{{number_format($invoice->total_inc_vat, 4) . ' USD'}}</th>
                                         </tr>
                                         <tr>
                                             <td>Invoice Total</td>
-                                            <th>{{number_format($grandTotal, 4) . ' USD'}}</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Amount Due</td>
-                                            <th>{{number_format($grandTotal, 4) . ' USD'}}</th>
+                                            <th>{{number_format($invoice->inv_total, 4) . ' USD'}}</th>
                                         </tr>
                                         <tr>
                                             <th colspan="2">
-                                                In words: {{strtoupper($speller->format($dueAmount)). ' USD'}}
+                                                @php
+                                                    $speller = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+                                                @endphp
+                                                In words: {{strtoupper($speller->format($invoice->inv_total)). ' USD'}}
                                             </th>
                                         </tr>
 
@@ -267,67 +237,6 @@
 
 
 @push('scripts')
-    {{-- Datetime Picker --}}
-    <script src="{{asset('theme')}}/assets/libs/moment/moment.js"></script>
-    <script src="{{asset('theme')}}/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-    {{-- Datetime Picker --}}
-
-<script>
 
 
-    // Datetiem picker
-    $(function ()
-    {
-        // Datetiem picker
-        $('#fromDate').datetimepicker({
-            showClose: true,
-            showClear: true,
-            format: 'YYYY-MM-DD',
-            useCurrent: 'month',
-            // format: 'YYYY-MM-DD HH:mm',
-            // inline: true,
-            // sideBySide: true
-        });
-
-        $('#toDate').datetimepicker({
-            useCurrent: 'day',
-            showClose: true,
-            showClear: true,
-            format: 'YYYY-MM-DD',
-        });
-
-    });
-
-// Vue js One page app
-    const app = new Vue({
-        el: '#invoice',
-        data:{
-            clients: [],
-            companies: [],
-        },
-        methods:{
-           getCompanies(){
-                axios.get('{{route("company.all")}}')
-                    .then(res=>{
-                        this.companies = res.data
-                    })
-                    .catch(e=>alert(e))
-            },
-            getClients(){
-                axios.get('{{route("clients")}}')
-                    .then(res=>{
-                        this.clients = res.data
-                    })
-                    .catch(e=>alert(e))
-            },
-        },
-        mounted() {
-            this.getCompanies();
-            this.getClients();
-            $('#invoice').addClass('loaded');
-        }
-    });
-
-
-</script>
 @endpush
