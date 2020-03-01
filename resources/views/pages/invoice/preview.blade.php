@@ -13,14 +13,14 @@
         }
 
         @page {
-            margin: 0 calc((100vw - 212mm)/2);
+            margin: 0 calc((100vw - 70%)/2);
             background-color: black;
+            height: 297mm;
         }
 
         .a4 {
-            margin: 0 calc((100vw - 220mm)/2);
+            margin: 0 calc((100vw - 70%)/2);
             height: 297mm;
-
             background-color: black;
         }
 

@@ -6,7 +6,48 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
-    <link rel="stylesheet" href="{{asset('css/app.css')}}">
+    {{-- <link href="{{asset('theme')}}/dist/css/print.css" rel="stylesheet" media="print"> --}}
+
+    <style>
+        .page-break {
+            page-break-after: always;
+        }
+
+        @page { size: auto;  margin: 0mm; }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+            }
+            .items-section > table > thead,
+            .items-section > table > thead > tr,
+            .items-section > table > thead > tr > th
+            {
+                background-color: #5A6268 !important;
+                /* background-color: black !important; */
+            }
+
+            .column-table td {
+                border: 0px solid white !important;
+                border-right: 1px solid #E2E6E9 !important;
+                border-bottom-style: none;
+            }
+        }
+
+        .a4 {
+            background-color: black;
+            margin: 0 calc((100vw - 70%)/2);
+        }
+
+        #invoice-inner {
+            padding: 20px 72px;
+            height: 297mm;
+            background-color: white;
+            /* background-color: black; */
+        }
+
+
+    </style>
 @endpush
 
 @php
@@ -15,7 +56,7 @@
 @endphp
 
 @section('content')
-<div class="container-fluid loaded" id="invoice">
+<div class="container-fluid loaded" id="invoice-section">
 
     <!-- ============================================================== -->
     <!-- Start Page Content -->
@@ -33,14 +74,14 @@
                         <div class="ml-auto">
                             <div class="btn-group">
                                 <a href="{{route('invoice.download', $invoice->id)}}" data-toggle="tooltip" title="Download to pdf"  class="btn btn-rounded btn-danger {{$disabled}}"> <i class="fas fa-file-pdf"></i> PDF</a>
-                                <a href="{{route('invoice.preview', $invoice->id)}}" data-toggle="tooltip" title="Preview Invoice"  class="btn btn-rounded btn-secondary {{$disabled}}"> <i class="fas fa-eye"></i> Preview</a>
+                                {{-- <a href="{{route('invoice.preview', $invoice->id)}}" data-toggle="tooltip" title="Preview Invoice"  class="btn btn-rounded btn-secondary"> <i class="fas fa-eye"></i> Preview</a> --}}
+                                <a href="#" onclick="printDiv('invoice')" data-toggle="tooltip" title="Print Invoice"  class="btn btn-rounded btn-secondary"> <i class="fas fa-print"></i> Print</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="container">
-                    <div id="invoice">
+                <div class="card-body" id="invoice">
+                    <div class="" id="invoice-inner" style="">
                         <div class="top-bar">
                             <div class="company d-flex justify-content-between">
                                 <div class="">
@@ -129,7 +170,7 @@
                                 <tbody class="column-table">
                                     @foreach ($invoice->items as $item)
                                     <tr>
-                                        <th>{{sprintf('%02d', $loop->count)}}</th>
+                                        <td>{{sprintf('%02d', $loop->count)}}</td>
                                         <td>{{$item->description}}</td>
                                         <td>{{$item->prefix}}</td>
                                         <td class="text-right">{{number_format($item->rate, 2)}}</td>
@@ -221,7 +262,6 @@
                             <span class="text-danger">{{'Note : '}}</span> {{'This is a computer generated Invoice,No signature is required.
                                                 '}}
                         </p>
-                        </div>
                     </div>
                 </div>
                 {{-- @endif --}}
@@ -237,6 +277,18 @@
 
 
 @push('scripts')
+    <script>
+        function printDiv(divName) {
+            var originalContents = $('body').clone(true);
+            var styleA4 = document.body.classList.toggle('a4');
+            var printContents = document.getElementById(divName).innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            var removeA4 = document.body.classList.toggle('a4');
+            $('body').replaceWith(originalContents.clone(true));
+            // window.location.reload(true);
+        }
 
+    </script>
 
 @endpush
