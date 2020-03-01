@@ -111,6 +111,12 @@ class RolesAndPermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'read calls-summary client']);
         Permission::create(['name' => 'export calls-summary client']);
 
+        // invoice permissions
+        Permission::create(['name' => 'create invoice']);
+        Permission::create(['name' => 'read invoice']);
+        Permission::create(['name' => 'update invoice']);
+        Permission::create(['name' => 'delete invoice']);
+
         // create roles and assign created permissions
 
         // this can be done as separate statements
@@ -122,6 +128,7 @@ class RolesAndPermissionsTableSeeder extends Seeder
         //     ->givePermissionTo(['publish articles', 'unpublish articles']);
 
         $role = Role::create(['name' => 'Super Admin']);
+        // $role = Role::where('name', 'Super Admin')->first();
         $role->givePermissionTo(Permission::all());
 
     }

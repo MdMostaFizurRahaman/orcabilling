@@ -160,13 +160,13 @@ Route::group(['middleware' => ['watch_dog']], function () {
             Route::get('/', "CompanyController@index")->name('settings')->middleware('permission:read company-settings');
             Route::get('/datatable', "CompanyController@datatable")->name('settings.datatable')->middleware('permission:read company-settings');
             Route::get('/create', "CompanyController@create")->name('settings.create')
-            // ->middleware('permission:create company-settings')
+            ->middleware('permission:create company-settings')
             ;
             Route::get('/all', "CompanyController@companies")->name('all')->middleware('permission:read company-settings');
             Route::get('/{company}/show', "CompanyController@view")->name('settings.view')->middleware('permission:read company-settings');
             Route::get('/{company}/edit', "CompanyController@edit")->name('settings.edit')->middleware('permission:update company-settings');
             Route::get('/{company}/delete', "CompanyController@delete")->name('settings.delete')
-            // ->middleware('permission:delete company-settings')
+            ->middleware('permission:delete company-settings')
             ;
             Route::post('/', "CompanyController@update")->name('settings.update')->middleware('permission:update company-settings');
             Route::get('/parivacy-policy', "CompanyController@test")->name('privacy-policy')->middleware('permission:read privacy-policy');
@@ -175,31 +175,15 @@ Route::group(['middleware' => ['watch_dog']], function () {
 
         Route::prefix('/invoice')->name('invoice.')->group(function () {
             // Invoice Routes
-            Route::get('/generate', 'InvoiceController@draftFormShow')->name('generate.panel')
-            // ->middleware('permission:create invoice')
-            ;
-            Route::post('/generate', 'InvoiceController@draft')->name('generate')
-            // ->middleware('permission:create invoice')
-            ;
-            Route::get('/{invoice}/show', "InvoiceController@show")->name('show');
-            // ->middleware('permission:read invoice')
-            ;
-            Route::get('/{invoice}/download', "InvoiceController@downloadPDF")->name('download');
-            // ->middleware('permission:read invoice')
-            ;
-            Route::get('/{invoice}/pdf', "InvoiceController@viewPDF")->name('view-pdf');
-            // ->middleware('permission:read invoice')
-            ;
+            Route::get('/generate', 'InvoiceController@draftFormShow')->name('generate.panel')->middleware('permission:create invoice');
+            Route::post('/generate', 'InvoiceController@draft')->name('generate')->middleware('permission:create invoice');
+            Route::get('/{invoice}/show', "InvoiceController@show")->name('show')->middleware('permission:read invoice');
+            Route::get('/{invoice}/download', "InvoiceController@downloadPDF")->name('download')->middleware('permission:read invoice');
+            Route::get('/{invoice}/pdf', "InvoiceController@viewPDF")->name('view-pdf')->middleware('permission:read invoice');
             Route::get('/{invoice}/preview', "InvoiceController@printPreview")->name('preview');
-            Route::get('/history', 'InvoiceController@index')->name('history')
-            // ->middleware('permission:read invoice')
-            ;
-            Route::get('/datatable', 'InvoiceController@datatable')->name('datatable')
-            // ->middleware('permission:read invoice')
-            ;
-            Route::get('/{invoice}/delete', 'InvoiceController@delete')->name('delete')
-            // ->middleware('permission:delete invoice')
-            ;
+            Route::get('/history', 'InvoiceController@index')->name('history')->middleware('permission:read invoice');
+            Route::get('/datatable', 'InvoiceController@datatable')->name('datatable')->middleware('permission:read invoice');
+            Route::get('/{invoice}/delete', 'InvoiceController@delete')->name('delete')->middleware('permission:delete invoice');
         });
     });
 });

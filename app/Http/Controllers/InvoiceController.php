@@ -33,6 +33,7 @@ class InvoiceController extends Controller
             ->addColumn('user', function ($query) {
                 return $query->user->username;
             })
+
             ->addColumn('inv_total', function ($query) {
                 return '<h6>'.$query->inv_total. ' ' . $query->inv_currency .'</h6>';
             })
