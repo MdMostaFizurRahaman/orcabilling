@@ -6,7 +6,6 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
-    {{-- <link href="{{asset('theme')}}/dist/css/print.css" rel="stylesheet" media="print"> --}}
 
     <style>
         .page-break {
@@ -16,6 +15,7 @@
         @page { size: auto;  margin: 0mm; }
 
         @media print {
+
             body {
                 -webkit-print-color-adjust: exact !important;
             }
