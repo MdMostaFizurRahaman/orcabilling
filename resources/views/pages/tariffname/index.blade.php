@@ -64,55 +64,55 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
-        $(function(){
-            getTariffnames();
-        })
+    $(function(){
+        getTariffnames();
+    })
 
-        function getTariffnames(){
+    function getTariffnames(){
         $('#data_table').DataTable({
-                processing: true,
-                serverSide: true,
-                destroy: true,
-                "order": [[ 0, "desc" ]],
-                ajax:  "{{route('tariffnames.datatable')}}",
-                columns: [
-                            { data: 'id', name: 'id' },
-                            { data: 'name', name: 'name' },
-                            { data: 'currency_id', name: 'currency_id' },
-                            { data: 'created_by', name: 'created_by' },
-                            { data: 'tariff', name: 'tariff' },
-                            { data: 'edit', name: 'edit' },
-                            { data: 'delete', name: 'delete' },
-                        ],
-                "drawCallback": function( settings ) {
-                    $('.edit').click(function(){
-                        var id = $(this).data("id");
-                        app.edit(id);
-                    });
-                    $(".delete").click(function() {
-                        event.preventDefault();
-                        Swal.fire({
-                            title: "Are you sure?",
-                            text: "You won\'t be able to revert this!",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#3085d6",
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "Yes, delete it!"
-                            }).then((result) => {
-                                if (result.value) {
-                                    var id = $(this).data("id");
-                                    app.delete(id)
-                                }
-                        })
-                    });
-                }
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            "order": [[ 0, "desc" ]],
+            ajax:  "{{route('tariffnames.datatable')}}",
+            columns: [
+                        { data: 'id', name: 'id' },
+                        { data: 'name', name: 'name' },
+                        { data: 'currency_id', name: 'currency_id' },
+                        { data: 'created_by', name: 'created_by' },
+                        { data: 'tariff', name: 'tariff' },
+                        { data: 'edit', name: 'edit' },
+                        { data: 'delete', name: 'delete' },
+                    ],
+            "drawCallback": function( settings ) {
+                $('.edit').click(function(){
+                    var id = $(this).data("id");
+                    app.edit(id);
+                });
+                $(".delete").click(function() {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won\'t be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!"
+                        }).then((result) => {
+                            if (result.value) {
+                                var id = $(this).data("id");
+                                app.delete(id)
+                            }
+                    })
+                });
+            }
         });
     }
 
 
 
-const app = new Vue({
+    const app = new Vue({
         el: '#tariff',
         data:{
             disabled: false,

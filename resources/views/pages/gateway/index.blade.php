@@ -78,15 +78,15 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
-        $(function(){
-            getGateways();
-            $('[data-toggle="tooltip"]').tooltip()
-            $('#import').click(function(){
-                $('#import-modal').modal('show');
-            })
+    $(function(){
+        getGateways();
+        $('[data-toggle="tooltip"]').tooltip()
+        $('#import').click(function(){
+            $('#import-modal').modal('show');
         })
+    })
 
-        function getGateways(){
+    function getGateways(){
 
         $('#data_table').DataTable({
                 processing: true,
@@ -142,7 +142,7 @@
 
 
 
-const app = new Vue({
+    const app = new Vue({
         el: '#gateway',
         data:{
             file: '',

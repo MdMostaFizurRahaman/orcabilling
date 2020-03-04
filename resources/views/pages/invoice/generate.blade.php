@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="fromDate"> From Date</label>
-                                        <input id="fromDate" type='text' id='fromDate' name="from_date" class="form-control" required />
+                                        <input id="fromDate" type='text' name="from_date" class="form-control" required />
                                         @error('from_date')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -124,6 +124,7 @@
     @include('sweetalert::alert')
 
     {{-- Datetime Picker --}}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     <script src="{{asset('theme')}}/assets/libs/moment/moment.js"></script>
     <script src="{{asset('theme')}}/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     {{-- Datetime Picker --}}
@@ -138,18 +139,20 @@
         $('#fromDate').datetimepicker({
             showClose: true,
             showClear: true,
-            format: 'YYYY-MM-DD',
-            useCurrent: 'month',
-            // format: 'YYYY-MM-DD HH:mm',
+            // format: 'YYYY-MM-DD',
+            // useCurrent: 'month',
+            format: 'YYYY-MM-DD HH:mm',
             // inline: true,
             // sideBySide: true
         });
 
         $('#toDate').datetimepicker({
-            useCurrent: 'day',
+            // useCurrent: 'day',
             showClose: true,
             showClear: true,
-            format: 'YYYY-MM-DD',
+            // format: 'YYYY-MM-DD',
+            // format: 'YYYY-MM-DD HH:mm',
+            format: 'YYYY-MM-DD 23:59:59',
         });
 
     });
