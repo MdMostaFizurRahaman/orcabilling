@@ -132,6 +132,7 @@
 
 @push('scripts')
     {{-- Datetime Picker --}}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     <script src="{{asset('theme')}}/assets/libs/moment/moment.js"></script>
     <script src="{{asset('theme')}}/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     {{-- Datetime Picker --}}
@@ -140,18 +141,31 @@
 
     $(function ()
     {
+        // Datetiem picker
         $('#fromDate').datetimepicker({
             showClose: true,
             showClear: true,
+            // format: 'YYYY-MM-DD',
+            // useCurrent: 'month',
             format: 'YYYY-MM-DD HH:mm',
-            useCurrent: 'month',
+            // inline: true,
+            // sideBySide: true
         });
 
-        var dp = $('#toDate').datetimepicker({
+        $('#toDate').datetimepicker({
             useCurrent: 'day',
             showClose: true,
             showClear: true,
-            format: 'YYYY-MM-DD HH:mm',
+            // format: 'YYYY-MM-DD',
+            // format: 'YYYY-MM-DD HH:mm',
+            format: 'YYYY-MM-DD 23:59',
+        });
+
+        $("#fromDate").on("dp.change", function (e) {
+            $('#toDate').data("DateTimePicker").minDate(e.date);
+        });
+        $("#toDate").on("dp.change", function (e) {
+            $('#fromDate').data("DateTimePicker").maxDate(e.date);
         });
 
     });

@@ -158,7 +158,7 @@
             useCurrent: 'day',
             showClose: true,
             showClear: true,
-            format: 'YYYY-MM-DD HH:mm',
+            format: 'YYYY-MM-DD 23:59:59',
         });
 
     });

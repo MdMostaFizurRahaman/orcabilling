@@ -133,7 +133,7 @@
             useCurrent: 'day',
             showClose: true,
             showClear: true,
-            format: 'YYYY-MM-DD',
+            format: 'YYYY-MM-DD 23:59:59',
         });
 
         // VALIDATION MESSAGE CLOSE

@@ -147,12 +147,19 @@
         });
 
         $('#toDate').datetimepicker({
-            // useCurrent: 'day',
+            useCurrent: 'day',
             showClose: true,
             showClear: true,
             // format: 'YYYY-MM-DD',
             // format: 'YYYY-MM-DD HH:mm',
             format: 'YYYY-MM-DD 23:59:59',
+        });
+
+        $("#fromDate").on("dp.change", function (e) {
+            $('#toDate').data("DateTimePicker").minDate(e.date);
+        });
+        $("#toDate").on("dp.change", function (e) {
+            $('#fromDate').data("DateTimePicker").maxDate(e.date);
         });
 
     });
