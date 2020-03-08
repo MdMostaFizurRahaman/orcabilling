@@ -27,7 +27,7 @@
                         </tr>
                         <tr>
                             <th scope="row">Status</th>
-                            <td>@{{cdrlog.status}}</td>
+                            <td><span class="badge badge-warning">@{{cdrlog.status == 1 ? 'Success' : 'Error'}}</span></td>
                         </tr>
                         <tr>
                             <th scope="row">Processed Time</th>

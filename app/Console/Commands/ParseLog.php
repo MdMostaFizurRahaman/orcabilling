@@ -6,8 +6,8 @@ use Carbon\Carbon;
 use Spatie\Regex\Regex;
 use phpseclib\Net\SFTP;
 use Illuminate\Console\Command;
-use App\Http\Controllers\ParseLogController;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ParseLogController;
 
 class ParseLog extends Command
 {

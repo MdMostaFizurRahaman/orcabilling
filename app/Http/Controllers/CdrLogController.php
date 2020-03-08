@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use phpseclib\Net\SFTP;
 use Illuminate\Http\Request;
-use App\Http\Controllers\ParseLog;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
-
+use App\Http\Controllers\ParseLogController;
 
 class CdrLogController extends Controller
 {
@@ -71,7 +70,7 @@ class CdrLogController extends Controller
 
                 $this->uncompress('cdr.log.gz', 'cdr.log');
 
-                $parser = new ParseLog;
+                $parser = new ParseLogController;
 
                 if($rowsCount = $parser->parse('cdr.log', $file_name))
                 {

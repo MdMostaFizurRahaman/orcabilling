@@ -89,7 +89,14 @@
                 columns: [
                             { data: 'file_name', name: 'file_name' },
                             { data: 'rows_count', name: 'rows_count' },
-                            { data: 'status', name: 'status' },
+                            { data: 'status', name: 'status', render:function(data, type, row){
+                                    if(row.status == 1){
+                                        return "<span class='badge badge-success'>Success</span>";
+                                    } else if(row.status == 3){
+                                        return "<span class='badge badge-danger'>Error</span>";
+                                    }
+                                }
+                            },
                             { data: 'processed_time', name: 'processed_time' },
                             { data: 'show', name: 'show' },
                             { data: 'reparse', name: 'reparse' },
